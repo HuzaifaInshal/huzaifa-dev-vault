@@ -1,7 +1,16 @@
 import React from "react";
 
 interface Props {
-  language: "tsx" | "ts" | "js" | "jsx" | "json" | "css" | "html" | "md";
+  language?:
+    | "tsx"
+    | "ts"
+    | "js"
+    | "jsx"
+    | "json"
+    | "css"
+    | "html"
+    | "md"
+    | "py";
   children: React.ReactNode;
 }
 

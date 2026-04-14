@@ -151,3 +151,8 @@
 .doclayout-help-page a {
   color: #006de7;
 }
+
+.doclayout > * {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}

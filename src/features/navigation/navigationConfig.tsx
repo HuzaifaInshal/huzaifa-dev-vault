@@ -1,3 +1,4 @@
+import CreatingUiWithSSOrFigmaJson from "@/documentations/CreatingUiWithSSOrFigmaJson";
 import { NavNode } from "./navigationType";
 
 export const navConfig: NavNode[] = [
@@ -7,11 +8,12 @@ export const navConfig: NavNode[] = [
     subroutes: [
       {
         title: "Frontend",
-        route: "/frontend", // should become /ai-tools-assistants&prompts/frontend
+        route: "/frontend", // should become /ai-tools-assistants&prompts/frontend at runtime in page.tsx
         subroutes: [
           {
             title: "Creating UI with ss or figma json",
-            route: "creating-ui-with-ss"
+            route: "creating-ui-with-ss",
+            returnPage: (args) => <CreatingUiWithSSOrFigmaJson {...args} />
           }
         ]
       }
