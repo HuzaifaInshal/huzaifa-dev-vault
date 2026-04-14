@@ -1,26 +1,153 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary:var(--primary);
+  --color-secondary:var(--secondary);
+  --color-success:var(--success);
+  --color-desctructive:var(--desctructive);
+  --color-text-primary:var(--text-primary);
+  --color-text-secondary:var(--text-secondary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --primary:#5178ff;
+  --secondary:#5178ff;
+  --text-primary:#ffffff;
+  --text-secondary: lab(66.128% -.0000298023 .0000119209);;
+  --success:#5178ff;
+  --desctructive:#5178ff;
+}
+
+/* ========================|| Button Ripple Animation ||======================== */
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ========================|| My Custom Animations ||======================== */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
+
+/* ========================|| Custom Thin Scrollbar Variant ||======================== */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--custom-scrollbar);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--custom-scrollbar-2);
+}
+
+.scrollbar-h-3::-webkit-scrollbar {
+  height: 3px;
+}
+
+  /* ========================|| Rich text styles ||======================== */
+
+/* For h1: Largest size */
+.doclayout h1 {
+  font-size: 2rem; /* 32px */
+  font-weight: 700; /* Bold */
+  line-height: 1.2; /* Adjusted for readability */
+}
+
+/* For h2: Slightly smaller than h1 */
+.doclayout h2 {
+  font-size: 1.75rem; /* 28px */
+  font-weight: 600; /* Semi-bold */
+  line-height: 1.3; /* Adjusted for readability */
+}
+
+/* For h3: Medium size */
+.doclayout h3 {
+  font-size: 1.5rem; /* 24px */
+  font-weight: 600; /* Semi-bold */
+  line-height: 1.3;
+}
+
+/* For h4: Subheading */
+.doclayout h4 {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 500; /* Medium weight */
+  line-height: 1.4;
+}
+
+/* For h5: Smaller heading */
+.doclayout h5 {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500; /* Medium weight */
+  line-height: 1.4;
+}
+
+/* For h6: Smallest heading */
+.doclayout h6 {
+  font-size: 1rem; /* 16px */
+  font-weight: 400; /* Regular weight */
+  line-height: 1.5;
+}
+
+.doclayout ul {
+  list-style: circle;
+  padding-left: 20px;
+}
+
+.doclayout ol {
+  padding-left: 20px;
+  list-style: decimal;
+}
+
+.doclayout pre {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.doclayout p {
+  min-height: 16px;
+}
+
+.doclayout-help-page h2 {
+  font-size: 20px;
+}
+
+.doclayout-help-page h3 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.doclayout-help-page a {
+  color: #006de7;
 }
