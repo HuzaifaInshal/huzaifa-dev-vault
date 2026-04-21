@@ -1,0 +1,39 @@
+import basePrompt from '../../../prompts/frontend/nextjs/integration-base.md?raw'
+import laterPrompt from '../../../prompts/frontend/nextjs/integration-later-example.md?raw'
+import { Prompt } from '../../../doc-ui/Prompt'
+
+export const meta = {
+  title: 'API Integration',
+  description: 'TanStack Query service patterns for integrating REST APIs.',
+  order: 1,
+}
+
+# API Integration
+
+Two-step workflow for integrating REST APIs. Start with the **base prompt** to establish the service patterns, then send **later prompts** per feature with the actual API specs.
+
+## How it works
+
+1. Send the **Base Prompt** once at the beginning of a session (or add it as a project-level instruction/agent doc)
+2. For each feature, follow up with a **Later Prompt** listing the API endpoints, the target views, and any relevant payload shapes
+3. The AI generates typed service files, query/mutation hooks, and wires them into the correct views — all following your project structure
+
+## Service Patterns Covered
+
+| Pattern | Hook | Use when |
+|---------|------|----------|
+| GET (paginated) | `useQuery` | Fetching lists or detail data |
+| POST / PUT / PATCH / DELETE | `useMutation` | Creating or mutating data |
+| Infinite scroll | `useInfiniteQuery` | Paginated lists with load-more |
+
+## Base Prompt
+
+Send this once to establish context. It instructs the model on your service file structure, naming conventions, Yup/Formik validation patterns, and error handling.
+
+<Prompt source={basePrompt} title="Base Prompt" />
+
+## Later Prompts
+
+After the base prompt, follow up with the actual API list for each feature. This example integrates workflow management APIs into two views.
+
+<Prompt source={laterPrompt} title="Later Prompt — Example" />

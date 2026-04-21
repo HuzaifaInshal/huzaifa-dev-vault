@@ -142,4 +142,11 @@ export const mdxComponents: Record<string, any> = {
   em: ({ children }: { children: React.ReactNode }) => (
     <em className="text-zinc-300 italic">{children}</em>
   ),
+  img: ({ src, alt }: { src?: string; alt?: string }) => (
+    <img
+      src={src}
+      alt={alt ?? ''}
+      className="rounded-xl border border-zinc-800 my-6 max-w-full"
+    />
+  ),
 }

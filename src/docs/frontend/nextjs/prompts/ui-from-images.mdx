@@ -1,0 +1,18 @@
+import src from '../../../../prompts/frontend/nextjs/ui-from-images.md?raw'
+import { Prompt } from '../../../../doc-ui/Prompt'
+
+export const meta = {
+  title: 'UI from Screenshots',
+  description: 'Inline prompt for converting Figma screenshots to pixel-perfect React code.',
+  order: 1,
+}
+
+# UI from Screenshots / Images
+
+Use this prompt when you have Figma screenshots or exported images rather than the raw JSON. The model extracts the layout visually and converts it to code.
+
+<Prompt source={src} title="Image → React" />
+
+---
+
+> **When to use this vs. JSON:** Images are quicker to grab but the AI may miss exact spacing and font sizes. Use the [Figma JSON prompts](/frontend/nextjs/prompts/ui-from-figma-json) when pixel-perfect accuracy is critical.

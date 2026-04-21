@@ -1,0 +1,35 @@
+import src from '../../../prompts/frontend/nextjs/ui-from-html.md?raw'
+import { Prompt } from '../../../doc-ui/Prompt'
+
+export const meta = {
+  title: 'UI from Static HTML',
+  description: 'Convert Figma-exported static HTML to React using Claude.',
+  order: 0,
+}
+
+# UI from Static HTML
+
+Workflow for exporting HTML from Figma via a plugin, then letting an AI coding assistant convert it into clean React code that fits your project architecture.
+
+## Figma Extension Setup
+
+Install the **Figma to Code** plugin from the Figma Community:
+
+- [Plugin Link](https://www.figma.com/community/plugin/842128343887142055/figma-to-code-html-tailwind-flutter-swiftui)
+- [GitHub Repo](https://github.com/bernaferrari/figmatocode)
+
+Open the plugin on your Figma frame, switch to the **Tailwind** tab, and configure it with these settings:
+
+![Figma to Code settings — page 1](/figma-setup/image.png)
+![Figma to Code settings — page 2](/figma-setup/image-1.png)
+![Figma to Code settings — page 3](/figma-setup/image-2.png)
+
+## AI Assistant Setup
+
+Use auto model selection with maximum context. Before starting, create the auth feature yourself so the model has an example of your project's structure and conventions to reference.
+
+Create both `page.tsx` and `view.tsx` first, then pass the `view` name alongside the exported HTML in your prompt. For complex UI elements (tables, multi-step forms, etc.), describe them explicitly — don't rely on the AI to infer them from the HTML alone.
+
+## Prompt
+
+<Prompt source={src} title="HTML → React" />

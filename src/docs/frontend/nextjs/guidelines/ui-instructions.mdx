@@ -1,0 +1,88 @@
+export const meta = {
+  title: 'UI Instructions',
+  description: 'Special instructions for creating UI code in this project.',
+  order: 1,
+}
+
+# UI Creation Instructions
+
+Rules the AI must follow when generating or modifying UI code in this project. Reference this file from your prompts as `/ui-creation-special-instructions.md`.
+
+---
+
+## Class organisation
+
+Use `cn()` to group related Tailwind classes. Don't scatter classes across inline JSX.
+
+```tsx
+// ✓ Good
+<div className={cn('flex items-center gap-2', isActive && 'bg-violet-500')}>
+
+// ✗ Avoid
+<div className="flex items-center gap-2" style={{ background: isActive ? '...' : '' }}>
+```
+
+---
+
+## Responsive design
+
+All UI must be responsive. No desktop-only layouts.
+
+---
+
+## Component reuse
+
+**Always** check `/components/ui` before creating a new component.
+
+- If a matching component exists → use it
+- If a variant is needed → extend the existing component's styles first
+- For multi-variant components (e.g. Button) → add your style variant to the existing component rather than creating a parallel one
+- Only create a new `/components/ui` file if no suitable component exists at all
+
+---
+
+## Colors
+
+**Do not use Tailwind's built-in color utilities** (e.g. `text-blue-500`, `bg-gray-100`). Use only colors defined in `globals.css`. If a required color is missing from `globals.css`, add it there first.
+
+---
+
+## Images
+
+When placing an image in the design, add it in code with the appropriate `src` path and tell the developer explicitly which file to add and where in the `public/` folder.
+
+---
+
+## Class placement
+
+Write complete, full Tailwind class sets in `/components/ui` files. Feature components (inside `features/`) should stay lean — pass `className` props down rather than adding layout classes directly.
+
+---
+
+## Icons
+
+Use **`lucide-react`** for all icons.
+
+---
+
+## Sizing
+
+Avoid hardcoded pixel sizes (`w-[400px]`, `h-[72px]`). Use Tailwind's scale utilities instead (`w-96`, `h-18`). If no scale value fits, reconsider the design constraint.
+
+---
+
+## shadcn/ui
+
+Prefer shadcn components over building native equivalents. Install via:
+
+```bash
+pnpm dlx shadcn add <component-name>
+```
+
+Do not copy shadcn source files manually.
+
+---
+
+## File structure
+
+One component per file. No barrel files that bundle multiple components.

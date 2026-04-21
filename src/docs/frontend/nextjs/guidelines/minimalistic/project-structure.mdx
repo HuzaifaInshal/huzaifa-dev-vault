@@ -1,0 +1,64 @@
+export const meta = {
+  title: 'Project Structure',
+  description: 'Compact feature-based architecture reference.',
+  order: 0,
+}
+
+# Project Structure
+
+Feature-based architecture. Generic code in global folders; feature-specific logic in `src/features`.
+
+---
+
+## public/
+
+- `assets/common` — global assets
+- `assets/[feature]` — feature assets
+
+## src/
+
+```
+src/
+├─ app/           # Routes only. No logic. Import views from features.
+├─ components/
+│   ├─ ui/        # Pure design-system components (Button, Input, Modal)
+│   └─ custom/    # Cross-feature components (DataTable, Pagination)
+├─ lib/           # Shared utils (api-client, date, validators)
+├─ config/        # env, routes, constants
+├─ types/         # Global types (ApiResponse<T>, PaginatedResponse<T>)
+├─ services/      # Shared API setup (http, interceptors, token refresh)
+└─ features/
+    └─ [feature]/ # Self-contained domain module
+```
+
+## Feature Structure
+
+```
+features/[feature]/
+├─ views/         # Page-level containers (UsersView.tsx)
+├─ components/    # Feature-only components
+├─ hooks/         # State logic, combined queries, derived data
+├─ queries/       # TanStack Query — fetch only
+├─ mutations/     # TanStack Query — create/update/delete
+├─ services/      # API calls for this feature
+├─ types/         # Feature-specific types
+├─ utils/         # Feature-specific helpers
+└─ query-keys.ts  # Centralised query keys
+```
+
+## Data Flow
+
+`View → Hook → Query/Mutation → Service → API Client`
+
+## Naming
+
+- Components: `PascalCase.tsx`
+- Hooks: `usePascalCase.ts`
+- Utils/services: `camelCase.ts`
+
+## Rules
+
+- `app/` has no business logic — views only
+- Feature-specific types/utils stay inside the feature
+- `lib/` and `services/` are global only; don't put feature code there
+- For large features, group by sub-feature inside `queries/`, `components/`, etc.

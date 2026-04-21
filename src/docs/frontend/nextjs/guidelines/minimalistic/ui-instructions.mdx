@@ -1,0 +1,19 @@
+export const meta = {
+  title: 'UI Instructions',
+  description: 'Compact UI creation instructions for quick reference.',
+  order: 1,
+}
+
+# UI Instructions (Compact)
+
+- Group classes with `cn()`
+- Responsive UI always
+- Prefer `/components/ui` reusable components; create new ones only if needed
+- For multi-variant components (e.g. Button), extend existing styles before adding new ones
+- No Tailwind built-in colors — use `globals.css` variables; add missing colors there
+- For images: add placeholder in code + tell me the exact `public/` path
+- Keep full Tailwind classes in `/components/ui`, not in feature components
+- Icons: use `lucide-react`
+- Avoid hardcoded sizes (`w-[400px]`) — prefer Tailwind scale utilities (`w-96`)
+- Use shadcn over custom components — install via `pnpm dlx shadcn add <>`
+- One component per file

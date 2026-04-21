@@ -1,0 +1,215 @@
+export const meta = {
+  title: 'Project Structure',
+  description: 'Full feature-based Next.js architecture guide.',
+  order: 0,
+}
+
+# Project Structure
+
+Feature-based architecture. Generic code lives in global folders; **feature-specific logic lives inside `src/features`**.
+
+---
+
+## public/
+
+Static assets served directly by the browser.
+
+```
+public/
+ ├─ assets/
+ │   ├─ common/       ← global assets
+ │   └─ [feature]/    ← feature assets
+ └─ favicons/
+```
+
+---
+
+## src/
+
+```
+src/
+ ├─ app/
+ ├─ components/
+ ├─ lib/
+ ├─ services/
+ ├─ types/
+ ├─ config/
+ └─ features/
+```
+
+---
+
+## app/ — Next.js routing
+
+Contains **routes only**. No business logic. Only imports views from features.
+
+```tsx
+import UsersView from "@/features/users/views/users.view";
+
+export default function Page() {
+  return <UsersView />;
+}
+```
+
+---
+
+## components/ — global components
+
+```
+components/
+ ├─ ui/       ← design system (Button, Input, Modal, Dropdown)
+ └─ custom/   ← cross-feature components (DataTable, Pagination, FileUploader)
+```
+
+**`ui/`** — purely reusable, no business logic.
+
+**`custom/`** — reusable across features but not purely UI.
+
+---
+
+## lib/ — global utilities
+
+Utilities shared across features: `api-client.ts`, `date.ts`, `utils.ts`, `validators.ts`.
+
+> If a utility is feature-specific, keep it inside the feature.
+
+---
+
+## config/
+
+Application configuration: `env.ts`, `routes.ts`, `constants.ts`.
+
+---
+
+## types/ — global types
+
+Global reusable types: `ApiResponse<T>`, `PaginatedResponse<T>`, `ErrorResponse`.
+
+Feature-specific types should stay inside the feature.
+
+---
+
+## services/ — global API setup
+
+Shared API configuration: `http.ts`, `interceptors.ts`. Typically includes axios/fetch client, auth interceptors, and token refresh logic.
+
+---
+
+## features/ — core architecture
+
+All domain logic lives here. Each feature is **self-contained**.
+
+```
+features/
+ ├─ users/
+ ├─ auth/
+ ├─ products/
+ └─ orders/
+```
+
+---
+
+## Feature Structure
+
+```
+features/
+ └─ users/
+     ├─ views/          ← page-level containers
+     ├─ components/     ← feature-only components
+     ├─ hooks/          ← state logic, combined queries, derived data
+     ├─ queries/        ← TanStack Query — fetch only
+     ├─ mutations/      ← TanStack Query — create/update/delete
+     ├─ services/       ← API calls for this feature
+     ├─ types/          ← feature-specific types
+     ├─ utils/          ← feature-specific helpers
+     └─ query-keys.ts   ← centralised query keys
+```
+
+### views/
+
+Page-level containers used by `app/`.
+
+```
+views/
+ ├─ UsersView.tsx
+ └─ UserDetailsView.tsx
+```
+
+### queries/ (TanStack Query)
+
+Responsible only for **fetching data**.
+
+```ts
+export const useUsersQuery = () =>
+  useQuery({
+    queryKey: usersQueryKeys.list(),
+    queryFn: usersService.getUsers
+  });
+```
+
+### mutations/ (TanStack Query)
+
+Responsible for **creating/updating/deleting data**.
+
+```ts
+export const useCreateUserMutation = () =>
+  useMutation({
+    mutationFn: usersService.createUser
+  });
+```
+
+### services/ — feature API layer
+
+```ts
+export const usersService = {
+  getUsers: () => apiClient.get("/users"),
+  getUser: (id: string) => apiClient.get(`/users/${id}`),
+  createUser: (data) => apiClient.post("/users", data)
+};
+```
+
+### query-keys/
+
+Centralised TanStack Query keys.
+
+```ts
+export const usersQueryKeys = {
+  all: ["users"],
+  list: () => [...usersQueryKeys.all, "list"],
+  detail: (id: string) => [...usersQueryKeys.all, "detail", id]
+};
+```
+
+---
+
+## Sub-feature Pattern
+
+For large features, group logic by sub-feature.
+
+```
+users/
+ ├─ components/
+ │   ├─ users-list/
+ │   └─ user-details/
+ ├─ queries/
+ │   ├─ users-list/
+ │   └─ user-details/
+```
+
+---
+
+## Data Flow
+
+```
+View → Hook → Query / Mutation → Service → API Client
+```
+
+---
+
+## Naming Conventions
+
+| Type | Convention | Example |
+|------|-----------|---------|
+| Components | `PascalCase.tsx` | `UserCard.tsx` |
+| Hooks | `usePascalCase.ts` | `useUsers.ts` |
+| Utils / services | `camelCase.ts` | `formatUserName.ts` |

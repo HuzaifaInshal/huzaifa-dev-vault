@@ -1,0 +1,30 @@
+import jsonAttached from '../../../../prompts/frontend/nextjs/ui-from-figma-json-attached.md?raw'
+import figmaLink from '../../../../prompts/frontend/nextjs/ui-from-figma-link.md?raw'
+
+import { Prompt } from '../../../../doc-ui/Prompt'
+
+export const meta = {
+  title: 'UI from Figma JSON',
+  description: 'Inline prompts for converting Figma JSON to pixel-perfect React code.',
+  order: 0,
+}
+
+# UI from Figma JSON
+
+Two prompt variants depending on how you're providing the Figma data. Both reference `/ui-creation-special-instructions.md` (the guidelines file in your project) and require grid/flex-only layouts.
+
+## Variant 1 — JSON attached directly
+
+Use this when you've already exported the Figma JSON (via the `generate_figma_json` script or manually) and are pasting it into the chat.
+
+<Prompt source={jsonAttached} title="With JSON attached" />
+
+## Variant 2 — Figma link (script accessible)
+
+Use this when the `generate_figma_json` script is installed and your AI assistant can run bash commands. The model will extract the JSON itself before generating code.
+
+<Prompt source={figmaLink} title="With Figma link" />
+
+---
+
+> **Tip:** For the Figma link variant to work, the `generate_figma_json` script must be globally accessible in the shell. See the [Figma to JSON](/frontend/nextjs/tools/figma-to-json) tool page for setup instructions.
