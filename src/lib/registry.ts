@@ -1,15 +1,14 @@
 import type { ComponentType } from 'react'
 
-interface DocMeta {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export interface DocMeta {
   title: string
-  category?: string
   description?: string
   order?: number
-}
-
-interface DocModule {
-  default: ComponentType
-  meta?: DocMeta
+  // `category` is kept for backwards compat but no longer drives navigation —
+  // the file-system path is the single source of truth for tree position.
+  category?: string
 }
 
 export interface DocPage {
@@ -18,22 +17,98 @@ export interface DocPage {
   meta?: DocMeta
 }
 
+/**
+ * A node in the navigation tree. Every directory segment becomes a TreeNode.
+ *
+ * - Leaf page   → has `page`, no `children`
+ * - Section     → has `children`; may also have `page` (from an index.mdx)
+ * - Auto-section→ has `children`, no `page`  →  App generates a listing route
+ */
+export interface TreeNode {
+  slug: string
+  label: string
+  path: string
+  page?: DocPage
+  children: TreeNode[]
+  order: number
+}
+
+export interface NavTree {
+  /** The root "/" page, if one exists (docs/index.mdx) */
+  root?: DocPage
+  /** All other top-level nodes */
+  nodes: TreeNode[]
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function prettify(slug: string): string {
+  return slug
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
+}
+
+function sortNodes(nodes: TreeNode[]): void {
+  nodes.sort((a, b) => {
+    if (a.order !== b.order) return a.order - b.order
+    return a.label.localeCompare(b.label)
+  })
+  for (const n of nodes) sortNodes(n.children)
+}
+
+/** Recursively insert a page into the tree by path segments. */
+function insertPage(
+  nodes: TreeNode[],
+  segments: string[],
+  page: DocPage,
+  prefixPath: string,
+): void {
+  const [head, ...rest] = segments
+  const nodePath = prefixPath ? `${prefixPath}/${head}` : `/${head}`
+
+  let node = nodes.find((n) => n.slug === head)
+  if (!node) {
+    node = {
+      slug: head,
+      label: prettify(head),
+      path: nodePath,
+      children: [],
+      order: 999,
+    }
+    nodes.push(node)
+  }
+
+  if (rest.length === 0) {
+    // This page maps to this node (leaf or directory index)
+    node.page = page
+    node.label = page.meta?.title ?? prettify(head)
+    node.order = page.meta?.order ?? 999
+  } else {
+    insertPage(node.children, rest, page, nodePath)
+  }
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+
 const modules = import.meta.glob('../docs/**/*.mdx', { eager: true })
 
+/** Flat list of all MDX-backed pages — used for routing. */
 export function buildRegistry(): DocPage[] {
   return Object.entries(modules)
     .map(([filePath, rawMod]) => {
-      const mod = rawMod as DocModule
-      const routePath = filePath
-        .replace('../docs', '')
-        .replace('.mdx', '')
-        .replace(/\/index$/, '/')
+      const mod = rawMod as { default: ComponentType; meta?: DocMeta }
 
-      return {
-        path: routePath || '/',
-        Component: mod.default,
-        meta: mod.meta,
-      }
+      // docs/utils/frontend/cn.mdx       → /utils/frontend/cn
+      // docs/utils/frontend/index.mdx    → /utils/frontend
+      // docs/index.mdx                   → /
+      const routePath =
+        filePath
+          .replace('../docs', '')
+          .replace('.mdx', '')
+          .replace(/\/index$/, '') || '/'
+
+      return { path: routePath, Component: mod.default, meta: mod.meta }
     })
     .sort((a, b) => {
       const ao = a.meta?.order ?? 999
@@ -43,46 +118,33 @@ export function buildRegistry(): DocPage[] {
     })
 }
 
-export interface SidebarSection {
-  name: string
-  order: number
-  pages: DocPage[]
-}
-
-const CATEGORY_ORDER: Record<string, number> = {
-  'Getting Started': 0,
-  Components: 1,
-  Utils: 2,
-  Prompts: 3,
-  Instructions: 4,
-}
-
-export function buildSidebarTree(pages: DocPage[]): SidebarSection[] {
-  const categoryMap = new Map<string, DocPage[]>()
+/** Hierarchical tree derived from file paths — used for the sidebar. */
+export function buildNavTree(pages: DocPage[]): NavTree {
+  const nodes: TreeNode[] = []
+  let root: DocPage | undefined
 
   for (const page of pages) {
-    let category: string
-
-    if (page.meta?.category) {
-      category = page.meta.category
-    } else {
-      const parts = page.path.split('/').filter(Boolean)
-      if (parts.length > 1) {
-        category = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
-      } else {
-        category = 'General'
-      }
+    if (page.path === '/') {
+      root = page
+      continue
     }
-
-    if (!categoryMap.has(category)) categoryMap.set(category, [])
-    categoryMap.get(category)!.push(page)
+    const segments = page.path.split('/').filter(Boolean)
+    insertPage(nodes, segments, page, '')
   }
 
-  return Array.from(categoryMap.entries())
-    .map(([name, sectionPages]) => ({
-      name,
-      order: CATEGORY_ORDER[name] ?? 99,
-      pages: sectionPages,
-    }))
-    .sort((a, b) => a.order - b.order)
+  sortNodes(nodes)
+  return { root, nodes }
+}
+
+/**
+ * Collect every tree node that has children but no backing MDX page.
+ * These need an auto-generated SectionIndex route in the router.
+ */
+export function collectSectionNodes(nodes: TreeNode[]): TreeNode[] {
+  const result: TreeNode[] = []
+  for (const node of nodes) {
+    if (node.children.length > 0 && !node.page) result.push(node)
+    result.push(...collectSectionNodes(node.children))
+  }
+  return result
 }

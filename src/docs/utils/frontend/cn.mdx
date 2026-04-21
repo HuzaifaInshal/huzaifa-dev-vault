@@ -1,0 +1,36 @@
+import cnSrc from '../../../utils/cn.ts?raw'
+import { CodeBlock } from '../../../doc-ui/CodeBlock'
+
+export const meta = {
+  title: 'cn',
+  description: 'Merge Tailwind classes without conflicts.',
+  order: 0,
+}
+
+# cn
+
+Merges Tailwind CSS class names without conflicts. Combines `clsx` for conditional classes with `tailwind-merge` to resolve Tailwind specificity collisions.
+
+## Source
+
+<CodeBlock source={cnSrc} language="ts" title="src/utils/cn.ts" />
+
+## Usage
+
+```ts
+import { cn } from '@/utils/cn'
+
+// Conditional classes
+cn('px-4 py-2', isActive && 'bg-violet-500')
+
+// Tailwind conflict resolution — last class wins
+cn('px-4', 'px-2')
+// → 'px-2'
+
+// Mixed
+cn('text-sm px-4', isLarge && 'text-lg px-6', className)
+```
+
+## Why not just clsx?
+
+`clsx` concatenates strings but doesn't resolve Tailwind conflicts. When you pass `px-4` and `px-2`, both appear in the output and the winner depends on stylesheet order — which is unpredictable. `twMerge` removes the earlier conflicting class, so the last value always wins.

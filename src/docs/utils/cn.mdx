@@ -1,36 +1,37 @@
-import cnSrc from '../../utils/cn.ts?raw'
+import src from '../../utils/formatDate.ts?raw'
 import { CodeBlock } from '../../doc-ui/CodeBlock'
 
 export const meta = {
-  title: 'cn',
-  category: 'Utils',
+  title: 'formatDate',
+  description: 'Format dates and relative timestamps with the Intl API.',
   order: 0,
 }
 
-# cn
+# formatDate
 
-Merges Tailwind CSS class names without conflicts. Combines `clsx` for conditionals with `tailwind-merge` to resolve Tailwind's specificity edge cases.
+Two tiny date helpers built on the native `Intl.DateTimeFormat` API — no dependencies.
+
+- **`formatDate`** — formats a date as a readable string (`April 21, 2026`)
+- **`formatRelative`** — formats a date as a relative time string (`3h ago`, `just now`)
 
 ## Source
 
-<CodeBlock source={cnSrc} language="ts" title="src/utils/cn.ts" />
+<CodeBlock source={src} language="ts" title="src/utils/formatDate.ts" />
 
 ## Usage
 
 ```ts
-import { cn } from '../utils/cn'
+import { formatDate, formatRelative } from '@/utils/formatDate'
 
-// Conditional classes
-cn('px-4 py-2', isActive && 'bg-violet-500')
+formatDate(new Date())
+// → 'April 21, 2026'
 
-// Tailwind conflict resolution — later class wins
-cn('px-4', 'px-2')
-// → 'px-2'  (twMerge resolves the conflict)
+formatDate('2025-01-01', { month: 'short' })
+// → 'Jan 1, 2025'
 
-// Both together
-cn('text-sm px-4', isLarge && 'text-lg px-6', className)
+formatRelative(Date.now() - 1000 * 60 * 5)
+// → '5m ago'
+
+formatRelative(new Date('2026-04-14'))
+// → 'April 14, 2026'  (older than 7 days → falls back to formatDate)
 ```
-
-## Why not just clsx?
-
-`clsx` concatenates class strings but doesn't resolve Tailwind conflicts. If you pass `px-4` and `px-2`, both end up in the output and the winner depends on stylesheet order — which is unpredictable. `twMerge` removes the earlier conflicting class, so the last one always wins.
