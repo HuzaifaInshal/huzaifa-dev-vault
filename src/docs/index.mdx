@@ -1,0 +1,59 @@
+export const meta = {
+  title: 'Introduction',
+  category: 'Getting Started',
+  order: 0,
+}
+
+# Welcome to DevDocs
+
+Your personal library for components, utilities, prompts, and instructions — everything rendered from a single source of truth.
+
+## How it works
+
+Every doc page is an `.mdx` file in `src/docs/`. You write the page in Markdown/JSX, import your real component, and the same import renders **both** the live preview and the source code. No copy-pasting.
+
+## Adding a new page
+
+1. Create `src/docs/<category>/<name>.mdx`
+2. Export a `meta` object at the top
+3. Import your component and its source via `?raw`
+4. Use `<Demo>` to render both live preview and code
+
+```tsx
+import { MyComponent } from '../../components/MyComponent'
+import src from '../../components/MyComponent.tsx?raw'
+import { Demo } from '../../doc-ui/Demo'
+
+export const meta = {
+  title: 'My Component',
+  category: 'Components',
+  order: 1,
+}
+
+# My Component
+
+<Demo source={src}>
+  <MyComponent />
+</Demo>
+```
+
+The component is defined **once** in its file. The `?raw` import reads that same file as a string at build time — so what you see in the Code tab is always the real, up-to-date source.
+
+## Doc-ui primitives
+
+| Component | Purpose |
+|-----------|---------|
+| `<Demo source={src}>` | Live preview + source toggle |
+| `<CodeBlock source={src} language="ts">` | Source only, no preview |
+
+Both components accept a `title` prop for labelling.
+
+## Categories
+
+Organise your pages by setting `meta.category`. The sidebar groups them automatically. Suggested categories:
+
+- **Getting Started** — orientation pages like this one
+- **Components** — React UI components
+- **Utils** — helper functions
+- **Prompts** — LLM prompt templates
+- **Instructions** — coding standards, patterns, guidelines
