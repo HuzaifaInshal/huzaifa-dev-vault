@@ -29,10 +29,10 @@ export function Sidebar({ pages }: SidebarProps) {
             end
             className={({ isActive }) =>
               clsx(
-                'flex items-center px-3 py-1.5 text-sm rounded-md transition-colors mb-1',
+                'mb-2 block px-1 py-1 text-sm transition-colors',
                 isActive
-                  ? 'bg-violet-500/10 text-violet-400 font-medium'
-                  : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800',
+                  ? 'font-semibold text-zinc-100'
+                  : 'text-zinc-400 hover:text-zinc-100',
               )
             }
           >
@@ -65,6 +65,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
   const isCurrentPath = location.pathname === node.path
   const isChildActive = location.pathname.startsWith(node.path + '/')
   const hasChildren = node.children.length > 0
+  const isNestedLevel = depth >= 2
 
   // Start expanded if this node or a descendant is active
   const [open, setOpen] = useState(isCurrentPath || isChildActive)
@@ -77,23 +78,21 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(
-      'flex-1 min-w-0 flex items-center py-1.5 text-sm rounded-md transition-colors truncate',
-      depth === 0 ? 'font-medium' : 'font-normal',
+      'min-w-0 flex-1 py-1 text-sm leading-6 transition-colors truncate',
+      depth === 0 ? 'font-semibold text-zinc-200' : 'font-normal',
       isActive
-        ? 'text-violet-400'
+        ? 'text-zinc-100'
         : 'text-zinc-400 hover:text-zinc-100',
     )
 
   return (
-    <div style={{ paddingLeft: depth > 0 ? `${depth * 12}px` : undefined }}>
-      <div
-        className={clsx(
-          'flex items-center gap-1 rounded-md px-2',
-          (isCurrentPath || isChildActive) && !hasChildren
-            ? 'bg-violet-500/10'
-            : 'hover:bg-zinc-800',
-        )}
-      >
+    <div
+      className={clsx(
+        isNestedLevel && 'ml-4 border-l border-zinc-800/90 pl-4',
+        depth === 0 && 'mb-1.5',
+      )}
+    >
+      <div className="flex items-start gap-2">
         <NavLink to={node.path} className={linkClass} end={!hasChildren}>
           {node.label}
         </NavLink>
@@ -101,7 +100,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
         {hasChildren && (
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex-shrink-0 p-1 text-zinc-600 hover:text-zinc-300 transition-colors rounded"
+            className="mt-1 flex-shrink-0 text-zinc-600 hover:text-zinc-300 transition-colors"
             aria-label={open ? 'Collapse' : 'Expand'}
           >
             <Chevron open={open} />
