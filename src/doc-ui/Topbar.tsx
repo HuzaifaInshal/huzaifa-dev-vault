@@ -27,7 +27,13 @@ export function Topbar({ pages }: TopbarProps) {
             to="/"
             className="flex flex-shrink-0 items-center gap-2 text-sm font-semibold text-zinc-100"
           >
-            <span className="text-base leading-none text-violet-400">/</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-600">
+              <img
+                src="/assets/code.png"
+                alt="logo"
+                className="h-7 w-7 object-contain"
+              />
+            </span>
             <span className="whitespace-nowrap">Huzaifa Dev Vault</span>
           </Link>
 
