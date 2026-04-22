@@ -1,22 +1,18 @@
-import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import { clsx } from 'clsx'
-import { buildNavTree, type DocPage, type TreeNode } from '../lib/registry'
+import { useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { clsx } from "clsx";
+import { buildNavTree, type DocPage, type TreeNode } from "../lib/registry";
 
 interface SidebarProps {
-  pages: DocPage[]
+  pages: DocPage[];
 }
 
 export function Sidebar({ pages }: SidebarProps) {
-  const navTree = buildNavTree(pages)
+  const navTree = buildNavTree(pages);
 
   return (
-    <aside className="hidden w-[260px] flex-shrink-0 border-r border-zinc-800/60 xl:block">
-      <div className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto px-4 py-8">
-        <p className="mb-4 px-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
-          Sections
-        </p>
-
+    <aside className="hidden w-[260px] flex-shrink-0 xl:block">
+      <div className="sticky top-20 h-[calc(100vh-5.5rem)] overflow-y-auto px-4 py-8">
         <nav className="space-y-0.5">
           {navTree.root && (
             <NavLink
@@ -24,14 +20,14 @@ export function Sidebar({ pages }: SidebarProps) {
               end
               className={({ isActive }) =>
                 clsx(
-                  'block rounded-md px-3 py-1.5 text-sm transition-colors',
+                  "block rounded-md px-3 py-1.5 text-xs transition-colors",
                   isActive
-                    ? 'bg-zinc-800 font-medium text-white'
-                    : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100',
+                    ? "bg-zinc-800 font-medium text-white"
+                    : "text-zinc-400 hover:text-zinc-100"
                 )
               }
             >
-              {navTree.root.meta?.title ?? 'Home'}
+              {navTree.root.meta?.title ?? "Home"}
             </NavLink>
           )}
 
@@ -43,40 +39,40 @@ export function Sidebar({ pages }: SidebarProps) {
         </nav>
       </div>
     </aside>
-  )
+  );
 }
 
 function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
-  const location = useLocation()
-  const isCurrentPath = location.pathname === node.path
-  const isChildActive = location.pathname.startsWith(node.path + '/')
-  const hasChildren = node.children.length > 0
+  const location = useLocation();
+  const isCurrentPath = location.pathname === node.path;
+  const isChildActive = location.pathname.startsWith(node.path + "/");
+  const hasChildren = node.children.length > 0;
 
-  const [open, setOpen] = useState(isCurrentPath || isChildActive)
+  const [open, setOpen] = useState(isCurrentPath || isChildActive);
 
   useEffect(() => {
-    if (isCurrentPath || isChildActive) setOpen(true)
-  }, [isCurrentPath, isChildActive])
+    if (isCurrentPath || isChildActive) setOpen(true);
+  }, [isCurrentPath, isChildActive]);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(
-      'min-w-0 flex-1 rounded-md py-1.5 text-sm leading-5 transition-colors truncate',
-      depth === 0 ? 'font-medium' : 'font-normal',
+      "min-w-0 flex-1 rounded-md py-1.5 text-xs leading-5 transition-colors truncate",
+      depth === 0 ? "font-medium" : "font-normal",
       isActive
-        ? 'text-white'
+        ? "text-white"
         : depth === 0
-          ? 'text-zinc-300 hover:text-white'
-          : 'text-zinc-400 hover:text-zinc-200',
-    )
+          ? "text-zinc-300 hover:text-white"
+          : "text-zinc-400 hover:text-zinc-200"
+    );
 
   return (
-    <div className={clsx(depth >= 2 && 'ml-3 border-l border-zinc-800 pl-3')}>
+    <div className={clsx(depth >= 2 && "ml-3 border-l border-zinc-800 pl-3")}>
       <div
         className={clsx(
-          'flex items-center gap-1 rounded-md px-3 transition-colors',
+          "flex items-center gap-1 rounded-md px-3 transition-colors",
           (isCurrentPath || isChildActive) && depth === 0
-            ? 'bg-zinc-800/80'
-            : 'hover:bg-zinc-800/50',
+            ? "bg-zinc-800/80"
+            : ""
         )}
       >
         <NavLink to={node.path} className={linkClass} end={!hasChildren}>
@@ -87,7 +83,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
           <button
             onClick={() => setOpen((v) => !v)}
             className="flex-shrink-0 p-1 text-zinc-600 transition-colors hover:text-zinc-300"
-            aria-label={open ? 'Collapse' : 'Expand'}
+            aria-label={open ? "Collapse" : "Expand"}
           >
             <Chevron open={open} />
           </button>
@@ -102,7 +98,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function Chevron({ open }: { open: boolean }) {
@@ -112,7 +108,10 @@ function Chevron({ open }: { open: boolean }) {
       height="11"
       viewBox="0 0 12 12"
       fill="none"
-      className={clsx('transition-transform duration-150', open ? 'rotate-90' : 'rotate-0')}
+      className={clsx(
+        "transition-transform duration-150",
+        open ? "rotate-90" : "rotate-0"
+      )}
     >
       <path
         d="M4.5 2.5L8 6l-3.5 3.5"
@@ -122,5 +121,5 @@ function Chevron({ open }: { open: boolean }) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
