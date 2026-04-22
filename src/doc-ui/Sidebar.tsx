@@ -19,7 +19,7 @@ export function Sidebar({ pages }: SidebarProps) {
               end
               className={({ isActive }) =>
                 clsx(
-                  "block px-3 py-1.5 text-sm transition-colors",
+                  "block px-3 py-1.5 text-[13px] transition-colors",
                   isActive
                     ? "font-medium text-white"
                     : "text-zinc-400 hover:text-zinc-100"
@@ -42,7 +42,7 @@ export function Sidebar({ pages }: SidebarProps) {
 function SidebarSection({ node }: { node: TreeNode }) {
   return (
     <div>
-      <p className="px-3 text-sm font-medium text-pretty text-[#ededed]">
+      <p className="px-3 text-[13px] font-medium text-pretty text-[#ededed]">
         {node.label}
       </p>
 
@@ -67,7 +67,7 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
         end={!hasChildren}
         className={({ isActive }) =>
           clsx(
-            "block px-3 py-1.5 text-sm leading-5 text-pretty transition-colors truncate",
+            "block px-3 py-1.5 text-[13px] leading-5 text-pretty transition-colors truncate",
             isActive
               ? "font-medium text-white"
               : "text-[#a1a1a1] hover:text-[#ededed]"

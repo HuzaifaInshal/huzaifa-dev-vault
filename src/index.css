@@ -5,7 +5,7 @@
 @layer base {
   html {
     color-scheme: dark;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Geist', system-ui, sans-serif;
     scroll-behavior: smooth;
   }
 
