@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { DocPager } from './DocPager'
 import { Sidebar } from './Sidebar'
 import { TableOfContents } from './TableOfContents'
 import { Topbar } from './Topbar'
@@ -18,6 +19,7 @@ export function Layout({ pages }: LayoutProps) {
           <div className="mx-auto flex w-full max-w-7xl gap-8 px-6 py-8 lg:px-8">
             <article id="doc-content" className="min-w-0 flex-1 max-w-3xl">
               <Outlet />
+              <DocPager pages={pages} />
             </article>
             <TableOfContents />
           </div>

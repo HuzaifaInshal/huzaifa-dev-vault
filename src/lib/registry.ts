@@ -40,6 +40,11 @@ export interface NavTree {
   nodes: TreeNode[];
 }
 
+export interface BreadcrumbItem {
+  label: string;
+  path: string;
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function prettify(slug: string): string {
@@ -159,4 +164,40 @@ export function collectSectionNodes(nodes: TreeNode[]): TreeNode[] {
     result.push(...collectSectionNodes(node.children));
   }
   return result;
+}
+
+function findNodeTrail(nodes: TreeNode[], targetPath: string): TreeNode[] | null {
+  for (const node of nodes) {
+    if (node.path === targetPath) return [node];
+
+    const childTrail = findNodeTrail(node.children, targetPath);
+    if (childTrail) return [node, ...childTrail];
+  }
+
+  return null;
+}
+
+export function buildBreadcrumbs(navTree: NavTree, path: string): BreadcrumbItem[] {
+  const breadcrumbs: BreadcrumbItem[] = [];
+
+  if (navTree.root) {
+    breadcrumbs.push({
+      label: navTree.root.meta?.title ?? "Home",
+      path: "/"
+    });
+  }
+
+  if (path === "/") return breadcrumbs;
+
+  const trail = findNodeTrail(navTree.nodes, path);
+  if (!trail) return breadcrumbs;
+
+  breadcrumbs.push(
+    ...trail.map((node) => ({
+      label: node.label,
+      path: node.path
+    }))
+  );
+
+  return breadcrumbs;
 }
