@@ -1,5 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
+import { TableOfContents } from './TableOfContents'
+import { Topbar } from './Topbar'
 import type { DocPage } from '../lib/registry'
 
 interface LayoutProps {
@@ -10,11 +12,17 @@ export function Layout({ pages }: LayoutProps) {
   return (
     <div className="flex h-screen bg-zinc-950 overflow-hidden">
       <Sidebar pages={pages} />
-      <main className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-8 py-12">
-          <Outlet />
-        </div>
-      </main>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <Topbar pages={pages} />
+        <main className="flex-1 overflow-y-auto">
+          <div className="mx-auto flex w-full max-w-7xl gap-8 px-6 py-8 lg:px-8">
+            <article id="doc-content" className="min-w-0 flex-1 max-w-3xl">
+              <Outlet />
+            </article>
+            <TableOfContents />
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

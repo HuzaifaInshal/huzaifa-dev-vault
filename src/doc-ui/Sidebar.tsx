@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { clsx } from 'clsx'
 import { buildNavTree, type DocPage, type TreeNode } from '../lib/registry'
@@ -68,6 +68,12 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
 
   // Start expanded if this node or a descendant is active
   const [open, setOpen] = useState(isCurrentPath || isChildActive)
+
+  useEffect(() => {
+    if (isCurrentPath || isChildActive) {
+      setOpen(true)
+    }
+  }, [isCurrentPath, isChildActive])
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(

@@ -1,8 +1,8 @@
 export const meta = {
-  title: 'Introduction',
-  category: 'Getting Started',
-  order: 0,
-}
+  title: "Introduction",
+  category: "Getting Started",
+  order: 0
+};
 
 # Welcome to DevDocs
 
@@ -10,19 +10,19 @@ Your personal library for components, utilities, prompts, and instructions — e
 
 ## How it works
 
-Every doc page is an `.mdx` file in `src/docs/`. You write the page in Markdown/JSX, import your real component, and the same import renders **both** the live preview and the source code. No copy-pasting.
+Every doc page lives inside `src/documentation/`. Each page gets its own folder, with the `.mdx` file and any local imported markdown sitting together. You write the page in Markdown/JSX, import your real component, and the same import renders **both** the live preview and the source code. No copy-pasting.
 
 ## Adding a new page
 
-1. Create `src/docs/<category>/<name>.mdx`
+1. Create `src/documentation/<category>/<name>/<name>.mdx`
 2. Export a `meta` object at the top
 3. Import your component and its source via `?raw`
 4. Use `<Demo>` to render both live preview and code
 
 ```tsx
-import { MyComponent } from '../../components/MyComponent'
-import src from '../../components/MyComponent.tsx?raw'
-import { Demo } from '../../doc-ui/Demo'
+import { MyComponent } from '../components/MyComponent'
+import src from '../components/MyComponent.tsx?raw'
+import { Demo } from '../doc-ui/Demo'
 
 export const meta = {
   title: 'My Component',
@@ -41,10 +41,10 @@ The component is defined **once** in its file. The `?raw` import reads that same
 
 ## Doc-ui primitives
 
-| Component | Purpose |
-|-----------|---------|
-| `<Demo source={src}>` | Live preview + source toggle |
-| `<CodeBlock source={src} language="ts">` | Source only, no preview |
+| Component                                | Purpose                      |
+| ---------------------------------------- | ---------------------------- |
+| `<Demo source={src}>`                    | Live preview + source toggle |
+| `<CodeBlock source={src} language="ts">` | Source only, no preview      |
 
 Both components accept a `title` prop for labelling.
 
