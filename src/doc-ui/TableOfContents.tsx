@@ -17,14 +17,9 @@ function getHeadings(): HeadingLink[] {
       const text = heading.textContent?.trim()
       const id = heading.getAttribute('id')
       if (!text || !id) return null
-
-      return {
-        id,
-        text,
-        level: heading.tagName === 'H2' ? 2 : 3,
-      } satisfies HeadingLink
+      return { id, text, level: heading.tagName === 'H2' ? 2 : 3 } satisfies HeadingLink
     })
-    .filter((heading): heading is HeadingLink => heading !== null)
+    .filter((h): h is HeadingLink => h !== null)
 }
 
 export function TableOfContents() {
@@ -33,83 +28,61 @@ export function TableOfContents() {
   const [activeId, setActiveId] = useState<string>('')
 
   useEffect(() => {
-    let frame = 0
-    const updateHeadings = () => setHeadings(getHeadings())
-
-    frame = window.requestAnimationFrame(updateHeadings)
-
+    const frame = window.requestAnimationFrame(() => setHeadings(getHeadings()))
     return () => window.cancelAnimationFrame(frame)
   }, [location.pathname])
 
   useEffect(() => {
-    if (headings.length === 0) {
-      setActiveId('')
-      return
-    }
+    if (headings.length === 0) { setActiveId(''); return }
 
     const elements = headings
-      .map((heading) => document.getElementById(heading.id))
-      .filter((element): element is HTMLElement => element !== null)
+      .map((h) => document.getElementById(h.id))
+      .filter((el): el is HTMLElement => el !== null)
 
     if (elements.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              (a.target as HTMLElement).offsetTop - (b.target as HTMLElement).offsetTop,
-          )
-
-        if (visibleEntries.length > 0) {
-          setActiveId(visibleEntries[0].target.id)
-        }
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (a.target as HTMLElement).offsetTop - (b.target as HTMLElement).offsetTop)
+        if (visible.length > 0) setActiveId(visible[0].target.id)
       },
-      {
-        rootMargin: '0px 0px -70% 0px',
-        threshold: [0, 1],
-      },
+      { rootMargin: '0px 0px -70% 0px', threshold: [0, 1] },
     )
 
-    elements.forEach((element) => observer.observe(element))
-
-    const fallbackActive = elements.find((element) => element.getBoundingClientRect().top >= 0)
-    setActiveId(fallbackActive?.id ?? elements[0].id)
+    elements.forEach((el) => observer.observe(el))
+    const fallback = elements.find((el) => el.getBoundingClientRect().top >= 0)
+    setActiveId(fallback?.id ?? elements[0].id)
 
     return () => observer.disconnect()
   }, [headings, location.pathname])
 
-  if (headings.length === 0) {
-    return null
-  }
+  if (headings.length === 0) return null
 
   return (
-    <aside className="hidden w-72 flex-shrink-0 xl:block">
-      <div className="sticky top-6 py-4">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            On This Page
-          </p>
-
-          <nav className="mt-4 space-y-1">
-            {headings.map((heading) => (
-              <a
-                key={heading.id}
-                href={`#${heading.id}`}
-                className={clsx(
-                  'block rounded-lg px-3 py-2 text-sm transition-colors',
-                  heading.level === 3 && 'ml-3 text-[13px]',
-                  activeId === heading.id
-                    ? 'bg-violet-500/10 text-violet-300'
-                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100',
-                )}
-              >
-                {heading.text}
-              </a>
-            ))}
-          </nav>
-        </div>
+    <aside className="hidden w-[240px] flex-shrink-0 xl:block">
+      <div className="sticky top-14 py-8">
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
+          On this page
+        </p>
+        <nav className="space-y-1">
+          {headings.map((heading) => (
+            <a
+              key={heading.id}
+              href={`#${heading.id}`}
+              className={clsx(
+                'block py-1 text-[13px] leading-5 transition-colors',
+                heading.level === 3 && 'pl-3',
+                activeId === heading.id
+                  ? 'text-white'
+                  : 'text-zinc-500 hover:text-zinc-300',
+              )}
+            >
+              {heading.text}
+            </a>
+          ))}
+        </nav>
       </div>
     </aside>
   )

@@ -11,24 +11,23 @@ export function Sidebar({ pages }: SidebarProps) {
   const navTree = buildNavTree(pages)
 
   return (
-    <aside className="hidden w-72 flex-shrink-0 border-r border-zinc-800/80 xl:block">
-      <div className="sticky top-0 h-[calc(100vh-4rem)] overflow-y-auto px-6 py-8">
-        <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">
+    <aside className="hidden w-[260px] flex-shrink-0 border-r border-zinc-800/60 xl:block">
+      <div className="sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto px-4 py-8">
+        <p className="mb-4 px-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
           Sections
         </p>
 
-        <nav className="space-y-1">
-          {/* Root index page (e.g. Introduction) */}
+        <nav className="space-y-0.5">
           {navTree.root && (
             <NavLink
               to="/"
               end
               className={({ isActive }) =>
                 clsx(
-                  'mb-2 block px-1 py-1 text-sm transition-colors',
+                  'block rounded-md px-3 py-1.5 text-sm transition-colors',
                   isActive
-                    ? 'font-semibold text-violet-300'
-                    : 'text-zinc-400 hover:text-violet-300',
+                    ? 'bg-zinc-800 font-medium text-white'
+                    : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100',
                 )
               }
             >
@@ -36,8 +35,7 @@ export function Sidebar({ pages }: SidebarProps) {
             </NavLink>
           )}
 
-          {/* Tree */}
-          <div className="mt-1 space-y-0.5">
+          <div className="space-y-0.5">
             {navTree.nodes.map((node) => (
               <SidebarNode key={node.path} node={node} depth={0} />
             ))}
@@ -48,45 +46,39 @@ export function Sidebar({ pages }: SidebarProps) {
   )
 }
 
-// ─── Recursive node ───────────────────────────────────────────────────────────
-
 function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
   const location = useLocation()
   const isCurrentPath = location.pathname === node.path
   const isChildActive = location.pathname.startsWith(node.path + '/')
   const hasChildren = node.children.length > 0
-  const isNestedLevel = depth >= 2
 
-  // Start expanded if this node or a descendant is active
   const [open, setOpen] = useState(isCurrentPath || isChildActive)
 
   useEffect(() => {
-    if (isCurrentPath || isChildActive) {
-      setOpen(true)
-    }
+    if (isCurrentPath || isChildActive) setOpen(true)
   }, [isCurrentPath, isChildActive])
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(
-      'min-w-0 flex-1 py-1 text-sm leading-6 transition-colors truncate',
-      depth === 0 ? 'font-semibold' : 'font-normal',
+      'min-w-0 flex-1 rounded-md py-1.5 text-sm leading-5 transition-colors truncate',
+      depth === 0 ? 'font-medium' : 'font-normal',
       isActive
-        ? depth === 0
-          ? 'text-violet-300'
-          : 'text-violet-200'
+        ? 'text-white'
         : depth === 0
-          ? 'text-zinc-200 hover:text-violet-300'
-          : 'text-zinc-400 hover:text-violet-200',
+          ? 'text-zinc-300 hover:text-white'
+          : 'text-zinc-400 hover:text-zinc-200',
     )
 
   return (
-    <div
-      className={clsx(
-        isNestedLevel && 'ml-4 border-l border-violet-500/20 pl-4',
-        depth === 0 && 'mb-1.5',
-      )}
-    >
-      <div className="flex items-start gap-2">
+    <div className={clsx(depth >= 2 && 'ml-3 border-l border-zinc-800 pl-3')}>
+      <div
+        className={clsx(
+          'flex items-center gap-1 rounded-md px-3 transition-colors',
+          (isCurrentPath || isChildActive) && depth === 0
+            ? 'bg-zinc-800/80'
+            : 'hover:bg-zinc-800/50',
+        )}
+      >
         <NavLink to={node.path} className={linkClass} end={!hasChildren}>
           {node.label}
         </NavLink>
@@ -94,7 +86,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
         {hasChildren && (
           <button
             onClick={() => setOpen((v) => !v)}
-            className="mt-1 flex-shrink-0 text-zinc-600 transition-colors hover:text-violet-300"
+            className="flex-shrink-0 p-1 text-zinc-600 transition-colors hover:text-zinc-300"
             aria-label={open ? 'Collapse' : 'Expand'}
           >
             <Chevron open={open} />
@@ -120,10 +112,7 @@ function Chevron({ open }: { open: boolean }) {
       height="11"
       viewBox="0 0 12 12"
       fill="none"
-      className={clsx(
-        'transition-transform duration-150',
-        open ? 'rotate-90' : 'rotate-0',
-      )}
+      className={clsx('transition-transform duration-150', open ? 'rotate-90' : 'rotate-0')}
     >
       <path
         d="M4.5 2.5L8 6l-3.5 3.5"

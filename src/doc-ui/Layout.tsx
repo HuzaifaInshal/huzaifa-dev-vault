@@ -12,14 +12,17 @@ interface LayoutProps {
 
 export function Layout({ pages }: LayoutProps) {
   return (
-    <div className="h-screen overflow-hidden bg-zinc-950">
+    <div className="min-h-screen bg-zinc-950">
       <Topbar pages={pages} />
-      <div className="flex h-full pt-16">
+      <div className="mx-auto flex max-w-[1680px] pt-14">
         <Sidebar pages={pages} />
-        <main className="min-w-0 flex-1 overflow-y-auto">
+        <main className="min-w-0 flex-1">
           <div className="flex">
-            <div className="mx-auto flex w-full max-w-[40rem] gap-10 px-6 py-10 lg:px-8">
-              <article id="doc-content" className="min-w-0 flex-1 max-w-4xl">
+            <div className="flex flex-1 justify-center gap-10 px-6 py-10 lg:px-8">
+              <article
+                id="doc-content"
+                className="min-w-0 w-full max-w-[40rem]"
+              >
                 <PageHeader pages={pages} />
                 <Outlet />
                 <DocPager pages={pages} />

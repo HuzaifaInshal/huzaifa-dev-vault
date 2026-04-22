@@ -11,39 +11,39 @@ export function DocPager({ pages }: DocPagerProps) {
 
   if (currentIndex === -1) return null
 
-  const previousPage = currentIndex > 0 ? pages[currentIndex - 1] : undefined
-  const nextPage = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : undefined
+  const prev = currentIndex > 0 ? pages[currentIndex - 1] : undefined
+  const next = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : undefined
 
-  if (!previousPage && !nextPage) return null
+  if (!prev && !next) return null
 
   return (
     <div className="mt-12 grid gap-3 border-t border-zinc-800 pt-8 sm:grid-cols-2">
-      {previousPage ? (
+      {prev ? (
         <Link
-          to={previousPage.path}
-          className="rounded-2xl border border-zinc-800 bg-zinc-900/55 p-4 transition-colors hover:border-zinc-700 hover:bg-zinc-900"
+          to={prev.path}
+          className="group rounded-[10px] border border-zinc-800 p-4 transition-colors hover:bg-zinc-900"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Previous
+          <p className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
+            <span>←</span> Previous
           </p>
-          <p className="mt-2 text-sm font-medium text-zinc-100">
-            {previousPage.meta?.title ?? previousPage.path}
+          <p className="text-sm font-medium text-zinc-100 group-hover:text-white">
+            {prev.meta?.title ?? prev.path}
           </p>
         </Link>
       ) : (
         <div />
       )}
 
-      {nextPage ? (
+      {next ? (
         <Link
-          to={nextPage.path}
-          className="rounded-2xl border border-zinc-800 bg-zinc-900/55 p-4 text-left transition-colors hover:border-zinc-700 hover:bg-zinc-900 sm:ml-auto"
+          to={next.path}
+          className="group rounded-[10px] border border-zinc-800 p-4 text-right transition-colors hover:bg-zinc-900 sm:ml-auto sm:w-full"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
-            Next
+          <p className="mb-1 flex items-center justify-end gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
+            Next <span>→</span>
           </p>
-          <p className="mt-2 text-sm font-medium text-zinc-100">
-            {nextPage.meta?.title ?? nextPage.path}
+          <p className="text-sm font-medium text-zinc-100 group-hover:text-white">
+            {next.meta?.title ?? next.path}
           </p>
         </Link>
       ) : null}
