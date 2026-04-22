@@ -9,6 +9,7 @@ export default defineConfig({
     {
       enforce: 'pre',
       ...mdx({
+        include: /\.mdx$/,
         remarkPlugins: [remarkGfm],
         rehypePlugins: [rehypeSlug],
         providerImportSource: '@mdx-js/react',
