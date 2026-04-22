@@ -86,8 +86,8 @@ export function TableOfContents() {
 
   return (
     <aside className="hidden w-72 flex-shrink-0 xl:block">
-      <div className="sticky top-28 px-4 py-8">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/55 p-4">
+      <div className="sticky top-6 py-4">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">
             On This Page
           </p>

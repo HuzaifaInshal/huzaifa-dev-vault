@@ -11,48 +11,38 @@ export function Sidebar({ pages }: SidebarProps) {
   const navTree = buildNavTree(pages)
 
   return (
-    <aside className="w-64 flex-shrink-0 h-screen border-r border-zinc-800 bg-zinc-900 flex flex-col">
-      {/* Brand */}
-      <div className="px-6 py-5 border-b border-zinc-800 flex-shrink-0">
-        <span className="font-bold text-zinc-100 text-base tracking-tight">
-          Huzaifa Dev Vault
-        </span>
-        <span className="text-violet-400 font-bold text-lg">.</span>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-2 py-3">
-        {/* Root index page (e.g. Introduction) */}
-        {navTree.root && (
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              clsx(
-                'mb-2 block px-1 py-1 text-sm transition-colors',
-                isActive
-                  ? 'font-semibold text-zinc-100'
-                  : 'text-zinc-400 hover:text-zinc-100',
-              )
-            }
-          >
-            {navTree.root.meta?.title ?? 'Home'}
-          </NavLink>
-        )}
-
-        {/* Tree */}
-        <div className="mt-1 space-y-0.5">
-          {navTree.nodes.map((node) => (
-            <SidebarNode key={node.path} node={node} depth={0} />
-          ))}
-        </div>
-      </nav>
-
-      {/* Footer */}
-      <div className="px-6 py-3 border-t border-zinc-800 flex-shrink-0">
-        <p className="text-[11px] text-zinc-600">
-          {pages.length} page{pages.length !== 1 ? 's' : ''}
+    <aside className="hidden w-72 flex-shrink-0 border-r border-zinc-800/80 xl:block">
+      <div className="sticky top-0 h-[calc(100vh-4rem)] overflow-y-auto px-6 py-8">
+        <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">
+          Sections
         </p>
+
+        <nav className="space-y-1">
+          {/* Root index page (e.g. Introduction) */}
+          {navTree.root && (
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                clsx(
+                  'mb-2 block px-1 py-1 text-sm transition-colors',
+                  isActive
+                    ? 'font-semibold text-violet-300'
+                    : 'text-zinc-400 hover:text-violet-300',
+                )
+              }
+            >
+              {navTree.root.meta?.title ?? 'Home'}
+            </NavLink>
+          )}
+
+          {/* Tree */}
+          <div className="mt-1 space-y-0.5">
+            {navTree.nodes.map((node) => (
+              <SidebarNode key={node.path} node={node} depth={0} />
+            ))}
+          </div>
+        </nav>
       </div>
     </aside>
   )
@@ -79,16 +69,20 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     clsx(
       'min-w-0 flex-1 py-1 text-sm leading-6 transition-colors truncate',
-      depth === 0 ? 'font-semibold text-zinc-200' : 'font-normal',
+      depth === 0 ? 'font-semibold' : 'font-normal',
       isActive
-        ? 'text-zinc-100'
-        : 'text-zinc-400 hover:text-zinc-100',
+        ? depth === 0
+          ? 'text-violet-300'
+          : 'text-violet-200'
+        : depth === 0
+          ? 'text-zinc-200 hover:text-violet-300'
+          : 'text-zinc-400 hover:text-violet-200',
     )
 
   return (
     <div
       className={clsx(
-        isNestedLevel && 'ml-4 border-l border-zinc-800/90 pl-4',
+        isNestedLevel && 'ml-4 border-l border-violet-500/20 pl-4',
         depth === 0 && 'mb-1.5',
       )}
     >
@@ -100,7 +94,7 @@ function SidebarNode({ node, depth }: { node: TreeNode; depth: number }) {
         {hasChildren && (
           <button
             onClick={() => setOpen((v) => !v)}
-            className="mt-1 flex-shrink-0 text-zinc-600 hover:text-zinc-300 transition-colors"
+            className="mt-1 flex-shrink-0 text-zinc-600 transition-colors hover:text-violet-300"
             aria-label={open ? 'Collapse' : 'Expand'}
           >
             <Chevron open={open} />
