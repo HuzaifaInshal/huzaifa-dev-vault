@@ -79,7 +79,7 @@ export function TableOfContents() {
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
           On this page
         </p>
-        <nav className="space-y-1">
+        <nav className="">
           {headings.map((heading) => (
             <a
               key={heading.id}

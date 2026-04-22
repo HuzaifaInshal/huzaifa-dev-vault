@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import { buildBreadcrumbs, buildNavTree, type DocPage } from "../lib/registry";
 
 interface PageHeaderProps {
@@ -24,7 +25,7 @@ export function PageHeader({ pages }: PageHeaderProps) {
         >
           {breadcrumbs.map((item, index) => (
             <span key={item.path} className="flex items-center gap-1">
-              {index > 0 && <span className="text-zinc-700">/</span>}
+          {index > 0 && <ChevronRight size={13} className="text-zinc-700" />}
               {index === breadcrumbs.length - 1 ? (
                 <span className="font-medium text-zinc-300">{item.label}</span>
               ) : (

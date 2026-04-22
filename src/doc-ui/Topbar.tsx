@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Star } from "lucide-react";
 import { buildNavTree, type DocPage } from "../lib/registry";
 
 interface TopbarProps {
@@ -47,21 +48,22 @@ export function Topbar({ pages }: TopbarProps) {
           <div className="flex h-9 w-64 items-center rounded-lg text-sm border border-zinc-800 bg-zinc-900 px-3 text-zinc-500">
             Search documentation...
           </div>
-          <a
+          {/* <a
             href={REPO_URL}
             target="_blank"
             rel="noreferrer"
             className="text-sm text-zinc-400 transition-colors hover:text-zinc-100"
           >
             Repository
-          </a>
+          </a> */}
           <a
             href={`${REPO_URL}/stargazers`}
             target="_blank"
             rel="noreferrer"
-            className="rounded-lg border border-violet-500/30 bg-violet-500/10 px-3 py-1.5 text-sm font-medium text-violet-300 transition-colors hover:border-violet-400/40 hover:bg-violet-500/15"
+            className="flex items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/10 px-3 py-1.5 text-sm font-medium text-violet-300 transition-colors hover:border-violet-400/40 hover:bg-violet-500/15"
           >
-            Star the repo
+            Love the work? Star it
+            <Star size={14} className="fill-violet-300" />
           </a>
         </div>
       </div>

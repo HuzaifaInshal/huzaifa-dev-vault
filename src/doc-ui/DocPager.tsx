@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { DocPage } from '../lib/registry'
 
 interface DocPagerProps {
@@ -24,7 +25,7 @@ export function DocPager({ pages }: DocPagerProps) {
           className="group rounded-[10px] border border-zinc-800 p-4 transition-colors hover:bg-zinc-900"
         >
           <p className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
-            <span>←</span> Previous
+            <ChevronLeft size={13} /> Previous
           </p>
           <p className="text-sm font-medium text-zinc-100 group-hover:text-white">
             {prev.meta?.title ?? prev.path}
@@ -40,7 +41,7 @@ export function DocPager({ pages }: DocPagerProps) {
           className="group rounded-[10px] border border-zinc-800 p-4 text-right transition-colors hover:bg-zinc-900 sm:ml-auto sm:w-full"
         >
           <p className="mb-1 flex items-center justify-end gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
-            Next <span>→</span>
+            Next <ChevronRight size={13} />
           </p>
           <p className="text-sm font-medium text-zinc-100 group-hover:text-white">
             {next.meta?.title ?? next.path}

@@ -43,7 +43,7 @@ export function Sidebar({ pages }: SidebarProps) {
 function SidebarSection({ node }: { node: TreeNode }) {
   return (
     <div>
-      <p className="px-3 text-[13px] font-medium text-pretty text-[#ededed]">
+      <p className="px-3 text-[13px] font-medium text-pretty text-zinc-100">
         {node.label}
       </p>
 
@@ -82,7 +82,7 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
                 "flex-1 py-1 text-[13px] leading-5 transition-colors truncate",
                 isActive
                   ? "text-violet-500"
-                  : "text-[#a1a1a1] hover:text-[#ededed]"
+                  : "text-zinc-400 hover:text-zinc-100"
               )
             }
           >
@@ -91,7 +91,7 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
           {hasChildren && (
             <button
               onClick={() => setOpen((v) => !v)}
-              className="flex-shrink-0 text-[#a1a1a1] transition-colors hover:text-[#ededed]"
+              className="flex-shrink-0 text-zinc-400 transition-colors hover:text-zinc-100"
             >
               <Chevron open={open} />
             </button>
@@ -117,9 +117,7 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
           className={({ isActive }) =>
             clsx(
               "flex-1 px-3 py-1 text-[13px] leading-5 text-pretty transition-colors truncate",
-              isActive
-                ? "text-violet-500"
-                : "text-[#a1a1a1] hover:text-[#ededed]"
+              isActive ? "text-violet-500" : "text-zinc-400 hover:text-zinc-100"
             )
           }
         >
@@ -128,7 +126,7 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
         {hasChildren && (
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex-shrink-0 pr-3 text-[#a1a1a1] transition-colors hover:text-[#ededed]"
+            className="flex-shrink-0 pr-3 text-zinc-400 transition-colors hover:text-zinc-100"
           >
             <Chevron open={open} />
           </button>

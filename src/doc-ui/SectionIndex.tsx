@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
-import type { TreeNode } from '../lib/registry'
+import { Link } from "react-router-dom";
+import type { TreeNode } from "../lib/registry";
 
 interface SectionIndexProps {
-  node: TreeNode
+  node: TreeNode;
 }
 
 export function SectionIndex({ node }: SectionIndexProps) {
@@ -10,7 +10,9 @@ export function SectionIndex({ node }: SectionIndexProps) {
     <div>
       <h1 className="text-3xl font-bold text-zinc-100 mb-2">{node.label}</h1>
       {node.page?.meta?.description && (
-        <p className="text-zinc-400 leading-7 mb-8">{node.page.meta.description}</p>
+        <p className="text-zinc-400 leading-7 mb-8">
+          {node.page.meta.description}
+        </p>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-8">
@@ -25,7 +27,7 @@ export function SectionIndex({ node }: SectionIndexProps) {
                 {child.label}
               </span>
               <span className="text-zinc-600 group-hover:text-violet-400 transition-colors mt-0.5 text-sm">
-                →
+                ›
               </span>
             </div>
 
@@ -35,12 +37,13 @@ export function SectionIndex({ node }: SectionIndexProps) {
               </p>
             ) : child.children.length > 0 ? (
               <p className="text-sm text-zinc-600">
-                {child.children.length} item{child.children.length !== 1 ? 's' : ''}
+                {child.children.length} item
+                {child.children.length !== 1 ? "s" : ""}
               </p>
             ) : null}
           </Link>
         ))}
       </div>
     </div>
-  )
+  );
 }
