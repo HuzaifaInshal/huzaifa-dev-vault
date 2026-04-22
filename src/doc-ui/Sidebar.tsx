@@ -43,9 +43,12 @@ export function Sidebar({ pages }: SidebarProps) {
 function SidebarSection({ node }: { node: TreeNode }) {
   return (
     <div>
-      <p className="px-3 text-[13px] font-medium text-pretty text-zinc-100">
+      <NavLink
+        to={node.path}
+        className="px-3 text-[13px] font-medium text-pretty text-zinc-100"
+      >
         {node.label}
-      </p>
+      </NavLink>
 
       {node.children.length > 0 && (
         <div className="mt-1">

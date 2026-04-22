@@ -16,7 +16,7 @@ export function Layout({ pages }: LayoutProps) {
       <Topbar pages={pages} />
       <div className="flex pt">
         <Sidebar pages={pages} />
-        <main className="min-w-0 flex-1">
+        <main className="min-w-0 flex-1 min-h-dvh">
           <div className="flex">
             <div className="flex flex-1 justify-center gap-10 px-6 py-24 lg:px-8">
               <article
