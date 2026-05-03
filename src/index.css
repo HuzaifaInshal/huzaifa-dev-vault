@@ -37,3 +37,57 @@
     background: rgb(82 82 91);
   }
 }
+
+@layer components {
+  .prompt-markdown h1 {
+    @apply mt-0 mb-4 text-xl font-semibold text-zinc-100;
+  }
+
+  .prompt-markdown h2 {
+    @apply mt-6 mb-3 border-b border-zinc-800 pb-2 text-base font-semibold text-zinc-100 first:mt-0;
+  }
+
+  .prompt-markdown h3 {
+    @apply mt-5 mb-2 text-sm font-semibold text-zinc-200;
+  }
+
+  .prompt-markdown p {
+    @apply mb-4 leading-7 text-zinc-300;
+  }
+
+  .prompt-markdown ul {
+    @apply mb-4 ml-5 list-outside list-disc space-y-1 text-zinc-300;
+  }
+
+  .prompt-markdown ol {
+    @apply mb-4 ml-5 list-outside list-decimal space-y-1 text-zinc-300;
+  }
+
+  .prompt-markdown li {
+    @apply leading-7;
+  }
+
+  .prompt-markdown hr {
+    @apply my-6 border-zinc-800;
+  }
+
+  .prompt-markdown strong {
+    @apply font-semibold text-zinc-100;
+  }
+
+  .prompt-markdown a {
+    @apply text-violet-300 underline underline-offset-2 transition-colors hover:text-violet-200;
+  }
+
+  .prompt-markdown pre {
+    @apply mb-4 overflow-x-auto rounded-lg border border-zinc-800 bg-zinc-950 p-4 text-xs leading-6;
+  }
+
+  .prompt-markdown code {
+    @apply rounded bg-zinc-800 px-1.5 py-0.5 font-mono text-[0.875em] text-violet-200;
+  }
+
+  .prompt-markdown pre code {
+    @apply bg-transparent p-0 text-xs text-zinc-200;
+  }
+}

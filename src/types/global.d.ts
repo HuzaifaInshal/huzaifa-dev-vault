@@ -11,6 +11,11 @@ declare module '*.mdx' {
   }
 }
 
+declare module '*.md' {
+  const Component: ComponentType
+  export default Component
+}
+
 declare module '*?raw' {
   const content: string
   export default content

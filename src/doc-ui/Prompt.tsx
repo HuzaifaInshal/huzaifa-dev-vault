@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 interface PromptProps {
   /** Raw string from a `?raw` import — the prompt text to display and copy */
-  source: string;
+  children?: ReactNode;
   title?: string;
 }
 
-export function Prompt({ source, title }: PromptProps) {
+export function Prompt({ children, title }: PromptProps) {
   const [copied, setCopied] = useState(false);
+  const content = String(children)?.trim?.() ?? "";
 
   const copy = async () => {
-    await navigator.clipboard.writeText(source?.trim());
+    await navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -42,9 +43,9 @@ export function Prompt({ source, title }: PromptProps) {
 
       {/* Body */}
       <div className="bg-[#0a0a12] p-5 overflow-x-auto">
-        <pre className="text-sm text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap break-words m-0">
-          {source?.trim?.()}
-        </pre>
+        <div className="prompt-markdown text-sm text-zinc-300 leading-relaxed">
+          {children || ""}
+        </div>
       </div>
     </div>
   );

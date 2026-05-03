@@ -1,4 +1,4 @@
-import src from "./project-structure-plus-instructions-for-ui.md?raw";
+import GuidelinesPrompt from "./project-structure-plus-instructions-for-ui.md";
 import { Prompt } from "../../../../doc-ui/Prompt";
 
 export const meta = {
@@ -14,4 +14,6 @@ Following md file provide brief description for project structure and some neces
 
 ## Prompt
 
-<Prompt source={src} title="Instructions and Guidelines" />
+<Prompt title="Instructions and Guidelines">
+  <GuidelinesPrompt />
+</Prompt>

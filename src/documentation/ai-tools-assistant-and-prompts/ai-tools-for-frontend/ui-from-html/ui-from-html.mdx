@@ -1,4 +1,4 @@
-import src from "./ui-from-html.md?raw";
+import HtmlPrompt from "./ui-from-html.md";
 import { Prompt } from "../../../../doc-ui/Prompt";
 import img1 from "./image.png";
 import img2 from "./image-1.png";
@@ -33,4 +33,6 @@ Create both `page.tsx` and `view.tsx` first, then pass the `view` name alongside
 
 ## Prompt
 
-<Prompt source={src} title="HTML → React" />
+<Prompt title="HTML → React">
+  <HtmlPrompt />
+</Prompt>

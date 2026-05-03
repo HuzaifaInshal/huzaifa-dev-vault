@@ -9,12 +9,12 @@ export default defineConfig({
     {
       enforce: 'pre',
       ...mdx({
-        include: /\.mdx$/,
+        include: /\.mdx?$/,
         remarkPlugins: [remarkGfm],
         rehypePlugins: [rehypeSlug],
         providerImportSource: '@mdx-js/react',
       }),
     },
-    react({ include: /\.(tsx|ts|jsx|js|mdx)$/ }),
+    react({ include: /\.(tsx|ts|jsx|js|mdx?)$/ }),
   ],
 })
