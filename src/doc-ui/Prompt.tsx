@@ -1,16 +1,18 @@
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 interface PromptProps {
-  /** Raw string from a `?raw` import — the prompt text to display and copy */
   children?: ReactNode;
   title?: string;
 }
 
 export function Prompt({ children, title }: PromptProps) {
   const [copied, setCopied] = useState(false);
-  const content = String(children)?.trim?.() ?? "";
+  const [expanded, setExpanded] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const copy = async () => {
+    const content = contentRef.current?.innerText.trim() ?? "";
+
     await navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -42,9 +44,28 @@ export function Prompt({ children, title }: PromptProps) {
       </div>
 
       {/* Body */}
-      <div className="bg-[#0a0a12] p-5 overflow-x-auto">
-        <div className="prompt-markdown text-sm text-zinc-300 leading-relaxed">
+      <div className="relative bg-[#0a0a12] p-5 overflow-x-auto">
+        <div
+          ref={contentRef}
+          className={`prompt-markdown text-sm text-zinc-300 leading-relaxed ${
+            expanded ? "" : "max-h-96 overflow-hidden"
+          }`}
+        >
           {children || ""}
+        </div>
+
+        {!expanded && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-[60px] h-24 bg-gradient-to-t from-[#0a0a12] to-transparent" />
+        )}
+
+        <div className="mt-4 flex justify-center border-t border-violet-500/10 pt-3">
+          <button
+            type="button"
+            onClick={() => setExpanded((value) => !value)}
+            className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-3 py-1.5 rounded-md transition-colors font-mono"
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
         </div>
       </div>
     </div>
