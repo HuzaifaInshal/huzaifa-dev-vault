@@ -1,9 +1,3 @@
-export const meta = {
-  title: 'Project Structure',
-  description: 'Compact feature-based architecture reference.',
-  order: 0,
-}
-
 # Project Structure
 
 Feature-based architecture. Generic code in global folders; feature-specific logic in `src/features`.
@@ -62,3 +56,17 @@ features/[feature]/
 - Feature-specific types/utils stay inside the feature
 - `lib/` and `services/` are global only; don't put feature code there
 - For large features, group by sub-feature inside `queries/`, `components/`, etc.
+
+# Special Instructions
+
+- Group classes with `cn()`
+- Responsive UI always
+- Prefer `/components/ui` reusable components; create new ones only if needed
+- For multi-variant components (e.g. Button), extend existing styles before adding new ones
+- No Tailwind built-in colors — use `globals.css` variables; add missing colors there
+- For images: add placeholder in code + tell me the exact `public/` path
+- Keep full Tailwind classes in `/components/ui`, not in feature components
+- Icons: use `lucide-react`
+- Avoid hardcoded sizes (`w-[400px]`) — prefer Tailwind scale utilities (`w-96`)
+- Use shadcn over custom components — install via `pnpm dlx shadcn add <>`
+- One component per file
