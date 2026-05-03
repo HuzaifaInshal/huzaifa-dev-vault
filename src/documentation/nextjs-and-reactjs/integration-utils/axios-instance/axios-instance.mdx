@@ -1,0 +1,38 @@
+export const meta = {
+  title: "Axios Instance",
+  category: "Integration Utils",
+  order: 4
+};
+
+# Axios Instance
+
+This setup creates a shared Axios client with a base URL and default headers so every service call starts from the same configuration.
+
+## File
+
+📁 `src/services/axios.ts`
+
+```ts
+"use client";
+import axios from "axios";
+
+// ----------------|| Base Url ||-------------------
+
+export const BASE_URL = "https://fleet-anteater-cleanly.ngrok-free.app/api/";
+
+// -------------|| Axios Declaration ||-------------
+
+export const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true"
+  }
+});
+```
+
+## What It Solves
+
+- Centralizes API base configuration.
+- Applies default headers to every request.
+- Gives the codebase one reusable client for future interceptors and auth logic.

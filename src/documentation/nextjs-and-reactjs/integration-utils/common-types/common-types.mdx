@@ -1,0 +1,85 @@
+export const meta = {
+  title: "Common Types",
+  category: "Integration Utils",
+  order: 3
+};
+
+# Common Types
+
+This shared type file collects reusable primitives, function signatures, and React helpers that can be imported across components, services, and hooks.
+
+## File
+
+📁 `src/types/common.ts`
+
+```ts
+import React, { Dispatch, SetStateAction } from "react";
+
+type AnyBase = string | boolean | null | number | undefined;
+
+export type Any = AnyBase | Record<string, AnyBase>;
+
+export type DynamicObject = {
+  [key: string]: string;
+};
+
+export type LabelValuePair = {
+  label: string;
+  value: string;
+};
+
+export type LabelElementValuePair = {
+  label: string | React.ReactNode;
+  value: string;
+};
+
+export type StringOrNum = string | number;
+
+export type ReactDispatch<T> = Dispatch<SetStateAction<T>>;
+
+export type VoidFunctionWithTArg<T> = (_args: T) => void;
+
+export type TFunctionWithYArg<Y, T> = (_args: Y) => T;
+
+export type VoidFunctionWithBooleanArg = (_args: boolean) => void;
+
+export type VoidFunction = () => void;
+
+export type PromiseVoidFunction = () => Promise<void>;
+
+export type VoidFunctionWithStringArg = (_args: string) => void;
+
+export type StringFunctionWithStringArg = (_args: string) => string;
+
+export type VoidFunctionWithNumberArg = (_args: number) => void;
+
+export type VoidFunctionWithArrayOfStringArg = (_args: string[]) => void;
+
+export type VoidFunctionWithStringOrNullArg = (_args: string | null) => void;
+
+export type VoidFunctionWithArrayOfStringOrStringArg = (
+  _args: string | string[]
+) => void;
+
+export type DynamicObjectWithObject = {
+  [key: string]: string | DynamicObjectWithObject;
+};
+
+export type DotNestedKeys<T> = {
+  // eslint-disable-next-line
+  [K in keyof T & string]: T[K] extends Record<string, any>
+    ? `${K}` | `${K}.${DotNestedKeys<T[K]>}`
+    : `${K}`;
+}[keyof T & string];
+
+export type MouseClickEvent = TFunctionWithYArg<
+  React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  void
+>;
+```
+
+## What It Solves
+
+- Standardizes common value and callback types across the app.
+- Reduces repeated inline type declarations.
+- Keeps shared utility types in one import location.

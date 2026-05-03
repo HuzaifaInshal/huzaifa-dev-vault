@@ -1,0 +1,52 @@
+export const meta = {
+  title: "Infinite Query Utils",
+  category: "Integration Utils",
+  order: 1
+};
+
+# Infinite Query Utils
+
+These helpers keep TanStack Query infinite queries cleaner by extracting the next-page lookup and flattening paginated data into a single array.
+
+## File
+
+📁 `src/utils/infiniteQueryUtils.ts`
+
+```ts
+import { IPagination } from "@/types/common";
+import { InfiniteData } from "@tanstack/react-query";
+
+// -------------------[ Get next page utility utility function ]-------------------
+
+type GetNextPageParamArgs = {
+  pagination: IPagination;
+};
+
+export function getNextPageParam(lastPage: GetNextPageParamArgs) {
+  if (lastPage.pagination?.nextPage) {
+    return lastPage.pagination?.nextPage;
+  }
+  return undefined;
+}
+
+// -------------------[ Transform infinite data utility function ]-------------------
+
+type TransformInfiniteDataArgs<T, TKey extends string> = {
+  pagination: IPagination;
+} & {
+  [K in TKey]: T[];
+};
+
+export function transformInfiniteData<TData, TKey extends string>(
+  data: InfiniteData<TransformInfiniteDataArgs<TData, TKey>> | undefined,
+  key: TKey
+) {
+  return data?.pages.flatMap((each) => each[key]) ?? [];
+}
+```
+
+## What It Solves
+
+- `getNextPageParam` plugs directly into `useInfiniteQuery`.
+- `transformInfiniteData` turns paged responses into a flat list for rendering.
+- Generic typing keeps the helper reusable across different APIs.
