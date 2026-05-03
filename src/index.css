@@ -39,6 +39,12 @@
 }
 
 @layer components {
+  .ripple {
+    @apply pointer-events-none absolute rounded-full;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+  }
+
   .prompt-markdown h1 {
     @apply mt-0 mb-4 text-xl font-semibold text-zinc-100;
   }
@@ -89,5 +95,12 @@
 
   .prompt-markdown pre code {
     @apply bg-transparent p-0 text-xs text-zinc-200;
+  }
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }

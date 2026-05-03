@@ -1,6 +1,7 @@
 import { Button } from "../../../../components/Button";
 import buttonSrc from "../../../../components/Button.tsx?raw";
 import { Demo } from "../../../../doc-ui/Demo";
+import { CodeBlock } from "../../../../doc-ui/CodeBlock";
 
 export const meta = {
   title: "Button",
@@ -10,47 +11,159 @@ export const meta = {
 
 # Button
 
-A versatile button with multiple variants, sizes, and full keyboard accessibility.
+A versatile button with ripple feedback, loading state support, multiple variants, and live code preview.
+
+## Component Source
+
+<CodeBlock
+  source={buttonSrc}
+  language="tsx"
+  title="src/components/Button.tsx"
+/>
 
 ## Default
 
-<Demo source={buttonSrc}>
+<Demo source={buttonSrc} code={`<Button>Default Button</Button>`}>
   <Button>Default Button</Button>
 </Demo>
 
 ## Variants
 
-<Demo source={buttonSrc}>
+<Demo
+  source={buttonSrc}
+  code={`<>
   <Button variant="primary">Primary</Button>
   <Button variant="secondary">Secondary</Button>
   <Button variant="ghost">Ghost</Button>
   <Button variant="destructive">Destructive</Button>
+  <Button variant="link">Link Button</Button>
+</>`}
+>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="destructive">Destructive</Button>
+  <Button variant="link">Link Button</Button>
 </Demo>
 
 ## Sizes
 
-<Demo source={buttonSrc}>
+<Demo
+  source={buttonSrc}
+  code={`<>
   <Button size="sm">Small</Button>
   <Button size="md">Medium</Button>
   <Button size="lg">Large</Button>
+  <Button size="icon" aria-label="Icon button">
+    <span>+</span>
+  </Button>
+</>`}
+>
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+  <Button size="icon" aria-label="Icon button">
+    <span>+</span>
+  </Button>
 </Demo>
 
 ## Disabled
 
-<Demo source={buttonSrc}>
+<Demo
+  source={buttonSrc}
+  code={`<>
+  <Button disabled>Disabled</Button>
+  <Button variant="secondary" disabled>
+    Disabled
+  </Button>
+</>`}
+>
   <Button disabled>Disabled</Button>
   <Button variant="secondary" disabled>
     Disabled
   </Button>
 </Demo>
 
+## Loading And Ripple
+
+<Demo
+  source={buttonSrc}
+  code={`<>
+  <Button isLoading>Saving</Button>
+  <Button variant="secondary">Press Me</Button>
+  <Button variant="destructive">Delete</Button>
+</>`}
+>
+  <Button isLoading>Saving</Button>
+  <Button variant="secondary">Press Me</Button>
+  <Button variant="destructive">Delete</Button>
+</Demo>
+
+## Ripple Styles
+
+<CodeBlock
+  language="css"
+  title="src/index.css"
+  source={`.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}`}
+/>
+
+## Ripple Helper
+
+<CodeBlock
+  language="tsx"
+  title="src/lib/ui/handleRippleAnimation.ts"
+  source={`import { cn } from "../utils";
+
+export const handleRippleAnimation = (
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  overwriteClassname?: string
+) => {
+  const btn = e.currentTarget;
+  if (!btn) return;
+
+  const ripple = document.createElement("span");
+  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+  const radius = diameter / 2;
+
+  const rect = btn.getBoundingClientRect();
+  const dx = e.clientX - rect.left;
+  const dy = e.clientY - rect.top;
+
+  ripple.style.width = ripple.style.height = \`\${diameter}px\`;
+  ripple.style.left = \`\${dx - radius}px\`;
+  ripple.style.top = \`\${dy - radius}px\`;
+
+  ripple.className = cn(
+    "opacity-70 ripple pointer-events-none bg-white/40",
+    overwriteClassname
+  );
+
+  btn.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove());
+};`}
+/>
+
 ## Props
 
-| Prop        | Type                                                   | Default     | Description        |
-| ----------- | ------------------------------------------------------ | ----------- | ------------------ |
-| `variant`   | `'primary' \| 'secondary' \| 'ghost' \| 'destructive'` | `'primary'` | Visual style       |
-| `size`      | `'sm' \| 'md' \| 'lg'`                                 | `'md'`      | Size               |
-| `disabled`  | `boolean`                                              | `false`     | Disabled state     |
-| `className` | `string`                                               | —           | Additional classes |
+| Prop        | Type                                                              | Default     | Description                        |
+| ----------- | ----------------------------------------------------------------- | ----------- | ---------------------------------- |
+| `variant`   | `'primary' \| 'secondary' \| 'ghost' \| 'destructive' \| 'link'` | `'primary'` | Visual style                       |
+| `size`      | `'sm' \| 'md' \| 'lg' \| 'icon'`                                  | `'md'`      | Size preset                        |
+| `isLoading` | `boolean`                                                         | `false`     | Shows spinner and disables button  |
+| `link`      | `string`                                                          | —           | Renders the button as a link       |
+| `disabled`  | `boolean`                                                         | `false`     | Disabled state                     |
+| `className` | `string`                                                          | —           | Additional classes                 |
 
-Also accepts all native `<button>` props via spread.
+Also accepts native `<button>` props, triggers a ripple on mouse down, and keeps each demo's `Code` tab focused on the exact preview snippet.

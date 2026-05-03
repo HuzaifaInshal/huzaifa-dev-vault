@@ -1,0 +1,114 @@
+import DateSelector from "../../../../components/ui/date-selector";
+import DateSelectorSrc from "../../../../components/ui/date-selector.tsx?raw";
+import DateRangeSelector from "../../../../components/ui/date-range-selector";
+import DateRangeSelectorSrc from "../../../../components/ui/date-range-selector.tsx?raw";
+import TimeSelector from "../../../../components/ui/time-selector";
+import TimeSelectorSrc from "../../../../components/ui/time-selector.tsx?raw";
+import TimeRangeSelector from "../../../../components/ui/time-range-selector";
+import TimeRangeSelectorSrc from "../../../../components/ui/time-range-selector.tsx?raw";
+import DateTimeSelector from "../../../../components/ui/date-time-selector";
+import DateTimeSelectorSrc from "../../../../components/ui/date-time-selector.tsx?raw";
+import DateTimeRangeSelector from "../../../../components/ui/date-time-range-selector";
+import DateTimeRangeSelectorSrc from "../../../../components/ui/date-time-range-selector.tsx?raw";
+import { Demo } from "../../../../doc-ui/Demo";
+import { CodeBlock } from "../../../../doc-ui/CodeBlock";
+
+export const meta = {
+  title: "Date And Time Selectors",
+  category: "Components",
+  order: 2
+};
+
+# Date And Time Selectors
+
+A grouped set of date, time, and range pickers built for this docs app with local React state, live previews, and source blocks for each component file.
+
+## Date Selector
+
+<Demo
+  source={DateSelectorSrc}
+  code={`<DateSelector />`}
+>
+  <DateSelector />
+</Demo>
+
+<CodeBlock
+  source={DateSelectorSrc}
+  language="tsx"
+  title="src/components/ui/date-selector.tsx"
+/>
+
+## Date Range Selector
+
+<Demo
+  source={DateRangeSelectorSrc}
+  code={`<DateRangeSelector />`}
+>
+  <DateRangeSelector />
+</Demo>
+
+<CodeBlock
+  source={DateRangeSelectorSrc}
+  language="tsx"
+  title="src/components/ui/date-range-selector.tsx"
+/>
+
+## Time Selector
+
+<Demo
+  source={TimeSelectorSrc}
+  code={`<TimeSelector minuteStep={5} />`}
+>
+  <TimeSelector minuteStep={5} />
+</Demo>
+
+<CodeBlock
+  source={TimeSelectorSrc}
+  language="tsx"
+  title="src/components/ui/time-selector.tsx"
+/>
+
+## Time Range Selector
+
+<Demo
+  source={TimeRangeSelectorSrc}
+  code={`<TimeRangeSelector minuteStep={15} />`}
+>
+  <TimeRangeSelector minuteStep={15} />
+</Demo>
+
+<CodeBlock
+  source={TimeRangeSelectorSrc}
+  language="tsx"
+  title="src/components/ui/time-range-selector.tsx"
+/>
+
+## Date Time Selector
+
+<Demo
+  source={DateTimeSelectorSrc}
+  code={`<DateTimeSelector minuteStep={10} />`}
+>
+  <DateTimeSelector minuteStep={10} />
+</Demo>
+
+<CodeBlock
+  source={DateTimeSelectorSrc}
+  language="tsx"
+  title="src/components/ui/date-time-selector.tsx"
+/>
+
+## Date Time Range Selector
+
+<Demo
+  source={DateTimeRangeSelectorSrc}
+  code={`<DateTimeRangeSelector minuteStep={15} />`}
+>
+  <DateTimeRangeSelector minuteStep={15} />
+</Demo>
+
+<CodeBlock
+  source={DateTimeRangeSelectorSrc}
+  language="tsx"
+  title="src/components/ui/date-time-range-selector.tsx"
+/>
