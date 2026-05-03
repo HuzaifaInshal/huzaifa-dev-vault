@@ -1,34 +1,32 @@
-import { useState, type ReactNode } from 'react'
-import { Highlight, themes } from 'prism-react-renderer'
+import { useState, type ReactNode } from "react";
+import { Highlight, themes } from "prism-react-renderer";
 
 interface DemoProps {
-  source: string
-  code?: string
-  children: ReactNode
-  title?: string
-  language?: string
-  defaultTab?: 'preview' | 'code'
+  code: string;
+  children: ReactNode;
+  title?: string;
+  language?: string;
+  defaultTab?: "preview" | "code";
 }
 
 export function Demo({
-  source,
   code,
   children,
   title,
-  language = 'tsx',
-  defaultTab = 'preview',
+  language = "tsx",
+  defaultTab = "preview"
 }: DemoProps) {
-  const [tab, setTab] = useState<'preview' | 'code'>(defaultTab)
-  const [copied, setCopied] = useState(false)
-  const [expanded, setExpanded] = useState(false)
+  const [tab, setTab] = useState<"preview" | "code">(defaultTab);
+  const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-  const displayCode = code ?? source
+  const displayCode = code;
 
   const copy = async () => {
-    await navigator.clipboard.writeText(displayCode)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+    await navigator.clipboard.writeText(displayCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="rounded-xl border border-violet-500/30 overflow-hidden my-6 shadow-sm">
@@ -49,26 +47,29 @@ export function Demo({
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
-            <TabBtn active={tab === 'preview'} onClick={() => setTab('preview')}>
+            <TabBtn
+              active={tab === "preview"}
+              onClick={() => setTab("preview")}
+            >
               Preview
             </TabBtn>
-            <TabBtn active={tab === 'code'} onClick={() => setTab('code')}>
+            <TabBtn active={tab === "code"} onClick={() => setTab("code")}>
               Code
             </TabBtn>
           </div>
-          {tab === 'code' && (
+          {tab === "code" && (
             <button
               onClick={copy}
               className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-1 rounded-md transition-colors font-mono"
             >
-              {copied ? '✓ Copied' : 'Copy'}
+              {copied ? "✓ Copied" : "Copy"}
             </button>
           )}
         </div>
       </div>
 
       {/* Preview pane */}
-      {tab === 'preview' && (
+      {tab === "preview" && (
         <div className="p-8 bg-[#0a0a12] min-h-28 flex items-center justify-center">
           <div className="flex flex-wrap gap-3 items-center justify-center">
             {children}
@@ -77,14 +78,18 @@ export function Demo({
       )}
 
       {/* Code pane */}
-      {tab === 'code' && (
+      {tab === "code" && (
         <div className="relative bg-[#0a0a12]">
-          <div className={expanded ? '' : 'max-h-96 overflow-hidden'}>
-            <Highlight theme={themes.nightOwl} code={displayCode.trim()} language={language}>
+          <div className={expanded ? "" : "max-h-96 overflow-hidden"}>
+            <Highlight
+              theme={themes.nightOwl}
+              code={displayCode.trim()}
+              language={language}
+            >
               {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <pre
                   className={`${className} p-5 overflow-x-auto text-sm leading-relaxed m-0`}
-                  style={{ ...style, background: '#0d1117' }}
+                  style={{ ...style, background: "#0d1117" }}
                 >
                   {tokens.map((line, i) => (
                     <div key={i} {...getLineProps({ line })}>
@@ -105,37 +110,37 @@ export function Demo({
           <div className="flex justify-center border-t border-violet-500/10 pt-3 pb-3 bg-[#0d1117]">
             <button
               type="button"
-              onClick={() => setExpanded(v => !v)}
+              onClick={() => setExpanded((v) => !v)}
               className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-3 py-1.5 rounded-md transition-colors font-mono"
             >
-              {expanded ? 'Show less' : 'Show more'}
+              {expanded ? "Show less" : "Show more"}
             </button>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function TabBtn({
   active,
   onClick,
-  children,
+  children
 }: {
-  active: boolean
-  onClick: () => void
-  children: ReactNode
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
 }) {
   return (
     <button
       onClick={onClick}
       className={`px-3 py-1 text-xs rounded-md transition-colors font-mono ${
         active
-          ? 'bg-violet-500/20 text-violet-300'
-          : 'text-zinc-500 hover:text-zinc-300 hover:bg-violet-500/10'
+          ? "bg-violet-500/20 text-violet-300"
+          : "text-zinc-500 hover:text-zinc-300 hover:bg-violet-500/10"
       }`}
     >
       {children}
     </button>
-  )
+  );
 }

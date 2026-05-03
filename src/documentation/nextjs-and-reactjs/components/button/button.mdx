@@ -1,5 +1,6 @@
 import { Button } from "../../../../components/Button";
 import buttonSrc from "../../../../components/Button.tsx?raw";
+import buttonSrc2 from "./button-original.md?raw";
 import { Demo } from "../../../../doc-ui/Demo";
 import { CodeBlock } from "../../../../doc-ui/CodeBlock";
 
@@ -16,7 +17,7 @@ A versatile button with ripple feedback, loading state support, multiple variant
 ## Component Source
 
 <CodeBlock
-  source={buttonSrc}
+  source={buttonSrc2}
   language="tsx"
   title="src/components/Button.tsx"
 />
@@ -112,10 +113,10 @@ A versatile button with ripple feedback, loading state support, multiple variant
 }
 
 @keyframes ripple {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+to {
+transform: scale(4);
+opacity: 0;
+}
 }`}
 />
 
@@ -133,37 +134,37 @@ export const handleRippleAnimation = (
   const btn = e.currentTarget;
   if (!btn) return;
 
-  const ripple = document.createElement("span");
-  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
-  const radius = diameter / 2;
+const ripple = document.createElement("span");
+const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+const radius = diameter / 2;
 
-  const rect = btn.getBoundingClientRect();
-  const dx = e.clientX - rect.left;
-  const dy = e.clientY - rect.top;
+const rect = btn.getBoundingClientRect();
+const dx = e.clientX - rect.left;
+const dy = e.clientY - rect.top;
 
-  ripple.style.width = ripple.style.height = \`\${diameter}px\`;
-  ripple.style.left = \`\${dx - radius}px\`;
-  ripple.style.top = \`\${dy - radius}px\`;
+ripple.style.width = ripple.style.height = \`\${diameter}px\`;
+ripple.style.left = \`\${dx - radius}px\`;
+ripple.style.top = \`\${dy - radius}px\`;
 
-  ripple.className = cn(
-    "opacity-70 ripple pointer-events-none bg-white/40",
-    overwriteClassname
-  );
+ripple.className = cn(
+"opacity-70 ripple pointer-events-none bg-white/40",
+overwriteClassname
+);
 
-  btn.appendChild(ripple);
-  ripple.addEventListener("animationend", () => ripple.remove());
+btn.appendChild(ripple);
+ripple.addEventListener("animationend", () => ripple.remove());
 };`}
 />
 
 ## Props
 
-| Prop        | Type                                                              | Default     | Description                        |
-| ----------- | ----------------------------------------------------------------- | ----------- | ---------------------------------- |
-| `variant`   | `'primary' \| 'secondary' \| 'ghost' \| 'destructive' \| 'link'` | `'primary'` | Visual style                       |
-| `size`      | `'sm' \| 'md' \| 'lg' \| 'icon'`                                  | `'md'`      | Size preset                        |
-| `isLoading` | `boolean`                                                         | `false`     | Shows spinner and disables button  |
-| `link`      | `string`                                                          | —           | Renders the button as a link       |
-| `disabled`  | `boolean`                                                         | `false`     | Disabled state                     |
-| `className` | `string`                                                          | —           | Additional classes                 |
+| Prop        | Type                                                             | Default     | Description                       |
+| ----------- | ---------------------------------------------------------------- | ----------- | --------------------------------- |
+| `variant`   | `'primary' \| 'secondary' \| 'ghost' \| 'destructive' \| 'link'` | `'primary'` | Visual style                      |
+| `size`      | `'sm' \| 'md' \| 'lg' \| 'icon'`                                 | `'md'`      | Size preset                       |
+| `isLoading` | `boolean`                                                        | `false`     | Shows spinner and disables button |
+| `link`      | `string`                                                         | —           | Renders the button as a link      |
+| `disabled`  | `boolean`                                                        | `false`     | Disabled state                    |
+| `className` | `string`                                                         | —           | Additional classes                |
 
 Also accepts native `<button>` props, triggers a ripple on mouse down, and keeps each demo's `Code` tab focused on the exact preview snippet.
