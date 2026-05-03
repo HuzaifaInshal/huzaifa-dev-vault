@@ -1,0 +1,156 @@
+import TextInput from '../../../../components/ui/inputs/text-input'
+import TextInputSrc from '../../../../components/ui/inputs/text-input.tsx?raw'
+import PasswordInput from '../../../../components/ui/inputs/password-input'
+import PasswordInputSrc from '../../../../components/ui/inputs/password-input.tsx?raw'
+import LabelContainerSrc from '../../../../components/ui/inputs/label-container.tsx?raw'
+import InputStylesSrc from '../../../../components/ui/inputs/input-styles.ts?raw'
+import { Demo } from '../../../../doc-ui/Demo'
+import { CodeBlock } from '../../../../doc-ui/CodeBlock'
+import { Search, Mail } from 'lucide-react'
+
+export const meta = {
+  title: 'Inputs',
+  category: 'Components',
+  order: 3
+}
+
+# Inputs
+
+Form input primitives with label, error, icon support, and consistent styling. Built on native `<input>` elements with a shared style token file.
+
+## Input Styles
+
+<CodeBlock
+  source={InputStylesSrc}
+  language="ts"
+  title="src/styles/ui/inputStyles.ts"
+/>
+
+## Label Container
+
+<CodeBlock
+  source={LabelContainerSrc}
+  language="tsx"
+  title="src/components/ui/label-container.tsx"
+/>
+
+## Text Input
+
+<Demo
+  source={TextInputSrc}
+  code={`<TextInput label="Username" placeholder="Enter username" />`}
+>
+  <TextInput label="Username" placeholder="Enter username" />
+</Demo>
+
+### With Icons
+
+<Demo
+  source={TextInputSrc}
+  code={`<TextInput
+  label="Search"
+  placeholder="Search..."
+  startIcon={<Search className="size-4 text-zinc-400" />}
+/>`}
+>
+  <TextInput
+    label="Search"
+    placeholder="Search..."
+    startIcon={<Search className="size-4 text-zinc-400" />}
+  />
+</Demo>
+
+### With Error
+
+<Demo
+  source={TextInputSrc}
+  code={`<TextInput
+  label="Email"
+  placeholder="Enter email"
+  startIcon={<Mail className="size-4 text-zinc-400" />}
+  error="Invalid email address"
+  required
+/>`}
+>
+  <TextInput
+    label="Email"
+    placeholder="Enter email"
+    startIcon={<Mail className="size-4 text-zinc-400" />}
+    error="Invalid email address"
+    required
+  />
+</Demo>
+
+<CodeBlock
+  source={TextInputSrc}
+  language="tsx"
+  title="src/components/ui/text-input.tsx"
+/>
+
+## Password Input
+
+<Demo
+  source={PasswordInputSrc}
+  code={`<PasswordInput label="Password" placeholder="Enter password" />`}
+>
+  <PasswordInput label="Password" placeholder="Enter password" />
+</Demo>
+
+### With Error
+
+<Demo
+  source={PasswordInputSrc}
+  code={`<PasswordInput
+  label="Password"
+  placeholder="Enter password"
+  error="Password must be at least 8 characters"
+  required
+/>`}
+>
+  <PasswordInput
+    label="Password"
+    placeholder="Enter password"
+    error="Password must be at least 8 characters"
+    required
+  />
+</Demo>
+
+<CodeBlock
+  source={PasswordInputSrc}
+  language="tsx"
+  title="src/components/ui/password-input.tsx"
+/>
+
+## Global CSS — Autofill Fix
+
+```css
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--input) inset !important;
+  color: var(--text-primary) !important;
+}
+```
+
+## Props — TextInput
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `label` | `string` | Label above the input |
+| `error` | `string` | Error message below |
+| `value` | `string` | Controlled value |
+| `setValue` | `ReactDispatch<string>` | State setter shorthand |
+| `startIcon` | `ReactNode` | Icon on the left |
+| `endIcon` | `ReactNode` | Icon on the right |
+| `containerClassName` | `string` | Wrapper class |
+
+Also accepts all native `<input>` props.
+
+## Props — PasswordInput
+
+Same as TextInput minus `endIcon`. Adds:
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `showToggle` | `boolean` | `true` | Show/hide visibility toggle |

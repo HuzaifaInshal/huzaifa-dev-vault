@@ -15,6 +15,7 @@
     "hast-util-to-jsx-runtime": "^2.3.6",
     "lucide-react": "^1.8.0",
     "prism-react-renderer": "^2.4.1",
+    "radix-ui": "^1.4.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0",

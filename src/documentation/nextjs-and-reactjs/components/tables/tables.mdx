@@ -1,0 +1,92 @@
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../../components/ui/tables'
+import TablesSrc from '../../../../components/ui/tables.tsx?raw'
+import { Demo } from '../../../../doc-ui/Demo'
+import { CodeBlock } from '../../../../doc-ui/CodeBlock'
+
+export const meta = {
+  title: 'Tables',
+  category: 'Components',
+  order: 6
+}
+
+# Tables
+
+Composable table primitives with consistent zinc styling. Each piece is a thin wrapper around its native HTML element.
+
+## Basic Table
+
+<Demo
+  source={TablesSrc}
+  code={`<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Role</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alice</TableCell>
+      <TableCell>Admin</TableCell>
+      <TableCell>Active</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Bob</TableCell>
+      <TableCell>Editor</TableCell>
+      <TableCell>Inactive</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Carol</TableCell>
+      <TableCell>Viewer</TableCell>
+      <TableCell>Active</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`}
+>
+  <Table>
+    <TableHeader>
+      <TableRow>
+        <TableHead>Name</TableHead>
+        <TableHead>Role</TableHead>
+        <TableHead>Status</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      <TableRow>
+        <TableCell>Alice</TableCell>
+        <TableCell>Admin</TableCell>
+        <TableCell>Active</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Bob</TableCell>
+        <TableCell>Editor</TableCell>
+        <TableCell>Inactive</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Carol</TableCell>
+        <TableCell>Viewer</TableCell>
+        <TableCell>Active</TableCell>
+      </TableRow>
+    </TableBody>
+  </Table>
+</Demo>
+
+<CodeBlock
+  source={TablesSrc}
+  language="tsx"
+  title="src/components/ui/tables.tsx"
+/>
+
+## Components
+
+| Component | Element | Description |
+| --- | --- | --- |
+| `Table` | `<table>` | Scrollable wrapper + table |
+| `TableHeader` | `<thead>` | Header section with zinc-800 bg |
+| `TableBody` | `<tbody>` | Body, removes last row border |
+| `TableRow` | `<tr>` | Row with bottom border |
+| `TableHead` | `<th>` | Header cell |
+| `TableCell` | `<td>` | Data cell |
+
+All components accept `className` and forward native HTML props.

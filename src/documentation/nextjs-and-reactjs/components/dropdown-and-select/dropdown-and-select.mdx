@@ -1,0 +1,170 @@
+import Dropdown from '../../../../components/ui/inputs/dropdown'
+import DropdownSrc from '../../../../components/ui/inputs/dropdown.tsx?raw'
+import Select from '../../../../components/ui/inputs/select'
+import SelectSrc from '../../../../components/ui/inputs/select.tsx?raw'
+import { Demo } from '../../../../doc-ui/Demo'
+import { CodeBlock } from '../../../../doc-ui/CodeBlock'
+import { Button } from '../../../../components/Button'
+import { ChevronDown, User } from 'lucide-react'
+
+export const meta = {
+  title: 'Dropdown And Select',
+  category: 'Components',
+  order: 4
+}
+
+# Dropdown And Select
+
+Two menu primitives built on Radix UI with ripple feedback, label/error support, and consistent zinc styling.
+
+## Dropdown
+
+A trigger-agnostic dropdown menu — pass any element as `children` to act as the trigger.
+
+<Demo
+  source={DropdownSrc}
+  code={`<Dropdown
+  items={[
+    { value: 'profile', label: 'Profile' },
+    { value: 'settings', label: 'Settings' },
+    { value: 'logout', label: 'Logout' },
+  ]}
+>
+  <Button variant="secondary">
+    Options <ChevronDown className="size-4" />
+  </Button>
+</Dropdown>`}
+>
+  <Dropdown
+    items={[
+      { value: 'profile', label: 'Profile' },
+      { value: 'settings', label: 'Settings' },
+      { value: 'logout', label: 'Logout' },
+    ]}
+  >
+    <Button variant="secondary">
+      Options <ChevronDown className="size-4" />
+    </Button>
+  </Dropdown>
+</Demo>
+
+### With Label and Disabled Item
+
+<Demo
+  source={DropdownSrc}
+  code={`<Dropdown
+  label="Actions"
+  items={[
+    { value: 'edit', label: 'Edit' },
+    { value: 'duplicate', label: 'Duplicate', disabled: true },
+    { value: 'delete', label: 'Delete' },
+  ]}
+>
+  <Button variant="secondary">
+    Menu <ChevronDown className="size-4" />
+  </Button>
+</Dropdown>`}
+>
+  <Dropdown
+    label="Actions"
+    items={[
+      { value: 'edit', label: 'Edit' },
+      { value: 'duplicate', label: 'Duplicate', disabled: true },
+      { value: 'delete', label: 'Delete' },
+    ]}
+  >
+    <Button variant="secondary">
+      Menu <ChevronDown className="size-4" />
+    </Button>
+  </Dropdown>
+</Demo>
+
+<CodeBlock
+  source={DropdownSrc}
+  language="tsx"
+  title="src/components/ui/dropdown.tsx"
+/>
+
+## Select
+
+A styled select with placeholder, icons, label, and error state.
+
+<Demo
+  source={SelectSrc}
+  code={`<Select
+  label="Framework"
+  placeholder="Pick a framework"
+  options={[
+    { value: 'next', label: 'Next.js' },
+    { value: 'remix', label: 'Remix' },
+    { value: 'astro', label: 'Astro' },
+  ]}
+/>`}
+>
+  <Select
+    label="Framework"
+    placeholder="Pick a framework"
+    options={[
+      { value: 'next', label: 'Next.js' },
+      { value: 'remix', label: 'Remix' },
+      { value: 'astro', label: 'Astro' },
+    ]}
+  />
+</Demo>
+
+### With Start Icon and Error
+
+<Demo
+  source={SelectSrc}
+  code={`<Select
+  label="User Role"
+  placeholder="Select role"
+  startIcon={<User className="size-4 text-zinc-400" />}
+  error="A role is required"
+  required
+  options={[
+    { value: 'admin', label: 'Admin' },
+    { value: 'editor', label: 'Editor' },
+    { value: 'viewer', label: 'Viewer', disabled: true },
+  ]}
+/>`}
+>
+  <Select
+    label="User Role"
+    placeholder="Select role"
+    startIcon={<User className="size-4 text-zinc-400" />}
+    error="A role is required"
+    required
+    options={[
+      { value: 'admin', label: 'Admin' },
+      { value: 'editor', label: 'Editor' },
+      { value: 'viewer', label: 'Viewer', disabled: true },
+    ]}
+  />
+</Demo>
+
+<CodeBlock
+  source={SelectSrc}
+  language="tsx"
+  title="src/components/ui/select.tsx"
+/>
+
+## Props — Dropdown
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `children` | `ReactNode` | Trigger element |
+| `items` | `DropdownItem[]` | Menu items |
+| `label` | `string` | Label above trigger |
+| `error` | `string` | Error message below |
+| `open` / `onOpenChange` | `boolean / fn` | Controlled open state |
+
+## Props — Select
+
+| Prop | Type | Description |
+| --- | --- | --- |
+| `options` | `SelectOption[]` | List of options |
+| `placeholder` | `string` | Placeholder text |
+| `startIcon` / `endIcon` | `ReactNode` | Icons inside trigger |
+| `setValue` | `ReactDispatch<string>` | State setter shorthand |
+| `label` / `error` | `string` | Label and error text |
