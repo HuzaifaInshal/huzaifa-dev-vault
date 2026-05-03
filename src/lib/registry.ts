@@ -6,6 +6,7 @@ export interface DocMeta {
   title: string;
   description?: string;
   order?: number;
+  hideFromNav?: boolean;
   // `category` is kept for backwards compat but no longer drives navigation —
   // the file-system path is the single source of truth for tree position.
   category?: string;

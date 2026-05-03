@@ -7,6 +7,7 @@ declare module '*.mdx' {
     title: string
     category?: string
     description?: string
+    hideFromNav?: boolean
     order?: number
   }
 }

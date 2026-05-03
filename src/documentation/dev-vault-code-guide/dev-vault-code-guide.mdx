@@ -1,0 +1,60 @@
+export const meta = {
+  title: "Dev Vault Code Guide",
+  description: "How this documentation website is structured and extended.",
+  hideFromNav: true,
+  order: 1000
+};
+
+# Welcome to DevDocs
+
+Your personal library for components, utilities, prompts, and instructions — everything rendered from a single source of truth.
+
+## How it works
+
+Every doc page lives inside `src/documentation/`. Each page gets its own folder, with the `.mdx` file and any local imported markdown sitting together. You write the page in Markdown/JSX, import your real component, and the same import renders **both** the live preview and the source code. No copy-pasting.
+
+## Adding a new page
+
+1. Create `src/documentation/<category>/<name>/<name>.mdx`
+2. Export a `meta` object at the top
+3. Import your component and its source via `?raw`
+4. Use `<Demo>` to render both live preview and code
+
+```tsx
+import { MyComponent } from '../components/MyComponent'
+import src from '../components/MyComponent.tsx?raw'
+import { Demo } from '../doc-ui/Demo'
+
+export const meta = {
+  title: 'My Component',
+  category: 'Components',
+  order: 1,
+}
+
+# My Component
+
+<Demo source={src}>
+  <MyComponent />
+</Demo>
+```
+
+The component is defined **once** in its file. The `?raw` import reads that same file as a string at build time — so what you see in the Code tab is always the real, up-to-date source.
+
+## Doc-ui primitives
+
+| Component                                | Purpose                      |
+| ---------------------------------------- | ---------------------------- |
+| `<Demo source={src}>`                    | Live preview + source toggle |
+| `<CodeBlock source={src} language="ts">` | Source only, no preview      |
+
+Both components accept a `title` prop for labelling.
+
+## Categories
+
+Organise your pages by setting `meta.category`. The sidebar groups them automatically. Suggested categories:
+
+- **Getting Started** — orientation pages like this one
+- **Components** — React UI components
+- **Utils** — helper functions
+- **Prompts** — LLM prompt templates
+- **Instructions** — coding standards, patterns, guidelines

@@ -1,9 +1,3 @@
-export const meta = {
-  title: "Introduction",
-  description: "A focused knowledge base for reusable frontend code, prompts, and project guidance.",
-  order: 0
-};
-
 # Introduction
 
 Huzaifa Dev Vault is a practical documentation workspace for the things that help a frontend project move faster: reusable UI components, implementation notes, AI assistant prompts, and project-specific coding guidelines.
@@ -22,4 +16,4 @@ Use the top navigation to switch between major documentation areas. The sidebar 
 
 ## Want your own documentation website?
 
-Read the [Dev Vault Code Guide](/dev-vault-code-guide) to see how this app is structured, how pages are added, and which doc-ui primitives power the examples.
+Read the Dev Vault Code Guide in the app to see how this app is structured, how pages are added, and which doc-ui primitives power the examples.

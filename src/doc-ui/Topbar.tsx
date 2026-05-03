@@ -15,6 +15,7 @@ export function Topbar({ pages }: TopbarProps) {
       ? { label: navTree.root.meta?.title ?? "Docs", path: "/" }
       : { label: "Docs", path: "/" },
     ...navTree.nodes
+      .filter((node) => !node.page?.meta?.hideFromNav)
       .slice(0, 5)
       .map((node) => ({ label: node.label, path: node.path }))
   ];
