@@ -1,5 +1,7 @@
 import BasePromptContent from "./integration-base.md";
+import basePromptSource from "./integration-base.md?raw";
 import LaterPromptContent from "./integration-later-example.md";
+import laterPromptSource from "./integration-later-example.md?raw";
 import { Prompt } from "../../../../doc-ui/Prompt";
 
 export const meta = {
@@ -30,7 +32,7 @@ Two-step workflow for integrating REST APIs. Start with the **base prompt** to e
 
 Send this once to establish context. It instructs the model on your service file structure, naming conventions, Yup/Formik validation patterns, and error handling.
 
-<Prompt title="Base Prompt">
+<Prompt source={basePromptSource} title="Base Prompt">
   <BasePromptContent />
 </Prompt>
 
@@ -38,6 +40,6 @@ Send this once to establish context. It instructs the model on your service file
 
 After the base prompt, follow up with the actual API list for each feature. This example integrates workflow management APIs into two views.
 
-<Prompt title="Later Prompt — Example">
+<Prompt source={laterPromptSource} title="Later Prompt — Example">
   <LaterPromptContent />
 </Prompt>

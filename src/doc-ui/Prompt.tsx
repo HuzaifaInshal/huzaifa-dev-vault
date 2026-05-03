@@ -2,16 +2,19 @@ import { useRef, useState, type ReactNode } from "react";
 
 interface PromptProps {
   children?: ReactNode;
+  /** Raw markdown text used for copying while children render as MDX. */
+  source?: string | { default?: unknown };
   title?: string;
 }
 
-export function Prompt({ children, title }: PromptProps) {
+export function Prompt({ children, source, title }: PromptProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const copy = async () => {
-    const content = contentRef.current?.innerText.trim() ?? "";
+    const rawSource = getCopySource(source);
+    const content = rawSource ?? contentRef.current?.innerText.trim() ?? "";
 
     await navigator.clipboard.writeText(content);
     setCopied(true);
@@ -70,4 +73,16 @@ export function Prompt({ children, title }: PromptProps) {
       </div>
     </div>
   );
+}
+
+function getCopySource(source: PromptProps["source"]) {
+  if (typeof source === "string") {
+    return source.trim();
+  }
+
+  if (source && typeof source.default === "string") {
+    return source.default.trim();
+  }
+
+  return undefined;
 }
