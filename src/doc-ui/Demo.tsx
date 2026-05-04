@@ -29,7 +29,7 @@ export function Demo({
   };
 
   return (
-    <div className="rounded-xl border border-violet-500/30 overflow-hidden my-6 shadow-sm">
+    <div className={`rounded-xl border border-violet-500/30 ${tab === 'preview' ?'': 'overflow-hidden'} my-6 shadow-sm`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-violet-500/5 border-b border-violet-500/20">
         <div className="flex items-center gap-2.5">
@@ -70,7 +70,7 @@ export function Demo({
 
       {/* Preview pane */}
       {tab === "preview" && (
-        <div className="p-8 bg-[#0a0a12] min-h-28 flex items-center justify-center">
+        <div className="p-8 rounded-b-xl bg-[#0a0a12] min-h-28 flex items-center justify-center">
           <div className="flex flex-wrap gap-3 items-center justify-center">
             {children}
           </div>

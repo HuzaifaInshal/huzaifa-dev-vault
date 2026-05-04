@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 
 interface PromptProps {
   children?: ReactNode;
@@ -10,7 +10,13 @@ interface PromptProps {
 export function Prompt({ children, source, title }: PromptProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (el) setOverflows(el.scrollHeight > el.clientHeight);
+  }, [children]);
 
   const copy = async () => {
     const rawSource = getCopySource(source);
@@ -57,19 +63,21 @@ export function Prompt({ children, source, title }: PromptProps) {
           {children || ""}
         </div>
 
-        {!expanded && (
+        {!expanded && overflows && (
           <div className="pointer-events-none absolute inset-x-0 bottom-[60px] h-24 bg-gradient-to-t from-[#0a0a12] to-transparent" />
         )}
 
-        <div className="mt-4 flex justify-center border-t border-violet-500/10 pt-3">
-          <button
-            type="button"
-            onClick={() => setExpanded((value) => !value)}
-            className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-3 py-1.5 rounded-md transition-colors font-mono"
-          >
-            {expanded ? "Show less" : "Show more"}
-          </button>
-        </div>
+        {overflows && (
+          <div className="mt-4 flex justify-center border-t border-violet-500/10 pt-3">
+            <button
+              type="button"
+              onClick={() => setExpanded((value) => !value)}
+              className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-3 py-1.5 rounded-md transition-colors font-mono"
+            >
+              {expanded ? "Show less" : "Show more"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

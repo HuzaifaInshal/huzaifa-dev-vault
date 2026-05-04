@@ -1,0 +1,108 @@
+export const meta = {
+  title: "CSS Utils",
+  category: "Utils",
+  order: 0
+};
+
+# Add these in global.css files
+
+```css
+/* ========================|| Util Classes ||======================== */
+
+@layer base {
+  * {
+    @apply focus:outline-primary;
+  }
+  body {
+    @apply bg-background text-text-primary;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  .center {
+    @apply items-center justify-center;
+  }
+}
+
+@utility flex-* {
+  display: flex;
+  flex-direction: row;
+  gap: --spacing(--value(integer));
+  gap: --value([length], [percentage]);
+}
+
+@utility flex-col-* {
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(--value(integer));
+  gap: --value([length], [percentage]);
+}
+
+@layer utilities {
+  .dropdown-content-width-full {
+    width: var(--radix-dropdown-menu-trigger-width);
+  }
+}
+
+/* ========================|| My Custom Animations ||======================== */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
+
+/* ========================|| Custom Thin Scrollbar Variant ||======================== */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--custom-scrollbar);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--custom-scrollbar-2);
+}
+
+.scrollbar-h-3::-webkit-scrollbar {
+  height: 3px;
+}
+
+/* ========================|| Invisible Scrollbar Variant ||======================== */
+.custom-no-scrollbar::-webkit-scrollbar {
+  height: 0px;
+  width: 0px;
+}
+
+.custom-no-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.custom-no-scrollbar::-webkit-scrollbar-thumb {
+  background: #e4e4e4;
+  border-radius: 0px;
+}
+
+.custom-no-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c5c3c3;
+}
+```

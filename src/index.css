@@ -58,7 +58,7 @@
   }
 
   .prompt-markdown p {
-    @apply mb-4 leading-7 text-zinc-300;
+    @apply mb-4 leading-6 text-zinc-300;
   }
 
   .prompt-markdown ul {

@@ -11,12 +11,12 @@ function FencedCode({
   const lang = className?.replace('language-', '') || 'text'
 
   return (
-    <div className="rounded-xl border border-zinc-800 overflow-hidden my-6 shadow-sm">
+    <div className="rounded-xl overflow-hidden my-6">
       <Highlight theme={themes.nightOwl} code={children.trim()} language={lang}>
         {({ className: cls, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={clsx(cls, 'p-5 overflow-x-auto text-sm leading-relaxed m-0')}
-            style={{ ...style, background: '#0d1117' }}
+            className={clsx(cls, 'p-5 overflow-x-auto border-none text-sm leading-relaxed m-0 bg-zinc-800')}
+            style={{ ...style, }}
           >
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })}>
@@ -124,7 +124,8 @@ export const mdxComponents: Record<string, any> = {
     children: React.ReactNode
     className?: string
   }) => {
-    if (className?.startsWith('language-')) {
+    const isBlock = className?.startsWith('language-') || (typeof children === 'string' && children.includes('\n'))
+    if (isBlock) {
       return (
         <FencedCode className={className}>{children as string}</FencedCode>
       )
