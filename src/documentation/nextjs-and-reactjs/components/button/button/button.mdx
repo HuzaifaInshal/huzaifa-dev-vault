@@ -1,0 +1,152 @@
+import { Demo } from "@/doc-ui/Demo";
+import { Button } from "@/components/ui/Button";
+
+export const meta = {
+  title: "Button",
+  category: "Components",
+  order: 0,
+};
+
+# Button
+
+A versatile button built with `cva` supporting multiple variants, sizes, loading states, ripple animations, and optional Next.js `Link` rendering.
+
+📁 `src/components/ui/Button.tsx`
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `default \| outline-transparent \| outline \| ghost \| link` | `default` | Visual style |
+| `size` | `default \| xs \| sm \| lg \| icon \| xlg \| full \| fit` | `default` | Size preset |
+| `isLoading` | `boolean` | — | Shows spinner, disables interaction |
+| `link` | `string` | — | Renders as Next.js `<Link>` |
+| `component` | `React.ElementType` | `button` | Override root element |
+| `disabled` | `boolean` | — | Disables the button |
+
+## Variants
+
+<Demo
+  title="Variants"
+  code={`<Button variant="default">Default</Button>
+<Button variant="outline-transparent">Outline Transparent</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>`}
+>
+  <Button variant="default">Default</Button>
+  <Button variant="outline-transparent">Outline Transparent</Button>
+  <Button variant="outline">Outline</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="link">Link</Button>
+</Demo>
+
+## Sizes
+
+<Demo
+  title="Sizes"
+  code={`<Button size="xs">XSmall</Button>
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+<Button size="xlg">XLarge</Button>`}
+>
+  <Button size="xs">XSmall</Button>
+  <Button size="sm">Small</Button>
+  <Button size="default">Default</Button>
+  <Button size="lg">Large</Button>
+  <Button size="xlg">XLarge</Button>
+</Demo>
+
+## Loading & Disabled
+
+<Demo
+  title="States"
+  code={`<Button isLoading>Saving...</Button>
+<Button isLoading variant="outline">Loading</Button>
+<Button disabled>Disabled</Button>`}
+>
+  <Button isLoading>Saving...</Button>
+  <Button isLoading variant="outline">Loading</Button>
+  <Button disabled>Disabled</Button>
+</Demo>
+
+## Source
+
+```tsx
+"use client";
+import { cva, type VariantProps } from "class-variance-authority";
+import { LoaderCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { handleRippleAnimation } from "@/lib/ui/handleRippleAnimation";
+import { ButtonHTMLAttributes } from "react";
+import NextLink from "next/link";
+
+const buttonVariants = cva(
+  cn(
+    "inline-flex items-center justify-center gap-2 relative",
+    "whitespace-nowrap cursor-pointer rounded-md outline-none",
+    "font-semibold transition-all duration-200",
+    "disabled:cursor-not-allowed data-[externaldisabled=true]:opacity-60",
+    "[&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0",
+    "relative overflow-hidden"
+  ),
+  {
+    variants: {
+      variant: {
+        default: "bg-[image:var(--gradient)] hover:opacity-90 text-background",
+        "outline-transparent": "text-text-primary border border-border-primary hover:bg-black/5 shadow-[0px_1px_2px_0px_#00000014]",
+        outline: "border border-primary hover:bg-primary/10 text-primary",
+        ghost: "text-text-primary hover:bg-black/5",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-8 py-2",
+        xs: "h-7 px-3 text-sm",
+        sm: "h-9 gap-1.5 px-4 text-sm",
+        lg: "h-11 px-10",
+        icon: "size-9 rounded-full",
+        xlg: "h-12 px-12 text-lg",
+        full: "h-10 w-full",
+        fit: "h-10 w-fit px-0",
+      },
+    },
+    defaultVariants: { variant: "default", size: "default" },
+  }
+);
+
+type Props = ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants> & {
+    component?: React.ElementType;
+    link?: string;
+    isLoading?: boolean;
+  };
+
+function Button({ className, variant = "default", size = "default", component: ComponentOverride, link, children, isLoading, ...props }: Props) {
+  const Comp = ComponentOverride || "button";
+  if (link) {
+    return (
+      <NextLink href={link} className={cn(buttonVariants({ variant, size, className }))}>
+        {children}
+      </NextLink>
+    );
+  }
+  return (
+    <Comp
+      {...props}
+      className={cn(buttonVariants({ variant, size, className }))}
+      disabled={isLoading || props.disabled}
+      onMouseDown={(e) => { handleRippleAnimation(e, undefined); props.onMouseDown?.(e); }}
+    >
+      {isLoading && (
+        <span className="absolute flex center top-0 bottom-0 left-0 right-0 loader-container z-10">
+          <LoaderCircle className="animate-spin" />
+        </span>
+      )}
+      {children}
+    </Comp>
+  );
+}
+
+export { Button, buttonVariants };
+```

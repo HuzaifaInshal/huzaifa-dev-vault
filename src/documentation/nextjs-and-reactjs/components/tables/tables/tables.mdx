@@ -1,0 +1,106 @@
+import { Demo } from "@/doc-ui/Demo";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Tables";
+
+export const meta = {
+  title: "Tables",
+  category: "Components",
+  order: 5,
+};
+
+# Tables
+
+Composable table primitives with consistent border, background, and spacing. The root `Table` wraps in a scrollable container automatically.
+
+📁 `src/components/ui/Tables.tsx`
+
+## Components
+
+| Component | Element | Description |
+|-----------|---------|-------------|
+| `Table` | `<table>` | Root — overflow scroll wrapper |
+| `TableHeader` | `<thead>` | Header with secondary background |
+| `TableBody` | `<tbody>` | Body rows |
+| `TableRow` | `<tr>` | Row with bottom border |
+| `TableHead` | `<th>` | Header cell |
+| `TableCell` | `<td>` | Data cell |
+
+All components forward native HTML props and accept a `className` override.
+
+## Live Example
+
+<Demo
+  title="Tables"
+  code={`import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Tables";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      <TableHead>Name</TableHead>
+      <TableHead>Role</TableHead>
+      <TableHead>Status</TableHead>
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    <TableRow>
+      <TableCell>Alice</TableCell>
+      <TableCell>Admin</TableCell>
+      <TableCell>Active</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Bob</TableCell>
+      <TableCell>Editor</TableCell>
+      <TableCell>Inactive</TableCell>
+    </TableRow>
+  </TableBody>
+</Table>`}
+>
+  <div className="w-full max-w-lg">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Role</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          <TableCell>Alice</TableCell>
+          <TableCell>Admin</TableCell>
+          <TableCell>Active</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Bob</TableCell>
+          <TableCell>Editor</TableCell>
+          <TableCell>Inactive</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell>Charlie</TableCell>
+          <TableCell>Viewer</TableCell>
+          <TableCell>Active</TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  </div>
+</Demo>
+
+## Usage
+
+```tsx
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Tables";
+
+<Table>
+  <TableHeader>
+    <TableRow>
+      {columns.map((col) => <TableHead key={col.key}>{col.label}</TableHead>)}
+    </TableRow>
+  </TableHeader>
+  <TableBody>
+    {rows.map((row) => (
+      <TableRow key={row.id}>
+        {columns.map((col) => <TableCell key={col.key}>{row[col.key]}</TableCell>)}
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>
+```

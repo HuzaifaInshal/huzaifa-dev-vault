@@ -1,0 +1,190 @@
+import { Demo } from "@/doc-ui/Demo";
+import DateRangeSelector from "@/components/ui/DateRangeSelector";
+import DateRangeSelectorV2 from "@/components/ui/DateRangeSelectorV2";
+import DateSelector from "@/components/ui/DateSelector";
+import DateTimeRangeSelector from "@/components/ui/DateTimeRangeSelector";
+import DateTimeSelector from "@/components/ui/DateTimeSelector";
+import TimeRangeSelector from "@/components/ui/TimeRangeSelector";
+import TimeSelector from "@/components/ui/TimeSelector";
+
+export const meta = {
+  title: "Date & Time",
+  category: "Components",
+  order: 1,
+};
+
+# Date & Time Components
+
+All date and time picker components. Each is a Radix `DropdownMenu`-based dropdown with year/month/date drill-down, `moment` formatting, and a clear button. Time pickers auto-detect 12/24-hour format from the system locale.
+
+---
+
+## DateSelector
+
+📁 `src/components/ui/DateSelector.tsx`
+
+Single date picker with year → month → date drill-down.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Date` | — | Selected date |
+| `setValue` | `(date: Date) => void` | — | Change handler |
+| `placeholder` | `string` | `"Select Date"` | Trigger placeholder |
+| `trigger` | `React.ReactNode` | — | Custom trigger element |
+| `disabledDates` | `Date[]` | — | Dates to disable |
+| `minDate` | `Date` | — | Minimum selectable date |
+| `maxDate` | `Date` | — | Maximum selectable date |
+| `hideTrigger` | `boolean` | — | Hide the default trigger |
+| `open` / `onOpenChange` | `boolean / fn` | — | Controlled open state |
+
+<Demo
+  title="DateSelector"
+  code={`import DateSelector from "@/components/ui/DateSelector";
+const [date, setDate] = useState<Date | undefined>();
+<DateSelector value={date} setValue={setDate} />`}
+>
+  <DateSelector />
+</Demo>
+
+---
+
+## DateRangeSelector
+
+📁 `src/components/ui/DateRangeSelector.tsx`
+
+Single-panel date range picker. Click once for start, again for end.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `{ startDate: Date \| null; endDate: Date \| null }` | — | Controlled value |
+| `setValue` | `(value) => void` | — | Change handler |
+| `placeholder` | `string` | `"Select Date Range"` | Trigger placeholder |
+| `disabledDates` / `minDate` / `maxDate` | — | — | Date constraints |
+| `hideTrigger` / `open` / `onOpenChange` | — | — | Trigger control |
+
+<Demo
+  title="DateRangeSelector"
+  code={`import DateRangeSelector from "@/components/ui/DateRangeSelector";
+const [range, setRange] = useState({ startDate: null, endDate: null });
+<DateRangeSelector value={range} setValue={setRange} />`}
+>
+  <DateRangeSelector />
+</Demo>
+
+---
+
+## DateRangeSelectorV2
+
+📁 `src/components/ui/DateRangeSelectorV2.tsx`
+
+Enhanced dual-panel date range picker with hover preview and per-row range rounding.
+
+Additional prop: `triggerClassName` — extra classes for the trigger button.
+
+<Demo
+  title="DateRangeSelectorV2 (dual panel)"
+  code={`import DateRangeSelectorV2 from "@/components/ui/DateRangeSelectorV2";
+const [range, setRange] = useState({ startDate: null, endDate: null });
+<DateRangeSelectorV2 value={range} setValue={setRange} />`}
+>
+  <DateRangeSelectorV2 />
+</Demo>
+
+---
+
+## TimeSelector
+
+📁 `src/components/ui/TimeSelector.tsx`
+
+Single time picker with scrollable hour/minute/period columns.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string \| null` | — | Time in `"HH:mm"` format |
+| `setValue` | `(value: string) => void` | — | Change handler |
+| `minuteStep` | `number` | `1` | Minute increment |
+| `placeholder` | `string` | `"Select Time"` | Trigger placeholder |
+| `hideTrigger` / `open` / `onOpenChange` | — | — | Trigger control |
+
+<Demo
+  title="TimeSelector"
+  code={`import TimeSelector from "@/components/ui/TimeSelector";
+const [time, setTime] = useState<string | null>(null);
+<TimeSelector value={time} setValue={setTime} minuteStep={15} />`}
+>
+  <TimeSelector minuteStep={15} />
+</Demo>
+
+---
+
+## TimeRangeSelector
+
+📁 `src/components/ui/TimeRangeSelector.tsx`
+
+Time range picker. Validates end is not before start. Same column layout as `TimeSelector`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `{ startTime: string \| null; endTime: string \| null }` | — | Controlled value (`"HH:mm"`) |
+| `setValue` | `(value) => void` | — | Change handler |
+| `minuteStep` | `number` | `1` | Minute increment |
+| `placeholder` | `string` | `"Select Time Range"` | Trigger placeholder |
+
+<Demo
+  title="TimeRangeSelector"
+  code={`import TimeRangeSelector from "@/components/ui/TimeRangeSelector";
+const [range, setRange] = useState({ startTime: null, endTime: null });
+<TimeRangeSelector value={range} setValue={setRange} minuteStep={15} />`}
+>
+  <TimeRangeSelector minuteStep={15} />
+</Demo>
+
+---
+
+## DateTimeSelector
+
+📁 `src/components/ui/DateTimeSelector.tsx`
+
+Combined date + time picker. Closes automatically once both are selected.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `Date \| null` | — | Selected datetime |
+| `setValue` | `(value: Date) => void` | — | Change handler |
+| `minuteStep` | `number` | `1` | Minute increment |
+| `placeholder` | `string` | `"Select Date & Time"` | Trigger placeholder |
+| `disabledDates` / `minDate` / `maxDate` | — | — | Date constraints |
+
+<Demo
+  title="DateTimeSelector"
+  code={`import DateTimeSelector from "@/components/ui/DateTimeSelector";
+const [value, setValue] = useState<Date | null>(null);
+<DateTimeSelector value={value} setValue={setValue} minuteStep={15} />`}
+>
+  <DateTimeSelector minuteStep={15} />
+</Demo>
+
+---
+
+## DateTimeRangeSelector
+
+📁 `src/components/ui/DateTimeRangeSelector.tsx`
+
+Date range + time range combined. Select start/end dates then pick times for each.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `{ startDateTime: Date \| null; endDateTime: Date \| null }` | — | Controlled value |
+| `setValue` | `(value) => void` | — | Change handler |
+| `minuteStep` | `number` | `1` | Minute increment |
+| `placeholder` | `string` | `"Select Date & Time Range"` | Trigger placeholder |
+| `disabledDates` / `minDate` / `maxDate` | — | — | Date constraints |
+
+<Demo
+  title="DateTimeRangeSelector"
+  code={`import DateTimeRangeSelector from "@/components/ui/DateTimeRangeSelector";
+const [value, setValue] = useState({ startDateTime: null, endDateTime: null });
+<DateTimeRangeSelector value={value} setValue={setValue} minuteStep={15} />`}
+>
+  <DateTimeRangeSelector minuteStep={15} />
+</Demo>

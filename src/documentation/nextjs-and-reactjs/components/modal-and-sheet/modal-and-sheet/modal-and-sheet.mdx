@@ -1,0 +1,138 @@
+import { Demo } from "@/doc-ui/Demo";
+import { Modal, ModalClose } from "@/components/ui/Modal";
+import { Sheet, SheetClose } from "@/components/ui/Sheet";
+import { Button } from "@/components/ui/Button";
+import { Dialog } from "radix-ui";
+import React from "react";
+
+export const meta = {
+  title: "Modal & Sheet",
+  category: "Components",
+  order: 4,
+};
+
+# Modal & Sheet
+
+Both components are built on Radix `Dialog` and require `<Dialog.Title>` inside `children` for accessibility.
+
+---
+
+## Modal
+
+📁 `src/components/ui/Modal.tsx`
+
+Centered dialog with a blurred backdrop and smooth zoom animations.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `open` | `boolean` | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | Open state handler |
+| `children` | `React.ReactNode` | Modal content |
+| `className` | `string` | Extra classes for the content panel |
+
+**`ModalClose`** — renders a styled `×` close button. Accepts `className`.
+
+<Demo
+  title="Modal"
+  code={`"use client";
+import { useState } from "react";
+import { Modal, ModalClose } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Dialog } from "radix-ui";
+
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open Modal</Button>
+<Modal open={open} onOpenChange={setOpen} className="w-[400px] p-6">
+  <div className="flex items-center justify-between mb-4">
+    <Dialog.Title className="text-lg font-semibold">Modal Title</Dialog.Title>
+    <ModalClose />
+  </div>
+  <p className="text-text-secondary text-sm">Modal content goes here.</p>
+  <div className="mt-6 flex justify-end gap-2">
+    <Button variant="outline-transparent" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+    <Button size="sm" onClick={() => setOpen(false)}>Confirm</Button>
+  </div>
+</Modal>`}
+>
+  <ModalDemo />
+</Demo>
+
+export function ModalDemo() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal open={open} onOpenChange={setOpen} className="w-[400px] p-6">
+        <div className="flex items-center justify-between mb-4">
+          <Dialog.Title className="text-lg font-semibold text-text-primary">Modal Title</Dialog.Title>
+          <ModalClose />
+        </div>
+        <p className="text-text-secondary text-sm">Modal content goes here.</p>
+        <div className="mt-6 flex justify-end gap-2">
+          <Button variant="outline-transparent" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button size="sm" onClick={() => setOpen(false)}>Confirm</Button>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
+---
+
+## Sheet
+
+📁 `src/components/ui/Sheet.tsx`
+
+Slide-in panel from the left or right edge with a dark overlay.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Open state handler |
+| `children` | `React.ReactNode` | — | Sheet content |
+| `side` | `"left" \| "right"` | `"right"` | Slide direction |
+| `className` | `string` | — | Extra classes for the content panel |
+
+**`SheetClose`** — renders a styled `×` close button. Accepts `className`.
+
+<Demo
+  title="Sheet"
+  code={`"use client";
+import { useState } from "react";
+import { Sheet, SheetClose } from "@/components/ui/Sheet";
+import { Button } from "@/components/ui/Button";
+import { Dialog } from "radix-ui";
+
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open Sheet</Button>
+<Sheet open={open} onOpenChange={setOpen} className="w-80 p-6">
+  <div className="flex items-center justify-between mb-4">
+    <Dialog.Title className="text-lg font-semibold">Sheet Title</Dialog.Title>
+    <SheetClose />
+  </div>
+  <p className="text-text-secondary text-sm">Sheet content goes here.</p>
+</Sheet>`}
+>
+  <SheetDemo />
+</Demo>
+
+export function SheetDemo() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Sheet</Button>
+      <Sheet open={open} onOpenChange={setOpen} className="w-80 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <Dialog.Title className="text-lg font-semibold text-text-primary">Sheet Title</Dialog.Title>
+          <SheetClose />
+        </div>
+        <p className="text-text-secondary text-sm">Sheet content goes here.</p>
+        <div className="mt-auto pt-6">
+          <Button variant="outline-transparent" size="full" onClick={() => setOpen(false)}>Close</Button>
+        </div>
+      </Sheet>
+    </>
+  );
+}

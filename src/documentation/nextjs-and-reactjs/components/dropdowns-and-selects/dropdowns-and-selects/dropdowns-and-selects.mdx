@@ -1,0 +1,108 @@
+import { Demo } from "@/doc-ui/Demo";
+import Dropdown from "@/components/ui/Dropdown";
+import Select from "@/components/ui/Select";
+import { Button } from "@/components/ui/Button";
+
+export const meta = {
+  title: "Dropdowns & Selects",
+  category: "Components",
+  order: 2,
+};
+
+# Dropdowns & Selects
+
+---
+
+## Dropdown
+
+📁 `src/components/ui/Dropdown.tsx`
+
+A Radix `DropdownMenu` that accepts any trigger via `children` and renders a list of items with ripple animations. Wraps `LabelContainer` for optional label/error.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | — | Trigger element |
+| `items` | `DropdownItem[]` | `[]` | Menu items |
+| `label` | `string` | — | Label above the trigger |
+| `error` | `string` | — | Error message below |
+| `open` / `onOpenChange` | `boolean / fn` | — | Controlled open state |
+| `contentClassName` | `string` | — | Extra classes for the menu panel |
+| `required` | `boolean` | — | Required asterisk on label |
+
+**DropdownItem shape:** `{ value: string; label: ReactNode; disabled?: boolean; onClick?: (value: string) => void }`
+
+<Demo
+  title="Dropdown"
+  code={`import Dropdown from "@/components/ui/Dropdown";
+import { Button } from "@/components/ui/Button";
+
+<Dropdown
+  items={[
+    { value: "edit", label: "Edit" },
+    { value: "duplicate", label: "Duplicate" },
+    { value: "delete", label: "Delete", disabled: true },
+  ]}
+>
+  <Button variant="outline-transparent" size="sm">Actions ▾</Button>
+</Dropdown>`}
+>
+  <Dropdown
+    items={[
+      { value: "edit", label: "Edit" },
+      { value: "duplicate", label: "Duplicate" },
+      { value: "delete", label: "Delete", disabled: true },
+    ]}
+  >
+    <Button variant="outline-transparent" size="sm">Actions ▾</Button>
+  </Dropdown>
+</Demo>
+
+---
+
+## Select
+
+📁 `src/components/ui/Select.tsx`
+
+A Radix `Select` with label, error, start/end icon slots, ripple animations, and consistent input styling. Wraps `LabelContainer`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `options` | `SelectOption[]` | — | List of options |
+| `value` | `string` | — | Controlled value |
+| `setValue` | `(value: string) => void` | — | Shorthand change handler |
+| `onValueChange` | `(value: string) => void` | — | Radix change handler |
+| `placeholder` | `string` | `"Select an option"` | Placeholder text |
+| `label` | `string` | — | Label above the select |
+| `error` | `string` | — | Error message below |
+| `startIcon` / `endIcon` | `React.ReactNode` | — | Icon slots |
+| `disabled` / `required` | `boolean` | — | — |
+| `triggerClassName` / `contentClassName` | `string` | — | Style overrides |
+
+**SelectOption shape:** `{ value: string; label: ReactNode; disabled?: boolean }`
+
+<Demo
+  title="Select"
+  code={`import Select from "@/components/ui/Select";
+
+<Select
+  label="Framework"
+  placeholder="Pick a framework"
+  options={[
+    { value: "next", label: "Next.js" },
+    { value: "remix", label: "Remix" },
+    { value: "astro", label: "Astro" },
+  ]}
+/>`}
+>
+  <div className="w-64">
+    <Select
+      label="Framework"
+      placeholder="Pick a framework"
+      options={[
+        { value: "next", label: "Next.js" },
+        { value: "remix", label: "Remix" },
+        { value: "astro", label: "Astro" },
+      ]}
+    />
+  </div>
+</Demo>

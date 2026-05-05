@@ -1,0 +1,213 @@
+import { Demo } from "@/doc-ui/Demo";
+import TextInput from "@/components/ui/TextInput";
+import PasswordInput from "@/components/ui/PasswordInput";
+import OtpInput from "@/components/ui/OtpInput";
+import PhoneInput from "@/components/ui/PhoneInput";
+import LabelContainer from "@/components/ui/LabelContainer";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { Search } from "lucide-react";
+
+export const meta = {
+  title: "Inputs",
+  category: "Components",
+  order: 3,
+};
+
+# Inputs
+
+All input components share a common `LabelContainer` wrapper that renders an optional label, the input, and an optional error message.
+
+---
+
+## LabelContainer
+
+📁 `src/components/ui/LabelContainer.tsx`
+
+The base layout wrapper used by every input. Rarely used directly — all inputs below use it internally.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `children` | `React.ReactNode` | The input element |
+| `label` | `string` | Label text |
+| `error` | `string` | Error message (red, below input) |
+| `htmlFor` | `string` | Links label to input `id` |
+| `required` | `boolean` | Appends red `*` to label |
+| `className` / `labelClassName` | `string` | Style overrides |
+
+<Demo
+  title="LabelContainer"
+  code={`<LabelContainer label="Email" htmlFor="email" required>
+  <input id="email" type="email" placeholder="you@example.com" className="border border-border-primary rounded-lg px-3 py-2 w-full text-sm bg-background" />
+</LabelContainer>
+<LabelContainer label="Username" error="Already taken">
+  <input type="text" placeholder="username" className="border border-destructive rounded-lg px-3 py-2 w-full text-sm bg-background" />
+</LabelContainer>`}
+>
+  <div className="w-64 flex flex-col gap-4">
+    <LabelContainer label="Email" htmlFor="lc-email" required>
+      <input id="lc-email" type="email" placeholder="you@example.com" className="border border-border-primary rounded-lg px-3 py-2 w-full text-sm bg-background text-text-primary" />
+    </LabelContainer>
+    <LabelContainer label="Username" error="Already taken">
+      <input type="text" placeholder="username" className="border border-destructive rounded-lg px-3 py-2 w-full text-sm bg-background text-text-primary" />
+    </LabelContainer>
+  </div>
+</Demo>
+
+---
+
+## TextInput
+
+📁 `src/components/ui/TextInput.tsx`
+
+Standard text input with optional start/end icon slots.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `label` | `string` | Label text |
+| `error` | `string` | Error message |
+| `value` | `string` | Controlled value |
+| `setValue` | `(value: string) => void` | Change handler shorthand |
+| `startIcon` / `endIcon` | `React.ReactNode` | Icon slots |
+| `containerClassName` / `labelClassName` | `string` | Style overrides |
+
+All native `<input>` props are forwarded.
+
+<Demo
+  title="TextInput"
+  code={`import TextInput from "@/components/ui/TextInput";
+import { Search } from "lucide-react";
+
+<TextInput label="Search" placeholder="Search..." startIcon={<Search className="size-4" />} />
+<TextInput label="Username" placeholder="Enter username" />
+<TextInput label="With Error" placeholder="Enter value" error="This field is required" />`}
+>
+  <div className="w-64 flex flex-col gap-4">
+    <TextInput label="Search" placeholder="Search..." startIcon={<Search className="size-4" />} />
+    <TextInput label="Username" placeholder="Enter username" />
+    <TextInput label="With Error" placeholder="Enter value" error="This field is required" />
+  </div>
+</Demo>
+
+---
+
+## PasswordInput
+
+📁 `src/components/ui/PasswordInput.tsx`
+
+Password input with a built-in show/hide toggle. All native `<input>` props except `type` are forwarded.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` / `error` | `string` | — | Label and error |
+| `value` | `string` | — | Controlled value |
+| `setValue` | `(value: string) => void` | — | Change handler |
+| `startIcon` | `React.ReactNode` | — | Left icon |
+| `showToggle` | `boolean` | `true` | Show/hide the eye toggle |
+| `containerClassName` / `labelClassName` | `string` | — | Style overrides |
+
+<Demo
+  title="PasswordInput"
+  code={`import PasswordInput from "@/components/ui/PasswordInput";
+
+<PasswordInput label="Password" placeholder="Enter password" />
+<PasswordInput label="With Error" placeholder="Enter password" error="Password is required" />`}
+>
+  <div className="w-64 flex flex-col gap-4">
+    <PasswordInput label="Password" placeholder="Enter password" />
+    <PasswordInput label="With Error" placeholder="Enter password" error="Password is required" />
+  </div>
+</Demo>
+
+---
+
+## OtpInput
+
+📁 `src/components/ui/OtpInput.tsx`
+
+OTP input built on `input-otp`. Renders individual styled cells with a blinking caret.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `value` | `string` | — | Controlled OTP value |
+| `setValue` | `(value: string) => void` | — | Change handler |
+| `maxLength` | `number` | `6` | Number of digits |
+| `label` / `error` | `string` | — | Label and error |
+| `disabled` | `boolean` | — | Disables all cells |
+| `className` | `string` | — | Extra classes per cell |
+| `containerClassName` / `labelClassName` / `inputClassName` | `string` | — | Style overrides |
+
+<Demo
+  title="OtpInput"
+  code={`import OtpInput from "@/components/ui/OtpInput";
+
+<OtpInput label="Verification Code" maxLength={6} />
+<OtpInput label="4-digit PIN" maxLength={4} />
+<OtpInput label="With Error" maxLength={6} error="Invalid code" />`}
+>
+  <div className="flex flex-col gap-6 items-start">
+    <OtpInput label="Verification Code" maxLength={6} />
+    <OtpInput label="4-digit PIN" maxLength={4} />
+    <OtpInput label="With Error" maxLength={6} error="Invalid code" />
+  </div>
+</Demo>
+
+---
+
+## PhoneInput
+
+📁 `src/components/ui/PhoneInput.tsx`
+
+International phone input combining a custom country code dropdown (flag + search + calling code) with `react-phone-input-2` for number formatting.
+
+**Dependencies:** `react-phone-input-2`, `libphonenumber-js`, `i18n-iso-countries`, `cmdk`, `radix-ui`
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `value` | `string` | Phone digits (no `+`) |
+| `setValue` | `(value: string) => void` | Change handler |
+| `defaultCountry` | `string` | ISO 2-letter code e.g. `"us"` |
+| `label` / `error` | `string` | Label and error |
+| `disabled` | `boolean` | Disables the input |
+| `containerClassName` / `labelClassName` | `string` | Style overrides |
+
+<Demo
+  title="PhoneInput"
+  code={`import PhoneInput from "@/components/ui/PhoneInput";
+
+<PhoneInput label="Phone Number" defaultCountry="us" placeholder="Enter phone number" />`}
+>
+  <div className="w-72">
+    <PhoneInput label="Phone Number" defaultCountry="us" placeholder="Enter phone number" />
+  </div>
+</Demo>
+
+---
+
+## CountryFlag
+
+📁 `src/components/ui/CountryFlag.tsx`
+
+Renders a country flag from `flagcdn.com` using a 2-letter ISO code. Falls back to a `?` placeholder on invalid codes or load errors. Used internally by `PhoneInput`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `countryCode` | `string \| null \| undefined` | ISO 3166-1 alpha-2 code |
+
+<Demo
+  title="CountryFlag"
+  code={`import CountryFlag from "@/components/ui/CountryFlag";
+
+<CountryFlag countryCode="us" />
+<CountryFlag countryCode="pk" />
+<CountryFlag countryCode="gb" />
+<CountryFlag countryCode="de" />
+<CountryFlag countryCode="invalid" />`}
+>
+  <div className="flex gap-4 items-center">
+    <CountryFlag countryCode="us" />
+    <CountryFlag countryCode="pk" />
+    <CountryFlag countryCode="gb" />
+    <CountryFlag countryCode="de" />
+    <CountryFlag countryCode="invalid" />
+  </div>
+</Demo>
