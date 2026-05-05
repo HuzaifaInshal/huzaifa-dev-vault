@@ -35,6 +35,56 @@ const importMap: Record<string, () => Promise<{ default: React.ComponentType }>>
     import("../documentation/nextjs-and-reactjs/others/themes/themes.mdx"),
   "/nextjs-and-reactjs/utils/css-utils/css-utils.mdx": () =>
     import("../documentation/nextjs-and-reactjs/utils/css-utils/css-utils.mdx"),
+  "/nextjs-and-reactjs/components/button/button.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/button/button.mdx"),
+  "/nextjs-and-reactjs/components/date-and-time/date-and-time.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/date-and-time/date-and-time.mdx"),
+  "/nextjs-and-reactjs/components/dropdowns-and-selects/dropdowns-and-selects.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/dropdowns-and-selects/dropdowns-and-selects.mdx"),
+  "/nextjs-and-reactjs/components/inputs/inputs.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/inputs/inputs.mdx"),
+  "/nextjs-and-reactjs/components/modal-and-sheet/modal-and-sheet.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/modal-and-sheet/modal-and-sheet.mdx"),
+  "/nextjs-and-reactjs/components/tables/tables.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/components/tables/tables.mdx"),
+  "/nextjs-and-reactjs/hooks/upload-hooks/upload-hooks.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/upload-hooks/upload-hooks.mdx"),
+  "/nextjs-and-reactjs/hooks/use-boolean-state/use-boolean-state.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/use-boolean-state/use-boolean-state.mdx"),
+  "/nextjs-and-reactjs/hooks/use-infinite/use-infinite.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/use-infinite/use-infinite.mdx"),
+  "/nextjs-and-reactjs/hooks/use-read-more/use-read-more.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/use-read-more/use-read-more.mdx"),
+  "/nextjs-and-reactjs/hooks/use-time-ago/use-time-ago.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/use-time-ago/use-time-ago.mdx"),
+  "/nextjs-and-reactjs/hooks/use-window-size/use-window-size.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/hooks/use-window-size/use-window-size.mdx"),
+  "/nextjs-and-reactjs/utils/add-query-params/add-query-params.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/add-query-params/add-query-params.mdx"),
+  "/nextjs-and-reactjs/utils/browser-notification/browser-notification.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/browser-notification/browser-notification.mdx"),
+  "/nextjs-and-reactjs/utils/check-url/check-url.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/check-url/check-url.mdx"),
+  "/nextjs-and-reactjs/utils/clear-search-params/clear-search-params.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/clear-search-params/clear-search-params.mdx"),
+  "/nextjs-and-reactjs/utils/formik-utils/formik-utils.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/formik-utils/formik-utils.mdx"),
+  "/nextjs-and-reactjs/utils/get-environment-mode/get-environment-mode.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/get-environment-mode/get-environment-mode.mdx"),
+  "/nextjs-and-reactjs/utils/get-file-extension-from-url/get-file-extension-from-url.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/get-file-extension-from-url/get-file-extension-from-url.mdx"),
+  "/nextjs-and-reactjs/utils/get-filename-from-url/get-filename-from-url.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/get-filename-from-url/get-filename-from-url.mdx"),
+  "/nextjs-and-reactjs/utils/handle-mutation-error/handle-mutation-error.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/handle-mutation-error/handle-mutation-error.mdx"),
+  "/nextjs-and-reactjs/utils/infinite-query-utils/infinite-query-utils.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/infinite-query-utils/infinite-query-utils.mdx"),
+  "/nextjs-and-reactjs/utils/input-utils/input-utils.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/input-utils/input-utils.mdx"),
+  "/nextjs-and-reactjs/utils/normalize-url/normalize-url.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/normalize-url/normalize-url.mdx"),
+  "/nextjs-and-reactjs/utils/tanstack-query-client/tanstack-query-client.mdx": () =>
+    import("../documentation/nextjs-and-reactjs/utils/tanstack-query-client/tanstack-query-client.mdx"),
 };
 
 export function MDXPage({ importKey }: { importKey: string }) {
