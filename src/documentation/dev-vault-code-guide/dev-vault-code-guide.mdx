@@ -5,56 +5,200 @@ export const meta = {
   order: 1000
 };
 
-# Welcome to DevDocs
+# Dev Vault Code Guide
 
-Your personal library for components, utilities, prompts, and instructions — everything rendered from a single source of truth.
+Everything in this site is driven by `.mdx` files inside `src/documentation/`. This page explains the folder conventions, how the registry picks up pages, and how to add new ones.
 
 ## How it works
 
-Every doc page lives inside `src/documentation/`. Each page gets its own folder, with the `.mdx` file and any local imported markdown sitting together. You write the page in Markdown/JSX, import your real component, and the same import renders **both** the live preview and the source code. No copy-pasting.
+1. `registry-server.ts` recursively scans `src/documentation/` for `.mdx` files
+2. Each file's path becomes its route — with one deduplication rule (see below)
+3. `MDXPage.tsx` holds a static `importMap` that maps each file path to a dynamic import — **every new file must be added here manually**
+
+## Folder & file naming
+
+Pages live at:
+
+```
+src/documentation/<section>/<group>/<name>.mdx
+```
+
+The registry deduplicates when the filename (without `.mdx`) equals its parent folder name:
+
+```
+nextjs-and-reactjs/utils/add-query-params/add-query-params.mdx
+→ route: /nextjs-and-reactjs/utils/add-query-params
+```
+
+So always name the file the same as its parent folder.
+
+## Current structure
+
+```
+src/documentation/
+├── index.mdx                          → /
+├── dev-vault-code-guide/
+│   └── dev-vault-code-guide.mdx       → /dev-vault-code-guide
+├── ai-tools-assistant-and-prompts/
+│   └── ai-tools-for-frontend/
+│       ├── guidelines-for-agent/
+│       ├── integration/
+│       └── ui-from-html/
+└── nextjs-and-reactjs/
+    ├── components/
+    │   ├── button/button.mdx
+    │   ├── date-and-time/date-and-time.mdx
+    │   ├── dropdowns-and-selects/dropdowns-and-selects.mdx
+    │   ├── inputs/inputs.mdx
+    │   ├── modal-and-sheet/modal-and-sheet.mdx
+    │   └── tables/tables.mdx
+    ├── hooks/
+    │   ├── upload-hooks/upload-hooks.mdx
+    │   ├── use-boolean-state/use-boolean-state.mdx
+    │   ├── use-infinite/use-infinite.mdx
+    │   ├── use-read-more/use-read-more.mdx
+    │   ├── use-time-ago/use-time-ago.mdx
+    │   └── use-window-size/use-window-size.mdx
+    ├── integration-utils/
+    │   ├── axios-instance/
+    │   ├── common-types/
+    │   ├── infinite-query-utils/
+    │   └── mutation-error-handler/
+    ├── others/
+    │   ├── bootstrap-containers/
+    │   ├── custom-fonts/
+    │   ├── favicons/
+    │   ├── lenis/
+    │   ├── socket-architecture/
+    │   └── themes/
+    └── utils/
+        ├── add-query-params/add-query-params.mdx
+        ├── browser-notification/browser-notification.mdx
+        ├── check-url/check-url.mdx
+        ├── clear-search-params/clear-search-params.mdx
+        ├── css-utils/css-utils.mdx
+        ├── formik-utils/formik-utils.mdx
+        ├── get-environment-mode/get-environment-mode.mdx
+        ├── get-file-extension-from-url/get-file-extension-from-url.mdx
+        ├── get-filename-from-url/get-filename-from-url.mdx
+        ├── handle-mutation-error/handle-mutation-error.mdx
+        ├── infinite-query-utils/infinite-query-utils.mdx
+        ├── input-utils/input-utils.mdx
+        ├── normalize-url/normalize-url.mdx
+        └── tanstack-query-client/tanstack-query-client.mdx
+```
 
 ## Adding a new page
 
-1. Create `src/documentation/<category>/<name>/<name>.mdx`
-2. Export a `meta` object at the top
-3. Import your component and its source via `?raw`
-4. Use `<Demo>` to render both live preview and code
+### 1. Create the file
 
-```tsx
-import { MyComponent } from '../components/MyComponent'
-import src from '../components/MyComponent.tsx?raw'
-import { Demo } from '../doc-ui/Demo'
-
-export const meta = {
-  title: 'My Component',
-  category: 'Components',
-  order: 1,
-}
-
-# My Component
-
-<Demo source={src}>
-  <MyComponent />
-</Demo>
+```
+src/documentation/nextjs-and-reactjs/<group>/<name>/<name>.mdx
 ```
 
-The component is defined **once** in its file. The `?raw` import reads that same file as a string at build time — so what you see in the Code tab is always the real, up-to-date source.
+### 2. Add the meta export
+
+```mdx
+export const meta = {
+  title: "My Page",
+  category: "Utils",
+  order: 5,
+};
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | `string` | Sidebar label and page heading |
+| `category` | `string` | Groups pages in the sidebar |
+| `order` | `number` | Sort order within the group (lower = higher) |
+| `description` | `string` | Optional subtitle |
+| `hideFromNav` | `boolean` | Hides the page from the sidebar |
+
+### 3. Register it in MDXPage.tsx
+
+Open `src/doc-ui/MDXPage.tsx` and add an entry to the `importMap`:
+
+```ts
+"/nextjs-and-reactjs/<group>/<name>/<name>.mdx": () =>
+  import("../documentation/nextjs-and-reactjs/<group>/<name>/<name>.mdx"),
+```
+
+This step is **required** — the page will 404 without it.
 
 ## Doc-ui primitives
 
-| Component                                | Purpose                      |
-| ---------------------------------------- | ---------------------------- |
-| `<Demo source={src}>`                    | Live preview + source toggle |
-| `<CodeBlock source={src} language="ts">` | Source only, no preview      |
+### `<Demo>`
 
-Both components accept a `title` prop for labelling.
+Renders a live preview and a copyable code block with a tab switcher.
 
-## Categories
+```mdx
+import { Demo } from "@/doc-ui/Demo";
+import { Button } from "@/components/ui/Button";
 
-Organise your pages by setting `meta.category`. The sidebar groups them automatically. Suggested categories:
+<Demo
+  title="My Button"
+  code={`<Button variant="outline">Click me</Button>`}
+>
+  <Button variant="outline">Click me</Button>
+</Demo>
+```
 
-- **Getting Started** — orientation pages like this one
-- **Components** — React UI components
-- **Utils** — helper functions
-- **Prompts** — LLM prompt templates
-- **Instructions** — coding standards, patterns, guidelines
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `code` | `string` | — | Source shown in the Code tab |
+| `children` | `ReactNode` | — | Live rendered preview |
+| `title` | `string` | — | Label in the demo header |
+| `language` | `string` | `"tsx"` | Syntax highlighting language |
+| `defaultTab` | `"preview" \| "code"` | `"preview"` | Which tab opens first |
+
+### `<CodeBlock>`
+
+Source-only block, no preview.
+
+```mdx
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
+<CodeBlock language="ts" source={mySourceString} />
+```
+
+### `<Prompt>`
+
+Renders a collapsible markdown prompt block with a copy button.
+
+```mdx
+import { Prompt } from "@/doc-ui/Prompt";
+import PromptContent from "./my-prompt.md";
+import promptSource from "./my-prompt.md?raw";
+
+<Prompt source={promptSource} title="My Prompt">
+  <PromptContent />
+</Prompt>
+```
+
+## Interactive demos with local state
+
+MDX supports exporting React components inline. Use this when a demo needs `useState`:
+
+```mdx
+import React from "react";
+import { Modal, ModalClose } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Dialog } from "radix-ui";
+
+export function ModalDemo() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal open={open} onOpenChange={setOpen} className="w-[400px] p-6">
+        <Dialog.Title>Title</Dialog.Title>
+        <ModalClose />
+      </Modal>
+    </>
+  );
+}
+
+<Demo title="Modal" code={`...`}>
+  <ModalDemo />
+</Demo>
+```
