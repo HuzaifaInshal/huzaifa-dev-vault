@@ -1,0 +1,30 @@
+export const meta = {
+  title: "normalizeUrl",
+  category: "Utils",
+  order: 11,
+};
+
+# normalizeUrl
+
+📁 `src/utils/normalize-url.utils.ts`
+
+Ensures a URL string has an `https://` protocol prefix. Returns the original value if it already starts with `http://` or `https://`. Trims whitespace.
+
+## Examples
+
+```ts
+normalizeUrl("example.com");        // "https://example.com"
+normalizeUrl("http://example.com"); // "http://example.com"
+normalizeUrl("  example.com  ");    // "https://example.com"
+normalizeUrl("");                   // ""
+```
+
+## Source
+
+```ts
+export const normalizeUrl = (url: string) => {
+  if (!url) return url;
+  if (!/^https?:\/\//i.test(url.trim())) return `https://${url}`;
+  return url.trim();
+};
+```

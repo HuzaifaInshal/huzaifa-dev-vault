@@ -1,0 +1,43 @@
+export const meta = {
+  title: "Input Utils",
+  category: "Utils",
+  order: 10,
+};
+
+# Input Utils
+
+📁 `src/utils/inputUtils.ts`
+
+Simple sanitization helpers for form input values.
+
+## Functions
+
+| Function | Description |
+|----------|-------------|
+| `sanitizeInput(str)` | Trims leading/trailing whitespace |
+| `sanitizeEmail(str)` | Trims and lowercases |
+| `sanitizePassword(str)` | Returns as-is (preserves spaces and casing) |
+
+## Usage
+
+```ts
+sanitizeInput("  Alice  ");        // "Alice"
+sanitizeEmail("  ALICE@X.COM  "); // "alice@x.com"
+sanitizePassword(" myPass123 ");  // " myPass123 "
+```
+
+## Source
+
+```ts
+export function sanitizeInput(str: string) {
+  return str.trim();
+}
+
+export function sanitizeEmail(str: string) {
+  return sanitizeInput(str).toLowerCase();
+}
+
+export function sanitizePassword(str: string) {
+  return str;
+}
+```

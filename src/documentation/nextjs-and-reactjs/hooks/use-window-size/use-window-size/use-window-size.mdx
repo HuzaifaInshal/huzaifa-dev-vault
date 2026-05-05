@@ -1,0 +1,104 @@
+export const meta = {
+  title: "useWindowSize",
+  category: "Hooks",
+  order: 5,
+};
+
+# useWindowSize & useWindowBreakpoint
+
+📁 `src/hooks/useWindowSize.ts`
+
+Two hooks for tracking browser window dimensions. Both use `useLayoutEffect` to avoid SSR flicker.
+
+---
+
+## useWindowSize
+
+Returns the current window `width` and `height`, updating on resize.
+
+### Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `width` | `number` | Current window width in px |
+| `height` | `number` | Current window height in px |
+
+```tsx
+const { width, height } = useWindowSize();
+return <p>{width} × {height}</p>;
+```
+
+---
+
+## useWindowBreakpoint
+
+Returns the current `width` and a Tailwind-like `breakpoint` string.
+
+### Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `width` | `number` | Current window width in px |
+| `breakpoint` | `"default" \| "sm" \| "md" \| "lg" \| "xl" \| "2xl"` | Active breakpoint |
+
+### Thresholds
+
+| Breakpoint | Min Width |
+|------------|-----------|
+| `default` | < 640px |
+| `sm` | ≥ 640px |
+| `md` | ≥ 768px |
+| `lg` | ≥ 1024px |
+| `xl` | ≥ 1280px |
+| `2xl` | ≥ 1536px |
+
+```tsx
+const { breakpoint } = useWindowBreakpoint();
+
+if (breakpoint === "default" || breakpoint === "sm") return <MobileView />;
+return <DesktopView />;
+```
+
+## Source
+
+```ts
+"use client";
+import { useLayoutEffect, useState } from "react";
+
+export function useWindowBreakpoint() {
+  const [width, setWidth] = useState<number>(0);
+
+  useLayoutEffect(() => {
+    const updateWidth = () => setWidth(window.innerWidth);
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  let breakpoint: "sm" | "md" | "lg" | "xl" | "2xl" | "default" = "default";
+  if (width >= 1536) breakpoint = "2xl";
+  else if (width >= 1280) breakpoint = "xl";
+  else if (width >= 1024) breakpoint = "lg";
+  else if (width >= 768) breakpoint = "md";
+  else if (width >= 640) breakpoint = "sm";
+
+  return { width, breakpoint };
+}
+
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
+  });
+
+  useLayoutEffect(() => {
+    const handleResize = () =>
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowSize;
+}
+```

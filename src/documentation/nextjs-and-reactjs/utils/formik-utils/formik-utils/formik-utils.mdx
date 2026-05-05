@@ -1,0 +1,61 @@
+export const meta = {
+  title: "Formik Utils",
+  category: "Utils",
+  order: 4,
+};
+
+# Formik Utils
+
+📁 `src/utils/formik.utils.ts`
+
+## extractFormikTouchAndError
+
+Returns the error string for a field only if it has been touched. Returns `undefined` otherwise — safe to pass directly to any input's `error` prop.
+
+```ts
+function extractFormikTouchAndError<T extends object>(
+  formik: FormikProps<T>,
+  key: keyof T
+): string | undefined
+```
+
+## Usage
+
+```tsx
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { extractFormikTouchAndError } from "@/utils/formik.utils";
+
+const formik = useFormik({
+  initialValues: { email: "", password: "" },
+  validationSchema: Yup.object({
+    email: Yup.string().email().required(),
+    password: Yup.string().min(8).required(),
+  }),
+  onSubmit: (values) => console.log(values),
+});
+
+<TextInput
+  label="Email"
+  value={formik.values.email}
+  onChange={formik.handleChange("email")}
+  onBlur={formik.handleBlur("email")}
+  error={extractFormikTouchAndError(formik, "email")}
+/>
+```
+
+## Source
+
+```ts
+import { FormikProps } from "formik";
+
+export function extractFormikTouchAndError<T extends object>(
+  formik: FormikProps<T>,
+  key: keyof T,
+): string | undefined {
+  const touched = formik.touched[key];
+  const error = formik.errors[key];
+  if (touched && error) return error as string;
+  return undefined;
+}
+```

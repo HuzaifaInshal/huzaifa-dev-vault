@@ -1,0 +1,44 @@
+export const meta = {
+  title: "getFilenameFromUrl",
+  category: "Utils",
+  order: 7,
+};
+
+# getFilenameFromUrl Utils
+
+📁 `src/utils/get-filename-from-url.utils.ts`
+
+## getFilenameFromUrl
+
+Returns the filename (with extension) from a URL, stripping query strings and hash fragments.
+
+```ts
+getFilenameFromUrl("https://cdn.example.com/uploads/photo.jpg?v=1"); // "photo.jpg"
+getFilenameFromUrl("https://cdn.example.com/uploads/");              // ""
+getFilenameFromUrl("");                                               // ""
+```
+
+## getFilenameFromUrlExtended
+
+Same as above but also strips an S3-style timestamp prefix in the format `<timestamp>Z-<filename>`.
+
+```ts
+getFilenameFromUrlExtended("https://cdn.example.com/1700000000Z-my-document.pdf");
+// "my-document.pdf"
+```
+
+## Source
+
+```ts
+export function getFilenameFromUrl(url: string): string {
+  if (!url) return "";
+  const cleanedUrl = url.split("?")[0].split("#")[0];
+  const parts = cleanedUrl.trim().split("/");
+  const filename = parts[parts.length - 1];
+  return filename ? filename.trim() : url.trim();
+}
+
+export function getFilenameFromUrlExtended(url: string): string {
+  return getFilenameFromUrl(url).split("Z-").slice(1).join("-");
+}
+```

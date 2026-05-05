@@ -1,0 +1,51 @@
+export const meta = {
+  title: "checkUrl",
+  category: "Utils",
+  order: 2,
+};
+
+# checkUrl Utils
+
+📁 `src/utils/checkUrl.ts`
+
+## checkIfUrl
+
+Returns `true` if the string looks like a valid URL (with or without protocol).
+
+```ts
+function checkIfUrl(str: string): boolean
+```
+
+```ts
+checkIfUrl("https://example.com");  // true
+checkIfUrl("example.com/path");     // true
+checkIfUrl("not a url");            // false
+```
+
+## checkIfImageUrl
+
+Returns `true` if the URL ends with a common image extension.
+
+```ts
+function checkIfImageUrl(url: string): boolean
+```
+
+Supported: `jpg`, `jpeg`, `png`, `gif`, `bmp`, `svg`, `webp`
+
+```ts
+checkIfImageUrl("https://cdn.example.com/photo.jpg"); // true
+checkIfImageUrl("https://cdn.example.com/file.pdf");  // false
+```
+
+## Source
+
+```ts
+export function checkIfUrl(str: string) {
+  return /^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$/.test(str);
+}
+
+export function checkIfImageUrl(url: string): boolean {
+  const imageExtensions = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
+  return imageExtensions.test(url);
+}
+```

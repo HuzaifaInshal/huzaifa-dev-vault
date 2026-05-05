@@ -1,0 +1,75 @@
+export const meta = {
+  title: "useBooleanState",
+  category: "Hooks",
+  order: 1,
+};
+
+# useBooleanState
+
+📁 `src/hooks/useBooleanState.tsx`
+
+Convenience hook for boolean state that returns named setters alongside the standard `setState` dispatcher.
+
+## Parameters
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `defaultValue` | `boolean` | `false` | Initial state value |
+
+## Returns
+
+A tuple: `[state, setState, onTrue, onFalse, onToggle]`
+
+| Index | Type | Description |
+|-------|------|-------------|
+| `[0]` | `boolean` | Current state |
+| `[1]` | `Dispatch<SetStateAction<boolean>>` | Standard React setter |
+| `[2]` | `() => void` | Sets state to `true` |
+| `[3]` | `() => void` | Sets state to `false` |
+| `[4]` | `() => void` | Toggles state |
+
+## Usage
+
+```tsx
+const [isOpen, setIsOpen, open, close, toggle] = useBooleanState(false);
+
+<button onClick={open}>Open</button>
+<button onClick={close}>Close</button>
+<button onClick={toggle}>Toggle</button>
+```
+
+## Common Patterns
+
+```tsx
+// Modal control — skip unused values with _
+const [modalOpen, , openModal, closeModal] = useBooleanState();
+
+// Loading state
+const [isLoading, , startLoading, stopLoading] = useBooleanState();
+
+// Toggle with initial true
+const [sidebarOpen, , , , toggleSidebar] = useBooleanState(true);
+```
+
+## Source
+
+```tsx
+"use client";
+import { useState, Dispatch, SetStateAction } from "react";
+
+export const useBooleanState = (defaultValue?: boolean) => {
+  const [internalState, setInternalState] = useState<boolean>(defaultValue || false);
+
+  const onTrue = () => setInternalState(true);
+  const onFalse = () => setInternalState(false);
+  const onToggle = () => setInternalState((prev) => !prev);
+
+  return [internalState, setInternalState, onTrue, onFalse, onToggle] as [
+    boolean,
+    Dispatch<SetStateAction<boolean>>,
+    () => void,
+    () => void,
+    () => void,
+  ];
+};
+```

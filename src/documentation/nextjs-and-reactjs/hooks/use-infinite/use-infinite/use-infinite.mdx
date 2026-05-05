@@ -1,0 +1,104 @@
+export const meta = {
+  title: "useInfinite",
+  category: "Hooks",
+  order: 2,
+};
+
+# useInfinite
+
+📁 `src/hooks/useInfinite.ts`
+
+Wraps a TanStack Query `useQuery` result to accumulate paginated data across page increments. Resets the accumulated list when `page` goes back to `1`.
+
+## Signature
+
+```ts
+function useInfinite<TData, TKey extends string>(
+  query: UseQueryResult<WithPagination<TData, TKey>, Error | AxiosError>,
+  key: TKey,
+  page: number
+)
+```
+
+## Parameters
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `query` | `UseQueryResult` | A TanStack Query result whose data has `pagination` and a keyed array |
+| `key` | `TKey` | The key in the response that holds the array (e.g. `"users"`) |
+| `page` | `number` | Current page — reset to `1` to clear accumulated data |
+
+## Returns
+
+Spreads all `UseQueryResult` fields plus:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `allData` | `TData[]` | Accumulated items across all loaded pages |
+| `hasMore` | `boolean` | `true` if `pagination.nextPage` exists |
+
+## Expected API Response Shape
+
+```ts
+{
+  pagination: { nextPage: number | null };
+  [key]: TData[];
+}
+```
+
+## Usage
+
+```tsx
+const [page, setPage] = useState(1);
+
+const query = useQuery({
+  queryKey: ["users", page],
+  queryFn: () => fetchUsers({ page }),
+});
+
+const { allData: users, hasMore, isLoading } = useInfinite(query, "users", page);
+
+return (
+  <>
+    {users.map((u) => <div key={u.id}>{u.name}</div>)}
+    {hasMore && (
+      <button onClick={() => setPage((p) => p + 1)} disabled={isLoading}>
+        Load More
+      </button>
+    )}
+  </>
+);
+```
+
+## Source
+
+```ts
+"use client";
+import { IPagination } from "@/types/common";
+import { UseQueryResult } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useEffect, useState } from "react";
+
+type WithPagination<TData, TKey extends string> = {
+  pagination: IPagination;
+} & { [K in TKey]: TData[] };
+
+export function useInfinite<TData, TKey extends string>(
+  query: UseQueryResult<WithPagination<TData, TKey>, Error | AxiosError>,
+  key: TKey,
+  page: number
+) {
+  const [allData, setAllData] = useState<TData[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+
+  useEffect(() => {
+    const items = query.data?.[key];
+    if (items) {
+      setAllData((prev) => (page === 1 ? items : [...prev, ...items]));
+      setHasMore(!!query?.data?.pagination?.nextPage);
+    }
+  }, [query.data, key]);
+
+  return { ...query, hasMore, allData };
+}
+```

@@ -1,0 +1,63 @@
+export const meta = {
+  title: "addQueryParams",
+  category: "Utils",
+  order: 0,
+};
+
+# addQueryParams
+
+📁 `src/utils/add-query-params.utils.ts`
+
+Appends query parameters to a base URL. Skips `null`, `undefined`, empty strings, and empty arrays. Arrays are serialized as repeated keys.
+
+## Signature
+
+```ts
+function addQueryParams(baseUrl: string, params: Record<string, any>): string
+```
+
+## Examples
+
+```ts
+addQueryParams("/api/users", { page: 1, search: "alice" });
+// → "/api/users?page=1&search=alice"
+
+addQueryParams("/api/users", { page: 1, search: "", role: null });
+// → "/api/users?page=1"
+
+addQueryParams("/api/users", { tags: ["admin", "editor"] });
+// → "/api/users?tags=admin&tags=editor"
+
+addQueryParams("/api/users", { tags: [] });
+// → "/api/users"
+```
+
+## Source
+
+```ts
+export const addQueryParams = (
+  baseUrl: string,
+  params: Record<string, any>,
+): string => {
+  const queryString = Object.keys(params)
+    .filter((key) => {
+      const value = params[key];
+      return (
+        value !== undefined &&
+        value !== null &&
+        !(typeof value === "string" && value.trim() === "") &&
+        !(Array.isArray(value) && value.length === 0)
+      );
+    })
+    .flatMap((key) => {
+      const value = params[key];
+      if (Array.isArray(value)) {
+        return value.map((val) => `${key}=${encodeURIComponent(val)}`);
+      }
+      return `${key}=${encodeURIComponent(value)}`;
+    })
+    .join("&");
+
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+};
+```

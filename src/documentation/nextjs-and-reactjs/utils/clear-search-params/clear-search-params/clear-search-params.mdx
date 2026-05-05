@@ -1,0 +1,28 @@
+export const meta = {
+  title: "clearSearchParams",
+  category: "Utils",
+  order: 3,
+};
+
+# clearSearchParams
+
+📁 `src/utils/clear-search-param.utils.ts`
+
+Removes all query parameters from the current URL without triggering a page reload. Uses `history.replaceState` so no browser history entry is added.
+
+## Usage
+
+```ts
+// URL: /callback?code=abc&state=xyz
+clearSearchParams();
+// URL: /callback
+```
+
+Common use case: clean up OAuth callback tokens after reading them from the URL.
+
+## Source
+
+```ts
+export const clearSearchParams = () =>
+  window.history.replaceState({}, "", window.location.pathname);
+```

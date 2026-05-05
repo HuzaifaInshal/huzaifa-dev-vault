@@ -1,0 +1,32 @@
+export const meta = {
+  title: "getEnvironmentMode",
+  category: "Utils",
+  order: 5,
+};
+
+# getEnvironmentMode
+
+📁 `src/utils/getEnvironmentMode.ts`
+
+Returns `"DEV"` or `"PROD"` based on `process.env.NODE_ENV`. Useful for conditionally enabling debug tools, logging, or dev-only UI.
+
+## Usage
+
+```ts
+if (getEnvironmentMode() === "DEV") {
+  console.log("debug:", data);
+}
+```
+
+```tsx
+{getEnvironmentMode() === "DEV" && <DevDashboard />}
+```
+
+## Source
+
+```ts
+export function getEnvironmentMode(): "DEV" | "PROD" {
+  if (process.env.NODE_ENV === "development") return "DEV";
+  return "PROD";
+}
+```

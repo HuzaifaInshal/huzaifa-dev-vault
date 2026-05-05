@@ -1,0 +1,73 @@
+export const meta = {
+  title: "useTimeAgo",
+  category: "Hooks",
+  order: 4,
+};
+
+# useTimeAgo
+
+📁 `src/hooks/useTimeAgo.ts`
+
+Returns a human-readable relative time string and auto-updates every second. Cleans up the interval on unmount.
+
+## Parameters
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `dateString` | `string` | ISO date string e.g. `"2025-09-24T12:00:00Z"` |
+
+## Returns
+
+`string` — the relative time label. Append `" ago"` yourself.
+
+## Time Ranges
+
+| Elapsed | Output example |
+|---------|---------------|
+| < 60s | `"45 seconds"` |
+| < 60m | `"3 minutes"` |
+| < 24h | `"2 hours"` |
+| < 30d | `"5 days"` |
+| < 12mo | `"3 months"` |
+| ≥ 12mo | `"1 year"` |
+
+## Usage
+
+```tsx
+const timeAgo = useTimeAgo(post.createdAt);
+
+return <span>{timeAgo} ago</span>;
+```
+
+## Source
+
+```ts
+"use client";
+import { useEffect, useState } from "react";
+
+export function useTimeAgo(dateString: string): string {
+  const getTimeAgo = () => {
+    const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+    if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""}`;
+    const minutes = Math.floor(diff / 60);
+    if (minutes < 60) return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    const hours = Math.floor(diff / 3600);
+    if (hours < 24) return `${hours} hour${hours !== 1 ? "s" : ""}`;
+    const days = Math.floor(diff / 86400);
+    if (days < 30) return `${days} day${days !== 1 ? "s" : ""}`;
+    const months = Math.floor(days / 30);
+    if (months < 12) return `${months} month${months !== 1 ? "s" : ""}`;
+    const years = Math.floor(months / 12);
+    return `${years} year${years !== 1 ? "s" : ""}`;
+  };
+
+  const [timeAgo, setTimeAgo] = useState(getTimeAgo);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTimeAgo(getTimeAgo()), 1000);
+    return () => clearInterval(interval);
+  }, [dateString]);
+
+  return timeAgo;
+}
+```

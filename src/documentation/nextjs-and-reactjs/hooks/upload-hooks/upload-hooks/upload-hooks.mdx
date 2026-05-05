@@ -1,0 +1,161 @@
+export const meta = {
+  title: "Upload Hooks",
+  category: "Hooks",
+  order: 0,
+};
+
+# Upload Hooks
+
+Three hooks for different file upload scenarios. All upload to `POST /upload/files` via `axiosInstance` and validate file type/size with toast notifications.
+
+---
+
+## useUploadFile
+
+📁 `src/hooks/uploadFile.tsx`
+
+Single file upload. One file, one request.
+
+### Parameters
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `setValue` | `(url: string) => void` | — | **Required.** Called with the uploaded URL |
+| `onlyImages` / `onlyVideos` | `boolean` | `false` | File type restriction |
+| `whiteLIstExtensions` / `blackListExtensions` | `string[]` | — | Extension allow/block lists |
+| `fileMaxSize` | `number` | `5` | Max size in MB |
+| `inputId` | `string` | — | `id` for the hidden input |
+| `onBlur` | `FocusEventHandler` | — | Blur handler |
+
+### Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `Input` | `JSX.Element` | Hidden `<input type="file">` — render this |
+| `triggerFileSelect` | `() => void` | Opens the file picker |
+| `uploadProgress` | `number \| null` | 0–100 |
+| `isUploading` | `boolean` | Upload in-progress flag |
+
+```tsx
+const { Input, triggerFileSelect, isUploading, uploadProgress } = useUploadFile({
+  onlyImages: true,
+  fileMaxSize: 2,
+  setValue: (url) => setAvatarUrl(url),
+});
+
+return (
+  <>
+    {Input}
+    <button onClick={triggerFileSelect} disabled={isUploading}>
+      {isUploading ? `${uploadProgress}%` : "Upload Avatar"}
+    </button>
+  </>
+);
+```
+
+---
+
+## useUploadBulkFiles
+
+📁 `src/hooks/uploadBulkFiles.tsx`
+
+Uploads multiple files in a **single** request. All files are sent together in one `multipart/form-data` call.
+
+### Parameters
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `multiple` | `boolean` | `false` | Allow multi-select in the file picker |
+| `setValue` | `(urls: string[]) => void` | — | Called with all uploaded URLs |
+| `onlyImages` / `onlyVideos` | `boolean` | `false` | File type restriction |
+| `whiteLIstExtensions` / `blackListExtensions` | `string[]` | — | Extension allow/block lists |
+| `fileMaxSize` | `number` | `5` | Max size in MB |
+| `onBlur` | `FocusEventHandler` | — | Blur handler |
+
+### Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `Input` | `JSX.Element` | Hidden `<input type="file">` — render this |
+| `triggerFileSelect` | `() => void` | Opens the file picker |
+| `uploadProgress` | `number \| null` | Overall progress 0–100 |
+| `uploadedUrls` | `string[]` | URLs returned from the server |
+| `setUploadedUrls` | `Dispatch` | Manually update the URL list |
+| `isUploading` | `boolean` | Upload in-progress flag |
+
+```tsx
+const { Input, triggerFileSelect, uploadedUrls, isUploading } = useUploadBulkFiles({
+  multiple: true,
+  onlyImages: true,
+  setValue: (urls) => setImages(urls),
+});
+
+return (
+  <>
+    {Input}
+    <button onClick={triggerFileSelect} disabled={isUploading}>Upload Images</button>
+    {uploadedUrls.map((url) => <img key={url} src={url} />)}
+  </>
+);
+```
+
+---
+
+## useUploadMultipleFiles
+
+📁 `src/hooks/uploadMultipleFiles.tsx`
+
+Uploads multiple files in **parallel**, each in its own request with individual progress tracking per file.
+
+### Parameters
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `maxFiles` | `number` | `10` | Max number of files allowed |
+| `initialImages` | `string[]` | — | Pre-populate with existing URLs |
+| `onlyImages` / `onlyVideos` / `onlyPdf` | `boolean` | `false` | File type restriction |
+| `whiteLIstExtensions` / `blackListExtensions` | `string[]` | — | Extension allow/block lists |
+| `fileMaxSize` | `number` | `5` | Max size in MB |
+| `setLoading` | `(v: boolean) => void` | — | External loading state setter |
+| `clearSelection` | `{ clearSelection: boolean; setClearSelection: fn }` | — | Programmatic clear trigger |
+| `onBlur` | `FocusEventHandler` | — | Blur handler |
+
+### Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `Input` | `JSX.Element` | Hidden `<input type="file" multiple>` — render this |
+| `triggerFileSelect` | `() => void` | Opens the file picker |
+| `uploadedFiles` | `IFile[]` | Array of file objects with per-file state |
+| `setUploadedFiles` | `Dispatch` | Manually update the file list |
+| `removeImageAtIndex` | `(url: string \| null) => void` | Remove a file by URL |
+
+### IFile shape
+
+```ts
+interface IFile {
+  url: string | null;
+  loading?: boolean;
+  fileName?: string;
+  fileSize?: string;
+  uploadProgress?: number | null;
+}
+```
+
+```tsx
+const { Input, triggerFileSelect, uploadedFiles, removeImageAtIndex } =
+  useUploadMultipleFiles({ onlyImages: true, maxFiles: 5 });
+
+return (
+  <>
+    {Input}
+    <button onClick={triggerFileSelect}>Add Images</button>
+    {uploadedFiles.map((f) => (
+      <div key={f.fileName}>
+        {f.loading ? <span>{f.uploadProgress}%</span> : <img src={f.url!} />}
+        <button onClick={() => removeImageAtIndex(f.url)}>✕</button>
+      </div>
+    ))}
+  </>
+);
+```

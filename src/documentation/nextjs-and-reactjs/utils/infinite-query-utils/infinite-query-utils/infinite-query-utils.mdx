@@ -1,0 +1,60 @@
+export const meta = {
+  title: "Infinite Query Utils",
+  category: "Utils",
+  order: 9,
+};
+
+# Infinite Query Utils
+
+📁 `src/utils/infiniteQueryUtils.ts`
+
+## getNextPageParam
+
+Standard `getNextPageParam` function for `useInfiniteQuery`. Returns the next page number or `undefined` when there are no more pages.
+
+```ts
+function getNextPageParam(lastPage: { pagination: IPagination }): number | undefined
+```
+
+## transformInfiniteData
+
+Flattens all pages of an infinite query result into a single array.
+
+```ts
+function transformInfiniteData<TData, TKey extends string>(
+  data: InfiniteData<...> | undefined,
+  key: TKey
+): TData[]
+```
+
+## Usage
+
+```tsx
+const query = useInfiniteQuery({
+  queryKey: ["posts"],
+  queryFn: ({ pageParam = 1 }) => fetchPosts({ page: pageParam }),
+  getNextPageParam,
+  initialPageParam: 1,
+});
+
+const posts = transformInfiniteData(query.data, "posts");
+// → Post[] (all pages flattened)
+```
+
+## Source
+
+```ts
+import { IPagination } from "@/types/common";
+import { InfiniteData } from "@tanstack/react-query";
+
+export function getNextPageParam(lastPage: { pagination: IPagination }) {
+  return lastPage.pagination?.nextPage ?? undefined;
+}
+
+export function transformInfiniteData<TData, TKey extends string>(
+  data: InfiniteData<{ pagination: IPagination } & { [K in TKey]: TData[] }> | undefined,
+  key: TKey
+) {
+  return data?.pages.flatMap((each) => each[key]) ?? [];
+}
+```

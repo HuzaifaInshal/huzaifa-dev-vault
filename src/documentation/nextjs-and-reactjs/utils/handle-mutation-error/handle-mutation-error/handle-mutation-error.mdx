@@ -1,0 +1,84 @@
+export const meta = {
+  title: "handleMutationError",
+  category: "Utils",
+  order: 8,
+};
+
+# handleMutationError Utils
+
+📁 `src/utils/handleMutationError.ts`
+
+Centralized Axios mutation error handling. Extracts a readable message from any `AxiosError` or `Error`.
+
+## handleMutationError
+
+Dismisses existing toasts and shows an error toast with the extracted message.
+
+```ts
+function handleMutationError(error: Error | AxiosError): void
+```
+
+## returnMutationError
+
+Returns the extracted error message as a string without showing a toast.
+
+```ts
+function returnMutationError(error: Error | AxiosError): string
+```
+
+## Message Extraction Priority
+
+1. `error.response.data.message` as a plain string
+2. NestJS validation array → joins all constraint messages
+3. `error.message`
+4. `"An unexpected error occurred"`
+
+## Usage
+
+```ts
+// Toast-based — pass directly as onError
+const mutation = useMutation({ mutationFn: createUser, onError: handleMutationError });
+
+// String-based — set form error without toast
+const mutation2 = useMutation({
+  mutationFn: createUser,
+  onError: (error) => setFormError(returnMutationError(error)),
+});
+```
+
+## Source
+
+```ts
+"use client";
+import { DynamicObject } from "@/types/common";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
+
+function extractErrorMessage(error: Error | AxiosError): string {
+  try {
+    if (axios.isAxiosError(error)) {
+      const msg = error?.response?.data?.message;
+      if (typeof msg === "string") return msg;
+      if (Array.isArray(msg)) {
+        const messages = msg.flatMap((each: { constraints?: DynamicObject }) =>
+          each?.constraints ? Object.values(each.constraints) : []
+        );
+        if (messages.length > 0) return messages.join(", ");
+      }
+      if (typeof error.message === "string") return error.message;
+    } else if (typeof error.message === "string") {
+      return error.message;
+    }
+  } catch {}
+  return "An unexpected error occurred";
+}
+
+export function handleMutationError(error: Error | AxiosError) {
+  toast.dismiss();
+  toast.error(extractErrorMessage(error));
+}
+
+export function returnMutationError(error: Error | AxiosError): string {
+  return extractErrorMessage(error);
+}
+```

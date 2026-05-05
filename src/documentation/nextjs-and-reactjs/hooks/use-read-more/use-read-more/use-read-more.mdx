@@ -1,0 +1,96 @@
+export const meta = {
+  title: "useReadMoreText",
+  category: "Hooks",
+  order: 3,
+};
+
+# useReadMoreText
+
+📁 `src/hooks/useReadMore.tsx`
+
+Detects whether text content overflows a given number of lines and provides expand/collapse state with the necessary inline styles. Re-checks on window resize.
+
+## Parameters
+
+| Param | Type | Description |
+|-------|------|-------------|
+| `maxLines` | `number` | Maximum lines to show when collapsed |
+
+## Returns
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `isExpanded` | `boolean` | Whether the text is fully expanded |
+| `shouldShowButton` | `boolean` | `true` if content overflows `maxLines` |
+| `clickButton` | `() => void` | Toggles expanded state |
+| `styles` | `CSSProperties` | Apply to the text container for line clamping |
+| `contentRef` | `RefObject<HTMLDivElement>` | Attach to the text container element |
+
+## Usage
+
+```tsx
+const { isExpanded, shouldShowButton, clickButton, styles, contentRef } =
+  useReadMoreText({ maxLines: 3 });
+
+return (
+  <div>
+    <div ref={contentRef} style={styles}>
+      {text}
+    </div>
+    {shouldShowButton && (
+      <button onClick={clickButton} className="text-primary text-sm font-medium mt-2">
+        {isExpanded ? "Show Less" : "Read More"}
+      </button>
+    )}
+  </div>
+);
+```
+
+## Notes
+
+- `styles` uses `-webkit-line-clamp` — supported in all modern browsers
+- `shouldShowButton` is `false` when content fits within `maxLines`, so no button renders unnecessarily
+- Overflow check runs on mount and on every window resize
+
+## Source
+
+```tsx
+"use client";
+import { CSSProperties, useEffect, useRef, useState } from "react";
+
+export function useReadMoreText({ maxLines }: { maxLines: number }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [shouldShowButton, setShouldShowButton] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (contentRef.current) {
+        const element = contentRef.current;
+        const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
+        const maxHeight = lineHeight * maxLines;
+        setShouldShowButton(element.scrollHeight > maxHeight);
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [maxLines]);
+
+  const styles: CSSProperties = {
+    overflow: "hidden",
+    display: "-webkit-box",
+    WebkitLineClamp: isExpanded ? "unset" : maxLines,
+    WebkitBoxOrient: "vertical",
+    lineHeight: "1.6",
+  };
+
+  return {
+    isExpanded,
+    shouldShowButton,
+    clickButton: () => setIsExpanded((prev) => !prev),
+    styles,
+    contentRef,
+  };
+}
+```

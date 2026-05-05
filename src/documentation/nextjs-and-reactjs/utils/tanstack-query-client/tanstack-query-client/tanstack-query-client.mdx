@@ -1,0 +1,45 @@
+export const meta = {
+  title: "TanStack Query Client",
+  category: "Utils",
+  order: 12,
+};
+
+# TanStack Query Client
+
+📁 `src/utils/tanstack-query-client.utils.ts`
+
+A React `cache()`-wrapped `QueryClient` factory for Server Components. Returns the same instance per request — prevents creating multiple clients during a single server render.
+
+## Usage
+
+```tsx
+// app/some-page/page.tsx (Server Component)
+import { getQueryClient } from "@/utils/tanstack-query-client.utils";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+
+export default async function Page() {
+  const queryClient = getQueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["users"],
+    queryFn: fetchUsers,
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <UserList />
+    </HydrationBoundary>
+  );
+}
+```
+
+> `cache()` is a React Server Component API — do not use `getQueryClient` in client components. Create a `QueryClient` in your provider instead.
+
+## Source
+
+```ts
+import { QueryClient } from "@tanstack/react-query";
+import { cache } from "react";
+
+export const getQueryClient = cache(() => new QueryClient());
+```
