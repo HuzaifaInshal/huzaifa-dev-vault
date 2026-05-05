@@ -90,6 +90,8 @@ src/documentation/
 
 ## Adding a new page
 
+Just two steps — no registration needed. `MDXPage` uses a dynamic import with a static prefix so webpack auto-discovers every `.mdx` file under `src/documentation/`.
+
 ### 1. Create the file
 
 ```
@@ -113,17 +115,6 @@ export const meta = {
 | `order` | `number` | Sort order within the group (lower = higher) |
 | `description` | `string` | Optional subtitle |
 | `hideFromNav` | `boolean` | Hides the page from the sidebar |
-
-### 3. Register it in MDXPage.tsx
-
-Open `src/doc-ui/MDXPage.tsx` and add an entry to the `importMap`:
-
-```ts
-"/nextjs-and-reactjs/<group>/<name>/<name>.mdx": () =>
-  import("../documentation/nextjs-and-reactjs/<group>/<name>/<name>.mdx"),
-```
-
-This step is **required** — the page will 404 without it.
 
 ## Doc-ui primitives
 
