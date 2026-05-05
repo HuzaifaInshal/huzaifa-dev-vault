@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "TanStack Query Client",
   category: "Utils",
@@ -37,9 +39,7 @@ export default async function Page() {
 
 ## Source
 
-```ts
-import { QueryClient } from "@tanstack/react-query";
+<CodeBlock title="tanstack-query-client.utils.ts" language="ts" source={`import { QueryClient } from "@tanstack/react-query";
 import { cache } from "react";
 
-export const getQueryClient = cache(() => new QueryClient());
-```
+export const getQueryClient = cache(() => new QueryClient());`} />

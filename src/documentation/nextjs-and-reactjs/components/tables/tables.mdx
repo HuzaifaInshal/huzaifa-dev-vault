@@ -1,4 +1,5 @@
 import { Demo } from "@/doc-ui/Demo";
+import { CodeBlock } from "@/doc-ui/CodeBlock";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Tables";
 
 export const meta = {
@@ -84,23 +85,33 @@ All components forward native HTML props and accept a `className` override.
   </div>
 </Demo>
 
-## Usage
+<CodeBlock title="Tables.tsx" language="tsx" source={`import { cn } from "@/lib/utils";
+import React from "react";
 
-```tsx
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/Tables";
+const Table = ({ className, ...props }: React.ComponentProps<"table">) => (
+  <div className="w-full overflow-auto">
+    <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
+  </div>
+);
 
-<Table>
-  <TableHeader>
-    <TableRow>
-      {columns.map((col) => <TableHead key={col.key}>{col.label}</TableHead>)}
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    {rows.map((row) => (
-      <TableRow key={row.id}>
-        {columns.map((col) => <TableCell key={col.key}>{row[col.key]}</TableCell>)}
-      </TableRow>
-    ))}
-  </TableBody>
-</Table>
-```
+const TableHeader = ({ className, ...props }: React.ComponentProps<"thead">) => (
+  <thead className={cn("bg-background-secondary", className)} {...props} />
+);
+
+const TableBody = ({ className, ...props }: React.ComponentProps<"tbody">) => (
+  <tbody className={cn("[&_tr:last-child]:border-0", className)} {...props} />
+);
+
+const TableRow = ({ className, ...props }: React.ComponentProps<"tr">) => (
+  <tr className={cn("border-b border-border-primary bg-background", className)} {...props} />
+);
+
+const TableHead = ({ className, ...props }: React.ComponentProps<"th">) => (
+  <th className={cn("h-11 px-4 text-left align-middle text-sm font-medium text-text-secondary", className)} {...props} />
+);
+
+const TableCell = ({ className, ...props }: React.ComponentProps<"td">) => (
+  <td className={cn("h-16 px-4 py-3.5 align-middle", className)} {...props} />
+);
+
+export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell };`} />

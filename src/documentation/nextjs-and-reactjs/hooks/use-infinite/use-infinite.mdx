@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "useInfinite",
   category: "Hooks",
@@ -72,8 +74,7 @@ return (
 
 ## Source
 
-```ts
-"use client";
+<CodeBlock title="useInfinite.ts" language="ts" source={`"use client";
 import { IPagination } from "@/types/common";
 import { UseQueryResult } from "@tanstack/react-query";
 import { AxiosError } from "axios";
@@ -100,5 +101,4 @@ export function useInfinite<TData, TKey extends string>(
   }, [query.data, key]);
 
   return { ...query, hasMore, allData };
-}
-```
+}`} />

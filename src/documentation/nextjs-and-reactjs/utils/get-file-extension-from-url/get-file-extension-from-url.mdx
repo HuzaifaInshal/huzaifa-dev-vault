@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "Get file extension from url",
   category: "Utils",
@@ -20,8 +22,7 @@ getFileExtensionFromUrl("https://cdn.example.com/noext");          // ""
 
 ## Source
 
-```ts
-export function getFileExtensionFromUrl(url: string): string {
+<CodeBlock title="get-file-extension-from-url.utils.ts" language="ts" source={`export function getFileExtensionFromUrl(url: string): string {
   const cleanedUrl = url.split("?")[0].split("#")[0];
   const parts = cleanedUrl.trim().split("/");
   const filename = parts[parts.length - 1];
@@ -30,5 +31,4 @@ export function getFileExtensionFromUrl(url: string): string {
     return extensionParts[extensionParts.length - 1].trim().toLowerCase() || "";
   }
   return "";
-}
-```
+}`} />

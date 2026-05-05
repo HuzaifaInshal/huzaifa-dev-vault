@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "Get Environment Mode",
   category: "Utils",
@@ -24,9 +26,7 @@ if (getEnvironmentMode() === "DEV") {
 
 ## Source
 
-```ts
-export function getEnvironmentMode(): "DEV" | "PROD" {
+<CodeBlock title="getEnvironmentMode.ts" language="ts" source={`export function getEnvironmentMode(): "DEV" | "PROD" {
   if (process.env.NODE_ENV === "development") return "DEV";
   return "PROD";
-}
-```
+}`} />

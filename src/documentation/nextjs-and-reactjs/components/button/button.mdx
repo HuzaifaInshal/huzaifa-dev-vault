@@ -1,5 +1,8 @@
 import { Demo } from "@/doc-ui/Demo";
+import { CodeBlock } from "@/doc-ui/CodeBlock";
 import { Button } from "@/components/ui/Button";
+import ButtonSrc from "@/../src/components/ui/Button.tsx?raw";
+import RippleSrc from "@/../src/lib/ui/handleRippleAnimation.ts?raw";
 
 export const meta = {
   title: "Button",
@@ -73,8 +76,8 @@ A versatile button built with `cva` supporting multiple variants, sizes, loading
 
 ## Source
 
-```tsx
-"use client";
+<CodeBlock title="Button.tsx" language="tsx" source={`"use client";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -87,18 +90,24 @@ const buttonVariants = cva(
     "inline-flex items-center justify-center gap-2 relative",
     "whitespace-nowrap cursor-pointer rounded-md outline-none",
     "font-semibold transition-all duration-200",
-    "disabled:cursor-not-allowed data-[externaldisabled=true]:opacity-60",
+    "disabled:cursor-not-allowed data-[externaldisabled=true]:opacity-60 hover:data-[externaldisabled=true]:opacity-60",
     "[&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0",
     "relative overflow-hidden"
   ),
   {
     variants: {
       variant: {
-        default: "bg-[image:var(--gradient)] hover:opacity-90 text-background",
-        "outline-transparent": "text-text-primary border border-border-primary hover:bg-black/5 shadow-[0px_1px_2px_0px_#00000014]",
-        outline: "border border-primary hover:bg-primary/10 text-primary",
-        ghost: "text-text-primary hover:bg-black/5",
-        link: "text-primary underline-offset-4 hover:underline",
+        default:
+          "bg-[image:var(--gradient)] [&_.loader-container]:bg-[image:var(--gradient)] hover:opacity-90 disabled:hover:opacity-100 text-background",
+        ["outline-transparent"]:
+          "text-text-primary border border-border-primary hover:bg-black/5 disabled:hover:bg-transparent shadow-[0px_1px_2px_0px_#00000014]",
+        outline:
+          "border border-primary hover:bg-primary/10 disabled:hover:bg-transparent text-primary",
+        secondary: "",
+        ghost:
+          "text-text-primary hover:bg-black/5 disabled:hover:bg-transparent",
+        destructive: "",
+        link: "text-primary underline-offset-4 hover:underline"
       },
       size: {
         default: "h-10 px-8 py-2",
@@ -108,10 +117,13 @@ const buttonVariants = cva(
         icon: "size-9 rounded-full",
         xlg: "h-12 px-12 text-lg",
         full: "h-10 w-full",
-        fit: "h-10 w-fit px-0",
-      },
+        fit: "h-10 w-fit px-0"
+      }
     },
-    defaultVariants: { variant: "default", size: "default" },
+    defaultVariants: {
+      variant: "default",
+      size: "default"
+    }
   }
 );
 
@@ -122,11 +134,54 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> &
     isLoading?: boolean;
   };
 
-function Button({ className, variant = "default", size = "default", component: ComponentOverride, link, children, isLoading, ...props }: Props) {
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  component: ComponentOverride,
+  link,
+  children,
+  isLoading,
+  ...props
+}: Props) {
   const Comp = ComponentOverride || "button";
+
+  const finalVariant = variant
+    ? variant === "outline"
+      ? "bg-primary/80"
+      : ["outline-transparent", "ghost"].includes(variant)
+        ? "bg-black/50"
+        : undefined
+    : undefined;
+
+  const Loading = () => {
+    if (isLoading) {
+      return (
+        <span className="absolute flex center top-0 bottom-0 left-0 right-0 loader-container z-10">
+          <LoaderCircle className={cn("animate-spin")} />
+        </span>
+      );
+    }
+    return <></>;
+  };
+
   if (link) {
     return (
-      <NextLink href={link} className={cn(buttonVariants({ variant, size, className }))}>
+      <NextLink
+        href={link}
+        className={cn(buttonVariants({ variant, size, className }))}
+        data-externaldisabled={\`\${props.disabled}\`}
+        onMouseDown={(e) => {
+          handleRippleAnimation(
+            e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>,
+            finalVariant
+          );
+          props.onMouseDown?.(
+            e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
+          );
+        }}
+      >
+        {Loading()}
         {children}
       </NextLink>
     );
@@ -134,19 +189,63 @@ function Button({ className, variant = "default", size = "default", component: C
   return (
     <Comp
       {...props}
+      data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      data-externaldisabled={\`\${props.disabled}\`}
       disabled={isLoading || props.disabled}
-      onMouseDown={(e) => { handleRippleAnimation(e, undefined); props.onMouseDown?.(e); }}
+      onMouseDown={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        handleRippleAnimation(e, finalVariant);
+        props.onMouseDown?.(e);
+      }}
     >
-      {isLoading && (
-        <span className="absolute flex center top-0 bottom-0 left-0 right-0 loader-container z-10">
-          <LoaderCircle className="animate-spin" />
-        </span>
-      )}
+      {Loading()}
       {children}
     </Comp>
   );
 }
 
-export { Button, buttonVariants };
-```
+export { Button, buttonVariants };`} />
+
+<CodeBlock title="handleRippleAnimation.ts" language="ts" source={`import { cn } from "../utils";
+
+export const handleRippleAnimation = (
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  overwriteClassname?: string
+) => {
+  const btn = e.currentTarget;
+  if (!btn) return;
+
+  const ripple = document.createElement("span");
+  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+  const radius = diameter / 2;
+
+  const rect = btn.getBoundingClientRect();
+  const dx = e.clientX - rect.left;
+  const dy = e.clientY - rect.top;
+
+  ripple.style.width = ripple.style.height = \`\${diameter}px\`;
+  ripple.style.left = \`\${dx - radius}px\`;
+  ripple.style.top = \`\${dy - radius}px\`;
+
+  ripple.className = cn(
+    "opacity-70 ripple pointer-events-none bg-white/40",
+    overwriteClassname
+  );
+
+  btn.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove());
+};`} />
+
+<CodeBlock title="globals.css — ripple animation" language="css" source={`.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}`} />

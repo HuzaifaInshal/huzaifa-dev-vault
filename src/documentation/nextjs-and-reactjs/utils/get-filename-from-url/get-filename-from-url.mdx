@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "Get filename from url",
   category: "Utils",
@@ -29,8 +31,7 @@ getFilenameFromUrlExtended("https://cdn.example.com/1700000000Z-my-document.pdf"
 
 ## Source
 
-```ts
-export function getFilenameFromUrl(url: string): string {
+<CodeBlock title="get-filename-from-url.utils.ts" language="ts" source={`export function getFilenameFromUrl(url: string): string {
   if (!url) return "";
   const cleanedUrl = url.split("?")[0].split("#")[0];
   const parts = cleanedUrl.trim().split("/");
@@ -40,5 +41,4 @@ export function getFilenameFromUrl(url: string): string {
 
 export function getFilenameFromUrlExtended(url: string): string {
   return getFilenameFromUrl(url).split("Z-").slice(1).join("-");
-}
-```
+}`} />

@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "useWindowSize",
   category: "Hooks",
@@ -61,8 +63,7 @@ return <DesktopView />;
 
 ## Source
 
-```ts
-"use client";
+<CodeBlock title="useWindowSize.ts" language="ts" source={`"use client";
 import { useLayoutEffect, useState } from "react";
 
 export function useWindowBreakpoint() {
@@ -100,5 +101,4 @@ export function useWindowSize() {
   }, []);
 
   return windowSize;
-}
-```
+}`} />

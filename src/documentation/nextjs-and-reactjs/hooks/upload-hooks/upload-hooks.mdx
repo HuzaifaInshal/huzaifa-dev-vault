@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "Upload Hooks",
   category: "Hooks",
@@ -132,15 +134,13 @@ Uploads multiple files in **parallel**, each in its own request with individual 
 
 ### IFile shape
 
-```ts
-interface IFile {
+<CodeBlock title="IFile" language="ts" source={`interface IFile {
   url: string | null;
   loading?: boolean;
   fileName?: string;
   fileSize?: string;
   uploadProgress?: number | null;
-}
-```
+}`} />
 
 ```tsx
 const { Input, triggerFileSelect, uploadedFiles, removeImageAtIndex } =

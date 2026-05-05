@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "useTimeAgo",
   category: "Hooks",
@@ -41,24 +43,23 @@ return <span>{timeAgo} ago</span>;
 
 ## Source
 
-```ts
-"use client";
+<CodeBlock title="useTimeAgo.ts" language="ts" source={`"use client";
 import { useEffect, useState } from "react";
 
 export function useTimeAgo(dateString: string): string {
   const getTimeAgo = () => {
     const diff = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
-    if (diff < 60) return `${diff} second${diff !== 1 ? "s" : ""}`;
+    if (diff < 60) return \`\${diff} second\${diff !== 1 ? "s" : ""}\`;
     const minutes = Math.floor(diff / 60);
-    if (minutes < 60) return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    if (minutes < 60) return \`\${minutes} minute\${minutes !== 1 ? "s" : ""}\`;
     const hours = Math.floor(diff / 3600);
-    if (hours < 24) return `${hours} hour${hours !== 1 ? "s" : ""}`;
+    if (hours < 24) return \`\${hours} hour\${hours !== 1 ? "s" : ""}\`;
     const days = Math.floor(diff / 86400);
-    if (days < 30) return `${days} day${days !== 1 ? "s" : ""}`;
+    if (days < 30) return \`\${days} day\${days !== 1 ? "s" : ""}\`;
     const months = Math.floor(days / 30);
-    if (months < 12) return `${months} month${months !== 1 ? "s" : ""}`;
+    if (months < 12) return \`\${months} month\${months !== 1 ? "s" : ""}\`;
     const years = Math.floor(months / 12);
-    return `${years} year${years !== 1 ? "s" : ""}`;
+    return \`\${years} year\${years !== 1 ? "s" : ""}\`;
   };
 
   const [timeAgo, setTimeAgo] = useState(getTimeAgo);
@@ -69,5 +70,4 @@ export function useTimeAgo(dateString: string): string {
   }, [dateString]);
 
   return timeAgo;
-}
-```
+}`} />

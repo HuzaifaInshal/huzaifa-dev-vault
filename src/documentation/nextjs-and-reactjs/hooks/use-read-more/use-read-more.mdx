@@ -1,3 +1,5 @@
+import { CodeBlock } from "@/doc-ui/CodeBlock";
+
 export const meta = {
   title: "useReadMoreText",
   category: "Hooks",
@@ -54,8 +56,7 @@ return (
 
 ## Source
 
-```tsx
-"use client";
+<CodeBlock title="useReadMore.tsx" language="tsx" source={`"use client";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 
 export function useReadMoreText({ maxLines }: { maxLines: number }) {
@@ -92,5 +93,4 @@ export function useReadMoreText({ maxLines }: { maxLines: number }) {
     styles,
     contentRef,
   };
-}
-```
+}`} />
