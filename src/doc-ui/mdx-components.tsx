@@ -1,22 +1,29 @@
-import { Highlight, themes } from 'prism-react-renderer'
-import { clsx } from 'clsx'
+import { Highlight, themes } from "prism-react-renderer";
+import { clsx } from "clsx";
+import { MDXProvider } from "@mdx-js/react";
+import type React from "react";
+
+type MDXComponents = React.ComponentProps<typeof MDXProvider>["components"];
 
 function FencedCode({
   children,
   className,
 }: {
-  children: string
-  className?: string
+  children: string;
+  className?: string;
 }) {
-  const lang = className?.replace('language-', '') || 'text'
+  const lang = className?.replace("language-", "") || "text";
 
   return (
     <div className="rounded-xl overflow-hidden my-6">
       <Highlight theme={themes.nightOwl} code={children.trim()} language={lang}>
         {({ className: cls, style, tokens, getLineProps, getTokenProps }) => (
           <pre
-            className={clsx(cls, 'p-5 overflow-x-auto border-none text-sm leading-relaxed m-0 bg-zinc-800')}
-            style={{ ...style, }}
+            className={clsx(
+              cls,
+              "p-5 overflow-x-auto border-none text-sm leading-relaxed m-0 bg-zinc-800"
+            )}
+            style={{ ...style }}
           >
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })}>
@@ -29,11 +36,10 @@ function FencedCode({
         )}
       </Highlight>
     </div>
-  )
+  );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const mdxComponents: Record<string, any> = {
+export const mdxComponents: MDXComponents = {
   h1: ({ children, id }: { children: React.ReactNode; id?: string }) => (
     <h1
       id={id}
@@ -115,26 +121,27 @@ export const mdxComponents: Record<string, any> = {
   td: ({ children }: { children: React.ReactNode }) => (
     <td className="py-3 px-4 text-zinc-400">{children}</td>
   ),
-  // `pre` is a passthrough — the `code` override handles rendering
   pre: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   code: ({
     children,
     className,
   }: {
-    children: React.ReactNode
-    className?: string
+    children: React.ReactNode;
+    className?: string;
   }) => {
-    const isBlock = className?.startsWith('language-') || (typeof children === 'string' && children.includes('\n'))
+    const isBlock =
+      className?.startsWith("language-") ||
+      (typeof children === "string" && children.includes("\n"));
     if (isBlock) {
       return (
         <FencedCode className={className}>{children as string}</FencedCode>
-      )
+      );
     }
     return (
       <code className="bg-zinc-800 text-violet-300 px-1.5 py-0.5 rounded text-[0.875em] font-mono">
         {children}
       </code>
-    )
+    );
   },
   hr: () => <hr className="border-zinc-800 my-10" />,
   strong: ({ children }: { children: React.ReactNode }) => (
@@ -144,10 +151,11 @@ export const mdxComponents: Record<string, any> = {
     <em className="text-zinc-300 italic">{children}</em>
   ),
   img: ({ src, alt }: { src?: string; alt?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
-      alt={alt ?? ''}
+      alt={alt ?? ""}
       className="rounded-xl border border-zinc-800 my-6 max-w-full"
     />
   ),
-}
+};

@@ -1,20 +1,21 @@
-import { Link, useLocation } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
-import { buildBreadcrumbs, buildNavTree, type DocPage } from "../lib/registry";
+import { buildBreadcrumbs, buildNavTree, type DocPage } from "@/lib/registry";
 
 interface PageHeaderProps {
   pages: DocPage[];
 }
 
 export function PageHeader({ pages }: PageHeaderProps) {
-  const location = useLocation();
-  const currentPage = pages.find((page) => page.path === location.pathname);
+  const pathname = usePathname();
+  const currentPage = pages.find((page) => page.path === pathname);
   const navTree = buildNavTree(pages);
-  const breadcrumbs = buildBreadcrumbs(navTree, location.pathname);
+  const breadcrumbs = buildBreadcrumbs(navTree, pathname);
 
-  if (!currentPage && breadcrumbs.length === 0) {
-    return null;
-  }
+  if (!currentPage && breadcrumbs.length === 0) return null;
 
   return (
     <header className="mb-10 border-b border-zinc-800/80 pb-8">
@@ -25,12 +26,14 @@ export function PageHeader({ pages }: PageHeaderProps) {
         >
           {breadcrumbs.map((item, index) => (
             <span key={item.path} className="flex items-center gap-1">
-          {index > 0 && <ChevronRight size={13} className="text-zinc-700" />}
+              {index > 0 && (
+                <ChevronRight size={13} className="text-zinc-700" />
+              )}
               {index === breadcrumbs.length - 1 ? (
                 <span className="font-medium text-zinc-300">{item.label}</span>
               ) : (
                 <Link
-                  to={item.path}
+                  href={item.path}
                   className="transition-colors hover:text-violet-300"
                 >
                   {item.label}

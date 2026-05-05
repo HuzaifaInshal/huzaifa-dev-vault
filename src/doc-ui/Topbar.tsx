@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+"use client";
+
+import Link from "next/link";
 import { Star } from "lucide-react";
-import { buildNavTree, type DocPage } from "../lib/registry";
+import { buildNavTree, type DocPage } from "@/lib/registry";
 
 interface TopbarProps {
   pages: DocPage[];
@@ -17,7 +19,7 @@ export function Topbar({ pages }: TopbarProps) {
     ...navTree.nodes
       .filter((node) => !node.page?.meta?.hideFromNav)
       .slice(0, 5)
-      .map((node) => ({ label: node.label, path: node.path }))
+      .map((node) => ({ label: node.label, path: node.path })),
   ];
 
   return (
@@ -25,12 +27,13 @@ export function Topbar({ pages }: TopbarProps) {
       <div className="flex h-16 items-center justify-between gap-6 px-6">
         <div className="flex min-w-0 items-center gap-6 overflow-hidden">
           <Link
-            to="/"
+            href="/"
             className="flex flex-shrink-0 items-center gap-2 text-sm font-semibold text-zinc-100"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-violet-600">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/assets/code.png"
+                src="/code.png"
                 alt="logo"
                 className="h-7 w-7 object-contain"
               />
@@ -42,7 +45,7 @@ export function Topbar({ pages }: TopbarProps) {
             {primaryLinks.map((item) => (
               <Link
                 key={item.path}
-                to={item.path}
+                href={item.path}
                 className="text-sm text-zinc-400 transition-colors hover:text-zinc-100"
               >
                 {item.label}
@@ -55,14 +58,6 @@ export function Topbar({ pages }: TopbarProps) {
           <div className="flex h-9 w-64 items-center rounded-lg text-sm border border-zinc-800 bg-zinc-900 px-3 text-zinc-500">
             Search documentation...
           </div>
-          {/* <a
-            href={REPO_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm text-zinc-400 transition-colors hover:text-zinc-100"
-          >
-            Repository
-          </a> */}
           <a
             href={`${REPO_URL}/stargazers`}
             target="_blank"

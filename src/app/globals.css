@@ -1,0 +1,289 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ========================|| Docs Site Global Styles ||======================== */
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background-color: rgb(9 9 11);
+  color: rgb(228 228 231);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(63 63 70);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(82 82 91);
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-success: var(--success);
+  --color-destructive: var(--destructive);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-border-primary: var(--border-primary);
+  --color-input: var(--input);
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+:root {
+  --primary: #5178ff;
+  --secondary: #5178ff;
+  --text-primary: #000000;
+  --text-secondary: #6d6d6d;
+  --success: #00ce26;
+  --destructive: #da2020;
+  --background: #fefbfe;
+  --background-secondary: #f4f5f8;
+  --border-primary: #dcdfe4;
+  --input: oklch(1 0 0);
+  --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+/* ========================|| Button Ripple Animation ||======================== */
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ========================|| My Custom Animations ||======================== */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out;
+}
+
+/* ========================|| Custom Thin Scrollbar Variant ||======================== */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--custom-scrollbar);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--custom-scrollbar-2);
+}
+
+.scrollbar-h-3::-webkit-scrollbar {
+  height: 3px;
+}
+
+/* ========================|| Input Auto Fill Color Handler ||======================== */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px var(--input) inset !important;
+  color: var(--text-primary) !important;
+}
+
+/* ========================|| Style to make the radix dropdown occupy full trigger width ||======================== */
+.DropdownMenuContent {
+  width: var(--radix-dropdown-menu-trigger-width);
+  max-height: var(--radix-dropdown-menu-content-available-height);
+}
+
+/* ========================|| Skeleton Shimmer ||======================== */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.animate-shine {
+  animation: shine 1.2s infinite linear;
+}
+
+/* ========================|| Util Classes ||======================== */
+
+@layer components {
+  .center {
+    @apply items-center justify-center;
+  }
+
+  .shadow-glow {
+    --glow-color: #166dfb;
+    box-shadow: 0 0 15px var(--glow-color) !important;
+  }
+
+  .hover\:shadow-glow:hover {
+    --glow-color: #166dfb;
+    box-shadow: 0 0 15px var(--glow-color) !important;
+  }
+}
+
+@layer utilities {
+  .dropdown-content-width-full {
+    width: var(--radix-dropdown-menu-trigger-width);
+  }
+}
+
+/* ========================|| Logo Spin Animation ||======================== */
+
+@keyframes logoSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.logo-spin {
+  animation: logoSpin 1.5s infinite cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========================|| Prompt Markdown Renderer ||======================== */
+
+.prompt-markdown h1 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(244 244 245);
+}
+
+.prompt-markdown h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(39 39 42);
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(244 244 245);
+}
+
+.prompt-markdown h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgb(228 228 231);
+}
+
+.prompt-markdown p {
+  margin-bottom: 1rem;
+  line-height: 1.625;
+  color: rgb(212 212 216);
+}
+
+.prompt-markdown ul {
+  margin-bottom: 1rem;
+  margin-left: 1.25rem;
+  list-style-type: disc;
+  color: rgb(212 212 216);
+}
+
+.prompt-markdown ol {
+  margin-bottom: 1rem;
+  margin-left: 1.25rem;
+  list-style-type: decimal;
+  color: rgb(212 212 216);
+}
+
+.prompt-markdown li {
+  line-height: 1.75;
+}
+
+.prompt-markdown hr {
+  margin: 1.5rem 0;
+  border-color: rgb(39 39 42);
+}
+
+.prompt-markdown strong {
+  font-weight: 600;
+  color: rgb(244 244 245);
+}
+
+.prompt-markdown a {
+  color: rgb(196 181 253);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 150ms;
+}
+
+.prompt-markdown a:hover {
+  color: rgb(221 214 254);
+}
+
+.prompt-markdown pre {
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(39 39 42);
+  background: rgb(9 9 11);
+  padding: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+}
+
+.prompt-markdown code {
+  border-radius: 0.25rem;
+  background: rgb(39 39 42);
+  padding: 0.125rem 0.375rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.875em;
+  color: rgb(221 214 254);
+}
+
+.prompt-markdown pre code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.75rem;
+  color: rgb(228 228 231);
+}

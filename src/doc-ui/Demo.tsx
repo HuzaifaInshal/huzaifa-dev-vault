@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, type ReactNode } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 
@@ -14,23 +16,22 @@ export function Demo({
   children,
   title,
   language = "tsx",
-  defaultTab = "preview"
+  defaultTab = "preview",
 }: DemoProps) {
   const [tab, setTab] = useState<"preview" | "code">(defaultTab);
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const displayCode = code;
-
   const copy = async () => {
-    await navigator.clipboard.writeText(displayCode);
+    await navigator.clipboard.writeText(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className={`rounded-xl border border-violet-500/30 ${tab === 'preview' ?'': 'overflow-hidden'} my-6 shadow-sm`}>
-      {/* Header */}
+    <div
+      className={`rounded-xl border border-violet-500/30 ${tab === "preview" ? "" : "overflow-hidden"} my-6 shadow-sm`}
+    >
       <div className="flex items-center justify-between px-4 py-2.5 bg-violet-500/5 border-b border-violet-500/20">
         <div className="flex items-center gap-2.5">
           <div className="flex gap-1 items-center">
@@ -47,10 +48,7 @@ export function Demo({
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
-            <TabBtn
-              active={tab === "preview"}
-              onClick={() => setTab("preview")}
-            >
+            <TabBtn active={tab === "preview"} onClick={() => setTab("preview")}>
               Preview
             </TabBtn>
             <TabBtn active={tab === "code"} onClick={() => setTab("code")}>
@@ -68,7 +66,6 @@ export function Demo({
         </div>
       </div>
 
-      {/* Preview pane */}
       {tab === "preview" && (
         <div className="p-8 rounded-b-xl bg-[#0a0a12] min-h-28 flex items-center justify-center">
           <div className="flex flex-wrap gap-3 items-center justify-center">
@@ -77,13 +74,12 @@ export function Demo({
         </div>
       )}
 
-      {/* Code pane */}
       {tab === "code" && (
         <div className="relative bg-[#0a0a12]">
           <div className={expanded ? "" : "max-h-96 overflow-hidden"}>
             <Highlight
               theme={themes.nightOwl}
-              code={displayCode.trim()}
+              code={code.trim()}
               language={language}
             >
               {({ className, style, tokens, getLineProps, getTokenProps }) => (
@@ -125,7 +121,7 @@ export function Demo({
 function TabBtn({
   active,
   onClick,
-  children
+  children,
 }: {
   active: boolean;
   onClick: () => void;

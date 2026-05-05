@@ -1,27 +1,31 @@
-import { Link, useLocation } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import type { DocPage } from '../lib/registry'
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import type { DocPage } from "@/lib/registry";
 
 interface DocPagerProps {
-  pages: DocPage[]
+  pages: DocPage[];
 }
 
 export function DocPager({ pages }: DocPagerProps) {
-  const location = useLocation()
-  const currentIndex = pages.findIndex((page) => page.path === location.pathname)
+  const pathname = usePathname();
+  const currentIndex = pages.findIndex((page) => page.path === pathname);
 
-  if (currentIndex === -1) return null
+  if (currentIndex === -1) return null;
 
-  const prev = currentIndex > 0 ? pages[currentIndex - 1] : undefined
-  const next = currentIndex < pages.length - 1 ? pages[currentIndex + 1] : undefined
+  const prev = currentIndex > 0 ? pages[currentIndex - 1] : undefined;
+  const next =
+    currentIndex < pages.length - 1 ? pages[currentIndex + 1] : undefined;
 
-  if (!prev && !next) return null
+  if (!prev && !next) return null;
 
   return (
     <div className="mt-12 grid gap-3 border-t border-zinc-800 pt-8 sm:grid-cols-2">
       {prev ? (
         <Link
-          to={prev.path}
+          href={prev.path}
           className="group rounded-[10px] border border-zinc-800 p-4 transition-colors hover:bg-zinc-900"
         >
           <p className="mb-1 flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
@@ -37,7 +41,7 @@ export function DocPager({ pages }: DocPagerProps) {
 
       {next ? (
         <Link
-          to={next.path}
+          href={next.path}
           className="group rounded-[10px] border border-zinc-800 p-4 text-right transition-colors hover:bg-zinc-900 sm:ml-auto sm:w-full"
         >
           <p className="mb-1 flex items-center justify-end gap-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
@@ -49,5 +53,5 @@ export function DocPager({ pages }: DocPagerProps) {
         </Link>
       ) : null}
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import type { TreeNode } from "../lib/registry";
+import Link from "next/link";
+import type { TreeNode } from "@/lib/registry";
 
 interface SectionIndexProps {
   node: TreeNode;
@@ -19,7 +19,7 @@ export function SectionIndex({ node }: SectionIndexProps) {
         {node.children.map((child) => (
           <Link
             key={child.path}
-            to={child.path}
+            href={child.path}
             className="group block p-5 rounded-xl border border-zinc-800 bg-zinc-900/60 hover:border-violet-500/40 hover:bg-zinc-900 transition-all"
           >
             <div className="flex items-start justify-between gap-2 mb-1">

@@ -1,8 +1,9 @@
+"use client";
+
 import { useRef, useState, useEffect, type ReactNode } from "react";
 
 interface PromptProps {
   children?: ReactNode;
-  /** Raw markdown text used for copying while children render as MDX. */
   source?: string | { default?: unknown };
   title?: string;
 }
@@ -21,7 +22,6 @@ export function Prompt({ children, source, title }: PromptProps) {
   const copy = async () => {
     const rawSource = getCopySource(source);
     const content = rawSource ?? contentRef.current?.innerText.trim() ?? "";
-
     await navigator.clipboard.writeText(content);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -29,7 +29,6 @@ export function Prompt({ children, source, title }: PromptProps) {
 
   return (
     <div className="rounded-xl border border-violet-500/30 overflow-hidden my-6 shadow-sm">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-violet-500/5 border-b border-violet-500/20">
         <div className="flex items-center gap-2.5">
           <div className="flex gap-1 items-center">
@@ -52,7 +51,6 @@ export function Prompt({ children, source, title }: PromptProps) {
         </button>
       </div>
 
-      {/* Body */}
       <div className="relative bg-[#0a0a12] p-5 overflow-x-auto">
         <div
           ref={contentRef}
@@ -71,7 +69,7 @@ export function Prompt({ children, source, title }: PromptProps) {
           <div className="mt-4 flex justify-center border-t border-violet-500/10 pt-3">
             <button
               type="button"
-              onClick={() => setExpanded((value) => !value)}
+              onClick={() => setExpanded((v) => !v)}
               className="text-xs text-zinc-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-3 py-1.5 rounded-md transition-colors font-mono"
             >
               {expanded ? "Show less" : "Show more"}
@@ -84,13 +82,7 @@ export function Prompt({ children, source, title }: PromptProps) {
 }
 
 function getCopySource(source: PromptProps["source"]) {
-  if (typeof source === "string") {
-    return source.trim();
-  }
-
-  if (source && typeof source.default === "string") {
-    return source.default.trim();
-  }
-
+  if (typeof source === "string") return source.trim();
+  if (source && typeof source.default === "string") return source.default.trim();
   return undefined;
 }

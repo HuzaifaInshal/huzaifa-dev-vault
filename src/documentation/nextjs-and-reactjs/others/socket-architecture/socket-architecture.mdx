@@ -19,7 +19,7 @@ Below is the **production-safe pattern** 👇
 
 ---
 
-# 🏗 Architecture
+## 🏗 Architecture
 
 ```
 lib/socket.ts
@@ -30,7 +30,7 @@ app/xyz/layout.tsx
 
 ---
 
-# 1️⃣ Create a Singleton Socket
+## 1️⃣ Create a Singleton Socket
 
 📁 `lib/socket.ts`
 
@@ -61,7 +61,7 @@ Why:
 
 ---
 
-# 2️⃣ Create Zustand Store
+## 2️⃣ Create Zustand Store
 
 📁 `stores/socket.store.ts`
 
@@ -114,7 +114,7 @@ export const useSocketStore = create<SocketState>((set, get) => ({
 
 ---
 
-# 3️⃣ Connect Only on `/xyz`
+## 3️⃣ Connect Only on `/xyz`
 
 If using **App Router**
 
@@ -151,7 +151,7 @@ Now:
 
 ---
 
-# 4️⃣ Use Socket Anywhere
+## 4️⃣ Use Socket Anywhere
 
 Inside `/xyz` pages/components:
 
@@ -182,7 +182,7 @@ export function ChatComponent() {
 
 ---
 
-# 🚀 Even Cleaner (Optional Helper Hook)
+## 🚀 Even Cleaner (Optional Helper Hook)
 
 If you want cleaner usage:
 
@@ -207,7 +207,7 @@ const { socket, isConnected } = useXYZSocket();
 
 ---
 
-# 🧠 Why This Pattern Is Better Than Context
+## 🧠 Why This Pattern Is Better Than Context
 
 | Context              | Zustand                       |
 | -------------------- | ----------------------------- |
@@ -219,7 +219,7 @@ const { socket, isConnected } = useXYZSocket();
 
 ---
 
-# ⚠️ Important Best Practice
+## ⚠️ Important Best Practice
 
 Avoid duplicate listeners inside `connect()`.
 
@@ -233,7 +233,7 @@ before re-adding listeners.
 
 ---
 
-# 🏆 Final Result
+## 🏆 Final Result
 
 You now have:
 

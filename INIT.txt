@@ -1,0 +1,13 @@
+## Initialization
+
+The boilerplate was initialized by using command:
+
+```md
+pnpm dlx create-next-app
+```
+
+customize for this setting: TypeScript, ESLint, No React Compiler, Tailwind CSS, src/ directory, AppRouter, AGENTS.md
+
+## Packages Required
+
+pnpm add lucide-react class-variance-authority clsx tailwind-merge moment

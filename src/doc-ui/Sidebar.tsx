@@ -1,23 +1,25 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { buildNavTree, type DocPage, type TreeNode } from "../lib/registry";
-import { SIDEBAR_SCOPED_TO_SECTION } from "../site.config";
+import { buildNavTree, type DocPage, type TreeNode } from "@/lib/registry";
+import { SIDEBAR_SCOPED_TO_SECTION } from "@/site.config";
 
 interface SidebarProps {
   pages: DocPage[];
 }
 
 export function Sidebar({ pages }: SidebarProps) {
-  const location = useLocation();
+  const pathname = usePathname();
   const navTree = buildNavTree(pages);
 
   const sections = SIDEBAR_SCOPED_TO_SECTION
     ? (() => {
         const activeTopNode = navTree.nodes.find(
           (node) =>
-            location.pathname === node.path ||
-            location.pathname.startsWith(node.path + "/")
+            pathname === node.path || pathname.startsWith(node.path + "/")
         );
         return activeTopNode ? visibleChildren(activeTopNode) : [];
       })()
@@ -41,12 +43,12 @@ function SidebarSection({ node }: { node: TreeNode }) {
 
   return (
     <div>
-      <NavLink
-        to={node.path}
+      <Link
+        href={node.path}
         className="px-3 text-[13px] font-medium text-pretty text-zinc-100"
       >
         {node.label}
-      </NavLink>
+      </Link>
 
       {children.length > 0 && (
         <div className="mt-1">
@@ -62,34 +64,30 @@ function SidebarSection({ node }: { node: TreeNode }) {
 function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
   const children = visibleChildren(node);
   const hasChildren = children.length > 0;
-  const location = useLocation();
-  const isCurrentPath = location.pathname === node.path;
-  const isChildActive = location.pathname.startsWith(node.path + "/");
+  const pathname = usePathname();
+  const isCurrentPath = pathname === node.path;
+  const isChildActive = pathname.startsWith(node.path + "/");
   const [open, setOpen] = useState(isCurrentPath || isChildActive);
 
   useEffect(() => {
     if (isCurrentPath || isChildActive) setOpen(true);
   }, [isCurrentPath, isChildActive]);
 
-  // depth 0 = lvl 2, depth 1+ = lvl 3+
+  const isActive = isCurrentPath;
+
   if (depth >= 1) {
     return (
       <div className="ml-3 border-l-2 border-violet-500/30 pl-3">
         <div className="flex items-center">
-          <NavLink
-            to={node.path}
-            end={!hasChildren}
-            className={({ isActive }) =>
-              clsx(
-                "flex-1 py-1 text-[13px] leading-5 transition-colors truncate",
-                isActive
-                  ? "text-violet-500"
-                  : "text-zinc-400 hover:text-zinc-100"
-              )
-            }
+          <Link
+            href={node.path}
+            className={clsx(
+              "flex-1 py-1 text-[13px] leading-5 transition-colors truncate",
+              isActive ? "text-violet-500" : "text-zinc-400 hover:text-zinc-100"
+            )}
           >
             {node.label}
-          </NavLink>
+          </Link>
           {hasChildren && (
             <button
               onClick={() => setOpen((v) => !v)}
@@ -113,18 +111,15 @@ function SidebarItem({ node, depth }: { node: TreeNode; depth: number }) {
   return (
     <div className="ps-0">
       <div className="flex items-center">
-        <NavLink
-          to={node.path}
-          end={!hasChildren}
-          className={({ isActive }) =>
-            clsx(
-              "flex-1 px-3 py-1 text-[13px] leading-5 text-pretty transition-colors truncate",
-              isActive ? "text-violet-500" : "text-zinc-400 hover:text-zinc-100"
-            )
-          }
+        <Link
+          href={node.path}
+          className={clsx(
+            "flex-1 px-3 py-1 text-[13px] leading-5 text-pretty transition-colors truncate",
+            isActive ? "text-violet-500" : "text-zinc-400 hover:text-zinc-100"
+          )}
         >
           {node.label}
-        </NavLink>
+        </Link>
         {hasChildren && (
           <button
             onClick={() => setOpen((v) => !v)}

@@ -1,0 +1,1 @@
+export const clearSearchParams=()=>window.history.replaceState({}, '', window.location.pathname);

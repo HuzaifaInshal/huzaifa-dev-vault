@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 
 interface HeadingLink {
@@ -27,16 +29,28 @@ function getHeadings(): HeadingLink[] {
 }
 
 export function TableOfContents() {
-  const location = useLocation();
+  const pathname = usePathname();
   const [headings, setHeadings] = useState<HeadingLink[]>([]);
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() =>
-      setHeadings(getHeadings())
-    );
-    return () => window.cancelAnimationFrame(frame);
-  }, [location.pathname]);
+    const scan = () => setHeadings(getHeadings());
+
+    // Initial scan after a frame
+    const frame = window.requestAnimationFrame(scan);
+
+    // Also watch for MDX content being injected dynamically (ssr:false)
+    const container = document.getElementById("doc-content");
+    if (!container) return () => window.cancelAnimationFrame(frame);
+
+    const observer = new MutationObserver(scan);
+    observer.observe(container, { childList: true, subtree: true });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [pathname]);
 
   useEffect(() => {
     if (headings.length === 0) {
@@ -50,28 +64,24 @@ export function TableOfContents() {
 
     if (elements.length === 0) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort(
-            (a, b) =>
-              (a.target as HTMLElement).offsetTop -
-              (b.target as HTMLElement).offsetTop
-          );
-        if (visible.length > 0) setActiveId(visible[0].target.id);
-      },
-      { rootMargin: "0px 0px -70% 0px", threshold: [0, 1] }
-    );
+    const updateActive = () => {
+      let active = elements[0];
+      for (const el of elements) {
+        if (el.getBoundingClientRect().top <= window.innerHeight)
+          // if (el.getBoundingClientRect().top <= window.innerHeight / 2)
+          active = el;
+        else break;
+      }
+      setActiveId(active.id);
+    };
 
-    elements.forEach((el) => observer.observe(el));
-    const fallback = elements.find((el) => el.getBoundingClientRect().top >= 0);
-    setActiveId(fallback?.id ?? elements[0].id);
+    updateActive();
+    window.addEventListener("scroll", updateActive, { passive: true });
+    return () => window.removeEventListener("scroll", updateActive);
+  }, [headings, pathname]);
 
-    return () => observer.disconnect();
-  }, [headings, location.pathname]);
-
-  if (headings.length === 0) return null;
+  if (headings.length === 0)
+    return <aside className="hidden w-[240px] flex-shrink-0 xl:block" />;
 
   return (
     <aside className="hidden w-[240px] flex-shrink-0 xl:block">
@@ -79,7 +89,7 @@ export function TableOfContents() {
         <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
           On this page
         </p>
-        <nav className="">
+        <nav>
           {headings.map((heading) => (
             <a
               key={heading.id}

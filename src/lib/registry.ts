@@ -1,30 +1,20 @@
-import type { ComponentType } from "react";
-
 // ─── Types ────────────────────────────────────────────────────────────────────
+// Pure functions and types — safe for both server and client components.
 
 export interface DocMeta {
   title: string;
   description?: string;
   order?: number;
   hideFromNav?: boolean;
-  // `category` is kept for backwards compat but no longer drives navigation —
-  // the file-system path is the single source of truth for tree position.
   category?: string;
 }
 
 export interface DocPage {
   path: string;
-  Component: ComponentType;
+  filePath: string;
   meta?: DocMeta;
 }
 
-/**
- * A node in the navigation tree. Every directory segment becomes a TreeNode.
- *
- * - Leaf page   → has `page`, no `children`
- * - Section     → has `children`; may also have `page` (from an index.mdx)
- * - Auto-section→ has `children`, no `page`  →  App generates a listing route
- */
 export interface TreeNode {
   slug: string;
   label: string;
@@ -35,9 +25,7 @@ export interface TreeNode {
 }
 
 export interface NavTree {
-  /** The root "/" page, if one exists (docs/index.mdx) */
   root?: DocPage;
-  /** All other top-level nodes */
   nodes: TreeNode[];
 }
 
@@ -63,7 +51,6 @@ function sortNodes(nodes: TreeNode[]): void {
   for (const n of nodes) sortNodes(n.children);
 }
 
-/** Recursively insert a page into the tree by path segments. */
 function insertPage(
   nodes: TreeNode[],
   segments: string[],
@@ -75,18 +62,11 @@ function insertPage(
 
   let node = nodes.find((n) => n.slug === head);
   if (!node) {
-    node = {
-      slug: head,
-      label: prettify(head),
-      path: nodePath,
-      children: [],
-      order: 999
-    };
+    node = { slug: head, label: prettify(head), path: nodePath, children: [], order: 999 };
     nodes.push(node);
   }
 
   if (rest.length === 0) {
-    // This page maps to this node (leaf or directory index)
     node.page = page;
     node.label = page.meta?.title ?? prettify(head);
     node.order = page.meta?.order ?? 999;
@@ -97,55 +77,12 @@ function insertPage(
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-const modules = import.meta.glob("../documentation/**/*.mdx", {
-  eager: true
-});
-
-/** Flat list of all MDX-backed pages — used for routing. */
-export function buildRegistry(): DocPage[] {
-  return Object.entries(modules)
-    .map(([filePath, rawMod]) => {
-      const mod = rawMod as { default: ComponentType; meta?: DocMeta };
-
-      // docs/utils/frontend/cn.mdx       → /utils/frontend/cn
-      // docs/utils/frontend/index.mdx    → /utils/frontend
-      // docs/index.mdx                   → /
-      const normalizedPath = filePath
-        .replace("../documentation", "")
-        .replace(".mdx", "");
-
-      const segments = normalizedPath.split("/").filter(Boolean);
-      const last = segments[segments.length - 1];
-      const prev = segments[segments.length - 2];
-
-      if (last === "index") {
-        segments.pop();
-      } else if (last && prev === last) {
-        segments.pop();
-      }
-
-      const routePath = segments.length > 0 ? `/${segments.join("/")}` : "/";
-
-      return { path: routePath, Component: mod.default, meta: mod.meta };
-    })
-    .sort((a, b) => {
-      const ao = a.meta?.order ?? 999;
-      const bo = b.meta?.order ?? 999;
-      if (ao !== bo) return ao - bo;
-      return (a.meta?.title ?? "").localeCompare(b.meta?.title ?? "");
-    });
-}
-
-/** Hierarchical tree derived from file paths — used for the sidebar. */
 export function buildNavTree(pages: DocPage[]): NavTree {
   const nodes: TreeNode[] = [];
   let root: DocPage | undefined;
 
   for (const page of pages) {
-    if (page.path === "/") {
-      root = page;
-      continue;
-    }
+    if (page.path === "/") { root = page; continue; }
     const segments = page.path.split("/").filter(Boolean);
     insertPage(nodes, segments, page, "");
   }
@@ -154,10 +91,6 @@ export function buildNavTree(pages: DocPage[]): NavTree {
   return { root, nodes };
 }
 
-/**
- * Collect every tree node that has children but no backing MDX page.
- * These need an auto-generated SectionIndex route in the router.
- */
 export function collectSectionNodes(nodes: TreeNode[]): TreeNode[] {
   const result: TreeNode[] = [];
   for (const node of nodes) {
@@ -170,35 +103,31 @@ export function collectSectionNodes(nodes: TreeNode[]): TreeNode[] {
 function findNodeTrail(nodes: TreeNode[], targetPath: string): TreeNode[] | null {
   for (const node of nodes) {
     if (node.path === targetPath) return [node];
-
     const childTrail = findNodeTrail(node.children, targetPath);
     if (childTrail) return [node, ...childTrail];
   }
-
   return null;
 }
 
-export function buildBreadcrumbs(navTree: NavTree, path: string): BreadcrumbItem[] {
+export function buildBreadcrumbs(navTree: NavTree, currentPath: string): BreadcrumbItem[] {
   const breadcrumbs: BreadcrumbItem[] = [];
-
-  if (navTree.root) {
-    breadcrumbs.push({
-      label: navTree.root.meta?.title ?? "Home",
-      path: "/"
-    });
-  }
-
-  if (path === "/") return breadcrumbs;
-
-  const trail = findNodeTrail(navTree.nodes, path);
+  if (navTree.root) breadcrumbs.push({ label: navTree.root.meta?.title ?? "Home", path: "/" });
+  if (currentPath === "/") return breadcrumbs;
+  const trail = findNodeTrail(navTree.nodes, currentPath);
   if (!trail) return breadcrumbs;
-
-  breadcrumbs.push(
-    ...trail.map((node) => ({
-      label: node.label,
-      path: node.path
-    }))
-  );
-
+  breadcrumbs.push(...trail.map((node) => ({ label: node.label, path: node.path })));
   return breadcrumbs;
+}
+
+export function findPage(pages: DocPage[], routePath: string): DocPage | undefined {
+  return pages.find((p) => p.path === routePath);
+}
+
+export function findTreeNode(nodes: TreeNode[], targetPath: string): TreeNode | undefined {
+  for (const node of nodes) {
+    if (node.path === targetPath) return node;
+    const found = findTreeNode(node.children, targetPath);
+    if (found) return found;
+  }
+  return undefined;
 }

@@ -1,26 +1,29 @@
-import type React from 'react'
+import { cn } from "../utils";
 
-export function handleRippleAnimation(
-  event: React.MouseEvent<HTMLElement>,
-  rippleClassName = 'bg-white/35',
-) {
-  const target = event.currentTarget
-  const rect = target.getBoundingClientRect()
+export const handleRippleAnimation = (
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  overwriteClassname?: string
+) => {
+  const btn = e.currentTarget;
+  if (!btn) return;
 
-  const ripple = document.createElement('span')
-  const size = Math.max(rect.width, rect.height)
+  const ripple = document.createElement("span");
+  const diameter = Math.max(btn.clientWidth, btn.clientHeight);
+  const radius = diameter / 2;
 
-  ripple.className = `ripple ${rippleClassName}`.trim()
-  ripple.style.width = `${size}px`
-  ripple.style.height = `${size}px`
-  ripple.style.left = `${event.clientX - rect.left - size / 2}px`
-  ripple.style.top = `${event.clientY - rect.top - size / 2}px`
+  const rect = btn.getBoundingClientRect();
+  const dx = e.clientX - rect.left;
+  const dy = e.clientY - rect.top;
 
-  const existingRipple = target.getElementsByClassName('ripple')[0]
-  if (existingRipple) {
-    existingRipple.remove()
-  }
+  ripple.style.width = ripple.style.height = `${diameter}px`;
+  ripple.style.left = `${dx - radius}px`;
+  ripple.style.top = `${dy - radius}px`;
 
-  target.appendChild(ripple)
-  ripple.addEventListener('animationend', () => ripple.remove(), { once: true })
-}
+  ripple.className = cn(
+    "opacity-70 ripple pointer-events-none bg-white/40",
+    overwriteClassname
+  );
+
+  btn.appendChild(ripple);
+  ripple.addEventListener("animationend", () => ripple.remove());
+};

@@ -10,7 +10,7 @@ In order to implement dark themes and light themes (or even more themes), we can
 
 ---
 
-# 🏗 Architecture
+## 🏗 Architecture
 
 ```
 providers/
@@ -22,7 +22,7 @@ app/
 
 ---
 
-# 1️⃣ Install
+## 1️⃣ Install
 
 ```bash
 pnpm add next-themes
@@ -30,7 +30,7 @@ pnpm add next-themes
 
 ---
 
-# 2️⃣ Create the Theme Provider
+## 2️⃣ Create the Theme Provider
 
 📁 `providers/providers.tsx`
 
@@ -62,7 +62,7 @@ Why `attribute="class"`:
 
 ---
 
-# 3️⃣ Define CSS Variables
+## 3️⃣ Define CSS Variables
 
 📁 `app/globals.css`
 
@@ -101,7 +101,7 @@ body {
 
 ---
 
-# 4️⃣ Toggle Theme in a Component
+## 4️⃣ Toggle Theme in a Component
 
 📁 `hooks/useThemesUpdate.ts`
 
@@ -134,7 +134,7 @@ const { effectiveTheme, toggleTheme } = useThemesUpdate();
 
 ---
 
-# 5️⃣ Wrap Your App
+## 5️⃣ Wrap Your App
 
 📁 `app/layout.tsx`
 
@@ -160,7 +160,7 @@ export default function RootLayout({
 
 ---
 
-# 🧠 How It Works
+## 🧠 How It Works
 
 | Feature                | How                                |
 | ---------------------- | ---------------------------------- |
@@ -171,7 +171,7 @@ export default function RootLayout({
 
 ---
 
-# 🏆 Final Result
+## 🏆 Final Result
 
 You now have:
 
