@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     "A focused knowledge base for reusable frontend code, prompts, and project guidance.",
   icons: {
     icon: [
-      { url: "/favs/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favs/favicon.svg", type: "image/svg+xml" },
-      { url: "/favs/favicon.ico" }
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon.ico" }
     ],
-    apple: [{ url: "/favs/apple-touch-icon.png", sizes: "180x180" }]
+    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }]
   },
-  manifest: "/favs/site.webmanifest"
+  manifest: "/favicon/site.webmanifest"
 };
 
 export default function RootLayout({
