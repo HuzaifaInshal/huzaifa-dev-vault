@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import AddQueryParamsSrc from "@/../src/utils/add-query-params.utils.ts?raw";
 
 export const meta = {
   title: "Add query params",
@@ -36,28 +37,4 @@ addQueryParams("/api/users", { tags: [] });
 
 ## Source
 
-<CodeBlock title="add-query-params.utils.ts" language="ts" source={`export const addQueryParams = (
-  baseUrl: string,
-  params: Record<string, any>,
-): string => {
-  const queryString = Object.keys(params)
-    .filter((key) => {
-      const value = params[key];
-      return (
-        value !== undefined &&
-        value !== null &&
-        !(typeof value === "string" && value.trim() === "") &&
-        !(Array.isArray(value) && value.length === 0)
-      );
-    })
-    .flatMap((key) => {
-      const value = params[key];
-      if (Array.isArray(value)) {
-        return value.map((val) => \`\${key}=\${encodeURIComponent(val)}\`);
-      }
-      return \`\${key}=\${encodeURIComponent(value)}\`;
-    })
-    .join("&");
-
-  return queryString ? \`\${baseUrl}?\${queryString}\` : baseUrl;
-};`} />
+<CodeBlock title="add-query-params.utils.ts" language="ts" source={AddQueryParamsSrc} />

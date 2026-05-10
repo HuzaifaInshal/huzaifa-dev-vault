@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import InfiniteQueryUtilsSrc from "@/../src/utils/infiniteQueryUtils.ts?raw";
 
 export const meta = {
   title: "Infinite Query Utils",
@@ -45,16 +46,4 @@ const posts = transformInfiniteData(query.data, "posts");
 
 ## Source
 
-<CodeBlock title="infiniteQueryUtils.ts" language="ts" source={`import { IPagination } from "@/types/common";
-import { InfiniteData } from "@tanstack/react-query";
-
-export function getNextPageParam(lastPage: { pagination: IPagination }) {
-  return lastPage.pagination?.nextPage ?? undefined;
-}
-
-export function transformInfiniteData<TData, TKey extends string>(
-  data: InfiniteData<{ pagination: IPagination } & { [K in TKey]: TData[] }> | undefined,
-  key: TKey
-) {
-  return data?.pages.flatMap((each) => each[key]) ?? [];
-}`} />
+<CodeBlock title="infiniteQueryUtils.ts" language="ts" source={InfiniteQueryUtilsSrc} />

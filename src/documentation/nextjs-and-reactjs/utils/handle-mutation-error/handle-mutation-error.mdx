@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import HandleMutationErrorSrc from "@/../src/utils/handleMutationError.ts?raw";
 
 export const meta = {
   title: "Mutation Error Handling",
@@ -50,35 +51,4 @@ const mutation2 = useMutation({
 
 ## Source
 
-<CodeBlock title="handleMutationError.ts" language="ts" source={`"use client";
-import { DynamicObject } from "@/types/common";
-import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
-
-function extractErrorMessage(error: Error | AxiosError): string {
-  try {
-    if (axios.isAxiosError(error)) {
-      const msg = error?.response?.data?.message;
-      if (typeof msg === "string") return msg;
-      if (Array.isArray(msg)) {
-        const messages = msg.flatMap((each: { constraints?: DynamicObject }) =>
-          each?.constraints ? Object.values(each.constraints) : []
-        );
-        if (messages.length > 0) return messages.join(", ");
-      }
-      if (typeof error.message === "string") return error.message;
-    } else if (typeof error.message === "string") {
-      return error.message;
-    }
-  } catch {}
-  return "An unexpected error occurred";
-}
-
-export function handleMutationError(error: Error | AxiosError) {
-  toast.dismiss();
-  toast.error(extractErrorMessage(error));
-}
-
-export function returnMutationError(error: Error | AxiosError): string {
-  return extractErrorMessage(error);
-}`} />
+<CodeBlock title="handleMutationError.ts" language="ts" source={HandleMutationErrorSrc} />

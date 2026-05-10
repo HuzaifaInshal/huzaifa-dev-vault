@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import CheckUrlSrc from "@/../src/utils/checkUrl.ts?raw";
 
 export const meta = {
   title: "Check Url",
@@ -41,11 +42,4 @@ checkIfImageUrl("https://cdn.example.com/file.pdf");  // false
 
 ## Source
 
-<CodeBlock title="checkUrl.ts" language="ts" source={`export function checkIfUrl(str: string) {
-  return /^(https?:\/\/)?([\\w\\-]+\.)+[\\w\\-]+(\/[\\w\\-./?%&=]*)?$/.test(str);
-}
-
-export function checkIfImageUrl(url: string): boolean {
-  const imageExtensions = /\\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
-  return imageExtensions.test(url);
-}`} />
+<CodeBlock title="checkUrl.ts" language="ts" source={CheckUrlSrc} />

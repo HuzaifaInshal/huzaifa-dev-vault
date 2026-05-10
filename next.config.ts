@@ -14,9 +14,14 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
   webpack(config) {
     // ?raw imports → return file content as a plain string
-    config.module.rules.push({
+    // unshift puts it first so it runs before SWC/babel touch the file
+    config.module.rules.unshift({
       resourceQuery: /raw/,
-      type: "asset/source",
+      use: [
+        {
+          loader: require.resolve("./raw-loader.js"),
+        },
+      ],
     });
     // Normal .md imports → compile as MDX/JSX (marked as client components)
     config.module.rules.push({

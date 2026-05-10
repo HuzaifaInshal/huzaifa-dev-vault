@@ -1,4 +1,7 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import UploadFileSrc from "@/../src/hooks/uploadFile.tsx?raw";
+import UploadBulkFilesSrc from "@/../src/hooks/uploadBulkFiles.tsx?raw";
+import UploadMultipleFilesSrc from "@/../src/hooks/uploadMultipleFiles.tsx?raw";
 
 export const meta = {
   title: "Upload Hooks",
@@ -55,6 +58,8 @@ return (
 );
 ```
 
+<CodeBlock title="uploadFile.tsx" language="tsx" source={UploadFileSrc} />
+
 ---
 
 ## useUploadBulkFiles
@@ -100,6 +105,8 @@ return (
   </>
 );
 ```
+
+<CodeBlock title="uploadBulkFiles.tsx" language="tsx" source={UploadBulkFilesSrc} />
 
 ---
 
@@ -159,3 +166,5 @@ return (
   </>
 );
 ```
+
+<CodeBlock title="uploadMultipleFiles.tsx" language="tsx" source={UploadMultipleFilesSrc} />

@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import NormalizeUrlSrc from "@/../src/utils/normalize-url.utils.ts?raw";
 
 export const meta = {
   title: "Normalize Url",
@@ -23,8 +24,4 @@ normalizeUrl("");                   // ""
 
 ## Source
 
-<CodeBlock title="normalize-url.utils.ts" language="ts" source={`export const normalizeUrl = (url: string) => {
-  if (!url) return url;
-  if (!/^https?:\/\//i.test(url.trim())) return \`https://\${url}\`;
-  return url.trim();
-};`} />
+<CodeBlock title="normalize-url.utils.ts" language="ts" source={NormalizeUrlSrc} />

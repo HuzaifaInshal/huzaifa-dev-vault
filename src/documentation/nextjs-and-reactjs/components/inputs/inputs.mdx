@@ -7,6 +7,11 @@ import PhoneInput from "@/components/ui/PhoneInput";
 import LabelContainer from "@/components/ui/LabelContainer";
 import CountryFlag from "@/components/ui/CountryFlag";
 import { Search } from "lucide-react";
+import LabelContainerSrc from "@/../src/components/ui/LabelContainer.tsx?raw";
+import TextInputSrc from "@/../src/components/ui/TextInput.tsx?raw";
+import PasswordInputSrc from "@/../src/components/ui/PasswordInput.tsx?raw";
+import OtpInputSrc from "@/../src/components/ui/OtpInput.tsx?raw";
+import CountryFlagSrc from "@/../src/components/ui/CountryFlag.tsx?raw";
 
 export const meta = {
   title: "Inputs",
@@ -54,38 +59,7 @@ The base layout wrapper used by every input. Rarely used directly — all inputs
   </div>
 </Demo>
 
-<CodeBlock title="LabelContainer.tsx" language="tsx" source={`import { cn } from "@/lib/utils";
-import React from "react";
-
-interface Props {
-  children: React.ReactNode;
-  label?: string;
-  error?: string;
-  htmlFor?: string;
-  required?: boolean;
-  className?: string;
-  labelClassName?: string;
-}
-
-const LabelContainer = ({ children, error, label, htmlFor, required, className, labelClassName }: Props) => {
-  return (
-    <div className={cn("flex", "flex-col", "gap-2", "w-full", className)}>
-      {label && (
-        <label
-          htmlFor={htmlFor}
-          className={cn("text-[0.95rem]", "font-medium", "leading-6", "text-text-primary", labelClassName)}
-        >
-          {label}
-          {required && <span className="text-xl text-red-600 ms-1">*</span>}
-        </label>
-      )}
-      {children}
-      {error && <p className="text-sm text-destructive">{error}</p>}
-    </div>
-  );
-};
-
-export default LabelContainer;`} />
+<CodeBlock title="LabelContainer.tsx" language="tsx" source={LabelContainerSrc} />
 
 ---
 
@@ -122,46 +96,7 @@ import { Search } from "lucide-react";
   </div>
 </Demo>
 
-<CodeBlock title="TextInput.tsx" language="tsx" source={`import { cn } from "@/lib/utils";
-import { ReactDispatch } from "@/types/common";
-import React from "react";
-import LabelContainer from "./LabelContainer";
-import { endIconStyles, inputStyles, startIconStyles } from "@/styles/ui/inputStyles";
-
-const TextInput = ({
-  label, error, value, setValue, startIcon, endIcon,
-  containerClassName, labelClassName, ...rest
-}: React.ComponentProps<"input"> & {
-  label?: string;
-  error?: string;
-  value?: string;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-  setValue?: ReactDispatch<string>;
-  containerClassName?: string;
-  labelClassName?: string;
-}) => {
-  const hasStartIcon = Boolean(startIcon);
-  const hasEndIcon = Boolean(endIcon);
-
-  return (
-    <LabelContainer error={error} htmlFor={rest.id} label={label} className={containerClassName} labelClassName={labelClassName} required={rest.required}>
-      <div className={cn("relative", "flex", "items-center")}>
-        {hasStartIcon && <span className={startIconStyles}>{startIcon}</span>}
-        <input
-          {...rest}
-          type="text"
-          className={cn(inputStyles, hasStartIcon && "pl-10", hasEndIcon && "pr-10", rest.className)}
-          value={value}
-          onChange={(e) => { setValue?.(e.target.value); rest.onChange?.(e); }}
-        />
-        {hasEndIcon && <span className={endIconStyles}>{endIcon}</span>}
-      </div>
-    </LabelContainer>
-  );
-};
-
-export default TextInput;`} />
+<CodeBlock title="TextInput.tsx" language="tsx" source={TextInputSrc} />
 
 ---
 
@@ -193,55 +128,7 @@ Password input with a built-in show/hide toggle. All native `<input>` props exce
   </div>
 </Demo>
 
-<CodeBlock title="PasswordInput.tsx" language="tsx" source={`import { cn } from "@/lib/utils";
-import { ReactDispatch } from "@/types/common";
-import React from "react";
-import LabelContainer from "./LabelContainer";
-import { endIconStyles, inputStyles, startIconStyles } from "@/styles/ui/inputStyles";
-
-const PasswordInput = ({
-  label, error, value, setValue, startIcon, containerClassName,
-  labelClassName, showToggle = true, ...rest
-}: Omit<React.ComponentProps<"input">, "type"> & {
-  label?: string;
-  error?: string;
-  value?: string;
-  startIcon?: React.ReactNode;
-  setValue?: ReactDispatch<string>;
-  containerClassName?: string;
-  labelClassName?: string;
-  showToggle?: boolean;
-}) => {
-  const [isVisible, setIsVisible] = React.useState(false);
-  const hasStartIcon = Boolean(startIcon);
-
-  return (
-    <LabelContainer error={error} htmlFor={rest.id} label={label} className={containerClassName} labelClassName={labelClassName} required={rest.required}>
-      <div className={cn("relative", "flex", "items-center")}>
-        {hasStartIcon && <span className={startIconStyles}>{startIcon}</span>}
-        <input
-          type={isVisible ? "text" : "password"}
-          className={cn(inputStyles, hasStartIcon && "pl-10", rest.className)}
-          {...rest}
-          value={value}
-          onChange={(e) => { setValue?.(e.target.value); rest.onChange?.(e); }}
-        />
-        {showToggle && (
-          <button
-            type="button"
-            onClick={() => setIsVisible((prev) => !prev)}
-            className={cn(endIconStyles, "text-text-secondary", "transition-colors", "hover:text-text-primary")}
-            aria-label={isVisible ? "Hide password" : "Show password"}
-          >
-            {/* eye / eye-off SVG icons */}
-          </button>
-        )}
-      </div>
-    </LabelContainer>
-  );
-};
-
-export default PasswordInput;`} />
+<CodeBlock title="PasswordInput.tsx" language="tsx" source={PasswordInputSrc} />
 
 ---
 
@@ -276,73 +163,7 @@ OTP input built on `input-otp`. Renders individual styled cells with a blinking 
   </div>
 </Demo>
 
-<CodeBlock title="OtpInput.tsx" language="tsx" source={`"use client";
-
-import * as React from "react";
-import { OTPInput as OTPInputPrimitive, OTPInputContext, type OTPInputProps } from "input-otp";
-import { cn } from "@/lib/utils";
-import { ReactDispatch } from "@/types/common";
-import LabelContainer from "./LabelContainer";
-
-const otpInputCellClassName = cn(
-  "relative flex h-12 w-12 items-center justify-center rounded-lg border border-border-primary bg-input text-base text-text-primary outline-none transition-all",
-  "first:ms-0",
-  "ms-3",
-  "data-[active=true]:ring-primary data-[active=true]:ring-2",
-  "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20"
-);
-
-type Props = Omit<OTPInputProps, "children" | "render" | "onChange" | "maxLength"> & {
-  label?: string;
-  error?: string;
-  setValue?: ReactDispatch<string>;
-  containerClassName?: string;
-  labelClassName?: string;
-  inputClassName?: string;
-  maxLength?: number;
-};
-
-function OtpInputSlot({ index, className }: { index: number; className?: string }) {
-  const inputOTPContext = React.useContext(OTPInputContext);
-  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
-
-  return (
-    <div data-active={isActive} className={cn(otpInputCellClassName, className)}>
-      {char}
-      {hasFakeCaret && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-5 w-px animate-caret-blink bg-primary duration-1000" />
-        </div>
-      )}
-    </div>
-  );
-}
-
-const OtpInput = ({
-  value, setValue, containerClassName, maxLength = 6, required,
-  label, className, inputClassName, labelClassName, error, disabled, ...rest
-}: Props) => {
-  return (
-    <LabelContainer error={error} htmlFor={rest.id} label={label} className={containerClassName} labelClassName={labelClassName} required={required}>
-      <OTPInputPrimitive
-        value={value}
-        maxLength={maxLength}
-        spellCheck={false}
-        disabled={disabled}
-        onChange={(nextValue) => setValue?.(nextValue)}
-        containerClassName="flex items-center disabled:opacity-50"
-        className={cn("w-fit disabled:cursor-not-allowed", inputClassName)}
-        {...rest}
-      >
-        {Array.from({ length: maxLength }, (_, index) => (
-          <OtpInputSlot key={index} index={index} className={className} />
-        ))}
-      </OTPInputPrimitive>
-    </LabelContainer>
-  );
-};
-
-export default OtpInput;`} />
+<CodeBlock title="OtpInput.tsx" language="tsx" source={OtpInputSrc} />
 
 ---
 
@@ -405,29 +226,4 @@ Renders a country flag from `flagcdn.com` using a 2-letter ISO code. Falls back 
   </div>
 </Demo>
 
-<CodeBlock title="CountryFlag.tsx" language="tsx" source={`"use client";
-import Image from "next/image";
-import { useState } from "react";
-
-const CountryFlag = ({ countryCode }: { countryCode?: string | null }) => {
-  const [error, setError] = useState(false);
-  const isValidCode = typeof countryCode === "string" && /^[A-Za-z]{2}$/.test(countryCode);
-
-  if (!isValidCode || error) {
-    return (
-      <div className="border border-border-primary rounded-full h-7 w-7 flex center">?</div>
-    );
-  }
-  const code = countryCode.toLowerCase();
-  return (
-    <Image
-      src={\`https://flagcdn.com/256x192/\${code}.png\`}
-      width="24"
-      height="18"
-      alt={countryCode}
-      onError={() => setError(true)}
-    />
-  );
-};
-
-export default CountryFlag;`} />
+<CodeBlock title="CountryFlag.tsx" language="tsx" source={CountryFlagSrc} />

@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import UseInfiniteSrc from "@/../src/hooks/useInfinite.ts?raw";
 
 export const meta = {
   title: "useInfinite",
@@ -74,31 +75,4 @@ return (
 
 ## Source
 
-<CodeBlock title="useInfinite.ts" language="ts" source={`"use client";
-import { IPagination } from "@/types/common";
-import { UseQueryResult } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
-
-type WithPagination<TData, TKey extends string> = {
-  pagination: IPagination;
-} & { [K in TKey]: TData[] };
-
-export function useInfinite<TData, TKey extends string>(
-  query: UseQueryResult<WithPagination<TData, TKey>, Error | AxiosError>,
-  key: TKey,
-  page: number
-) {
-  const [allData, setAllData] = useState<TData[]>([]);
-  const [hasMore, setHasMore] = useState<boolean>(false);
-
-  useEffect(() => {
-    const items = query.data?.[key];
-    if (items) {
-      setAllData((prev) => (page === 1 ? items : [...prev, ...items]));
-      setHasMore(!!query?.data?.pagination?.nextPage);
-    }
-  }, [query.data, key]);
-
-  return { ...query, hasMore, allData };
-}`} />
+<CodeBlock title="useInfinite.ts" language="ts" source={UseInfiniteSrc} />

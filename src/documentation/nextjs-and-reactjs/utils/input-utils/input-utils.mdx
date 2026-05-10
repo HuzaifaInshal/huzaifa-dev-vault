@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import InputUtilsSrc from "@/../src/utils/inputUtils.ts?raw";
 
 export const meta = {
   title: "Input Utils",
@@ -30,14 +31,4 @@ sanitizePassword(" myPass123 ");  // " myPass123 "
 
 ## Source
 
-<CodeBlock title="inputUtils.ts" language="ts" source={`export function sanitizeInput(str: string) {
-  return str.trim();
-}
-
-export function sanitizeEmail(str: string) {
-  return sanitizeInput(str).toLowerCase();
-}
-
-export function sanitizePassword(str: string) {
-  return str;
-}`} />
+<CodeBlock title="inputUtils.ts" language="ts" source={InputUtilsSrc} />

@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import UseReadMoreSrc from "@/../src/hooks/useReadMore.tsx?raw";
 
 export const meta = {
   title: "useReadMoreText",
@@ -56,41 +57,4 @@ return (
 
 ## Source
 
-<CodeBlock title="useReadMore.tsx" language="tsx" source={`"use client";
-import { CSSProperties, useEffect, useRef, useState } from "react";
-
-export function useReadMoreText({ maxLines }: { maxLines: number }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [shouldShowButton, setShouldShowButton] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (contentRef.current) {
-        const element = contentRef.current;
-        const lineHeight = parseFloat(getComputedStyle(element).lineHeight);
-        const maxHeight = lineHeight * maxLines;
-        setShouldShowButton(element.scrollHeight > maxHeight);
-      }
-    };
-    checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
-  }, [maxLines]);
-
-  const styles: CSSProperties = {
-    overflow: "hidden",
-    display: "-webkit-box",
-    WebkitLineClamp: isExpanded ? "unset" : maxLines,
-    WebkitBoxOrient: "vertical",
-    lineHeight: "1.6",
-  };
-
-  return {
-    isExpanded,
-    shouldShowButton,
-    clickButton: () => setIsExpanded((prev) => !prev),
-    styles,
-    contentRef,
-  };
-}`} />
+<CodeBlock title="useReadMore.tsx" language="tsx" source={UseReadMoreSrc} />

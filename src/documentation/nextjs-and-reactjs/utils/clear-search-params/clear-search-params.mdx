@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import ClearSearchParamsSrc from "@/../src/utils/clear-search-param.utils.ts?raw";
 
 export const meta = {
   title: "Clear Search Params",
@@ -24,5 +25,4 @@ Common use case: clean up OAuth callback tokens after reading them from the URL.
 
 ## Source
 
-<CodeBlock title="clear-search-param.utils.ts" language="ts" source={`export const clearSearchParams = () =>
-  window.history.replaceState({}, "", window.location.pathname);`} />
+<CodeBlock title="clear-search-param.utils.ts" language="ts" source={ClearSearchParamsSrc} />

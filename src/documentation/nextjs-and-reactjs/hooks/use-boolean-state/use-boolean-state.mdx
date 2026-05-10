@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import UseBooleanStateSrc from "@/../src/hooks/useBooleanState.tsx?raw";
 
 export const meta = {
   title: "useBooleanState",
@@ -55,21 +56,4 @@ const [sidebarOpen, , , , toggleSidebar] = useBooleanState(true);
 
 ## Source
 
-<CodeBlock title="useBooleanState.tsx" language="tsx" source={`"use client";
-import { useState, Dispatch, SetStateAction } from "react";
-
-export const useBooleanState = (defaultValue?: boolean) => {
-  const [internalState, setInternalState] = useState<boolean>(defaultValue || false);
-
-  const onTrue = () => setInternalState(true);
-  const onFalse = () => setInternalState(false);
-  const onToggle = () => setInternalState((prev) => !prev);
-
-  return [internalState, setInternalState, onTrue, onFalse, onToggle] as [
-    boolean,
-    Dispatch<SetStateAction<boolean>>,
-    () => void,
-    () => void,
-    () => void,
-  ];
-};`} />
+<CodeBlock title="useBooleanState.tsx" language="tsx" source={UseBooleanStateSrc} />

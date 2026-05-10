@@ -1,4 +1,5 @@
 import { Demo } from "@/doc-ui/Demo";
+import { CodeBlock } from "@/doc-ui/CodeBlock";
 import DateRangeSelector from "@/components/ui/DateRangeSelector";
 import DateRangeSelectorV2 from "@/components/ui/DateRangeSelectorV2";
 import DateSelector from "@/components/ui/DateSelector";
@@ -6,6 +7,13 @@ import DateTimeRangeSelector from "@/components/ui/DateTimeRangeSelector";
 import DateTimeSelector from "@/components/ui/DateTimeSelector";
 import TimeRangeSelector from "@/components/ui/TimeRangeSelector";
 import TimeSelector from "@/components/ui/TimeSelector";
+import DateSelectorSrc from "@/../src/components/ui/DateSelector.tsx?raw";
+import DateRangeSelectorSrc from "@/../src/components/ui/DateRangeSelector.tsx?raw";
+import DateRangeSelectorV2Src from "@/../src/components/ui/DateRangeSelectorV2.tsx?raw";
+import TimeSelectorSrc from "@/../src/components/ui/TimeSelector.tsx?raw";
+import TimeRangeSelectorSrc from "@/../src/components/ui/TimeRangeSelector.tsx?raw";
+import DateTimeSelectorSrc from "@/../src/components/ui/DateTimeSelector.tsx?raw";
+import DateTimeRangeSelectorSrc from "@/../src/components/ui/DateTimeRangeSelector.tsx?raw";
 
 export const meta = {
   title: "Date & Time",
@@ -46,6 +54,8 @@ const [date, setDate] = useState<Date | undefined>();
   <DateSelector />
 </Demo>
 
+<CodeBlock title="DateSelector.tsx" language="tsx" source={DateSelectorSrc} />
+
 ---
 
 ## DateRangeSelector
@@ -71,6 +81,8 @@ const [range, setRange] = useState({ startDate: null, endDate: null });
   <DateRangeSelector />
 </Demo>
 
+<CodeBlock title="DateRangeSelector.tsx" language="tsx" source={DateRangeSelectorSrc} />
+
 ---
 
 ## DateRangeSelectorV2
@@ -89,6 +101,8 @@ const [range, setRange] = useState({ startDate: null, endDate: null });
 >
   <DateRangeSelectorV2 />
 </Demo>
+
+<CodeBlock title="DateRangeSelectorV2.tsx" language="tsx" source={DateRangeSelectorV2Src} />
 
 ---
 
@@ -115,6 +129,8 @@ const [time, setTime] = useState<string | null>(null);
   <TimeSelector minuteStep={15} />
 </Demo>
 
+<CodeBlock title="TimeSelector.tsx" language="tsx" source={TimeSelectorSrc} />
+
 ---
 
 ## TimeRangeSelector
@@ -138,6 +154,8 @@ const [range, setRange] = useState({ startTime: null, endTime: null });
 >
   <TimeRangeSelector minuteStep={15} />
 </Demo>
+
+<CodeBlock title="TimeRangeSelector.tsx" language="tsx" source={TimeRangeSelectorSrc} />
 
 ---
 
@@ -164,6 +182,8 @@ const [value, setValue] = useState<Date | null>(null);
   <DateTimeSelector minuteStep={15} />
 </Demo>
 
+<CodeBlock title="DateTimeSelector.tsx" language="tsx" source={DateTimeSelectorSrc} />
+
 ---
 
 ## DateTimeRangeSelector
@@ -188,3 +208,5 @@ const [value, setValue] = useState({ startDateTime: null, endDateTime: null });
 >
   <DateTimeRangeSelector minuteStep={15} />
 </Demo>
+
+<CodeBlock title="DateTimeRangeSelector.tsx" language="tsx" source={DateTimeRangeSelectorSrc} />

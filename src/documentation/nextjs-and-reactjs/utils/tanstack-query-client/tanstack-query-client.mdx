@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/doc-ui/CodeBlock";
+import TanstackQueryClientSrc from "@/../src/utils/tanstack-query-client.utils.ts?raw";
 
 export const meta = {
   title: "TanStack Query Client",
@@ -39,7 +40,4 @@ export default async function Page() {
 
 ## Source
 
-<CodeBlock title="tanstack-query-client.utils.ts" language="ts" source={`import { QueryClient } from "@tanstack/react-query";
-import { cache } from "react";
-
-export const getQueryClient = cache(() => new QueryClient());`} />
+<CodeBlock title="tanstack-query-client.utils.ts" language="ts" source={TanstackQueryClientSrc} />
