@@ -87,7 +87,7 @@ function Button({
     return <></>;
   };
 
-  if (link) {
+  if (link && !props.disabled) {
     return (
       <NextLink
         href={link}
